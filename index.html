@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Sitio Web</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- AOS - Animate On Scroll -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- AOS - Animate On Scroll -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Google Font Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+</head>
+<body>
+
+<!-- BARA SUPERIOR (NAVBAR) -->
+<!-- header.html -->
+<header class="nexa-navbar-wrapper">
+  <div class="nexa-navbar-container">
+    <!-- Botón de menú móvil -->
+    <div class="nexa-mobile-menu-toggle" id="mobileMenuToggle">
+      <div class="nexa-menu-icon">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+    
+    <!-- Enlaces lado izquierdo -->
+    <nav class="nexa-nav-left">
+      <ul class="nexa-nav-links">
+        <li class="nexa-nav-item">
+          <a href="#servicios" class="nexa-nav-link">
+            <span class="nexa-nav-text">Servicios</span>
+            <span class="nexa-nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nexa-nav-item">
+          <a href="#metodologia" class="nexa-nav-link">
+            <span class="nexa-nav-text">Metodología</span>
+            <span class="nexa-nav-indicator"></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Logo en medio -->
+    <div class="nexa-logo-center">
+      <a href="#inicio" class="nexa-logo-link">
+        <img src="assets/LYX.IA-removebg-preview.png" alt="NEXA Logo" class="nexa-logo-img"/>
+        <div class="nexa-logo-glow"></div>
+      </a>
+    </div>
+    
+    <!-- Enlaces lado derecho -->
+    <nav class="nexa-nav-right">
+      <ul class="nexa-nav-links">
+        <li class="nexa-nav-item">
+          <a href="#faq" class="nexa-nav-link">
+            <span class="nexa-nav-text">Preguntas</span>
+            <span class="nexa-nav-indicator"></span>
+          </a>
+        </li>
+        <li class="nexa-nav-item">
+          <a href="#contacto" class="nexa-nav-link">
+            <span class="nexa-nav-text">Contacto</span>
+            <span class="nexa-nav-indicator"></span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <!-- Botón CTA con diseño sobresaliente -->
+    <div class="nexa-nav-cta" id="nexaDemoButton">
+      <a href="#contacto" class="nexa-cta-button">
+        Solicitar Demo
+        <div class="nexa-cta-overlay"></div>
+      </a>
+    </div>
+  </div>
+</header>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- HERO -->
+<!-- HERO -->
+<section class="hero-section" id="inicio">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.2/lottie.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+
+  <!-- Fondo animado con partículas -->
+  <div class="hero-particles" id="particles-js"></div>
+  
+  <!-- Capas de fondo -->
+  <div class="hero-overlay"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-shapes">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="shape shape-4"></div>
+  </div>
+  
+  <div class="floating-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  
+  <div class="hero-container">
+    <!-- Contenido principal -->
+    <div class="hero-content">
+      <div class="hero-text-container">
+        <h1 class="hero-title">
+          <span class="highlight">Potencia</span> <span class="subtitle-part">tu negocio con</span><br>
+          <span class="gradient-text">inteligencia artificial</span>
+        </h1>
+        
+        <p class="hero-description">
+          En <strong>LYXIA</strong> analizamos tu empresa y detectamos oportunidades 
+          para automatizar y optimizar tus procesos mediante IA, 
+          permitiéndote centrarte en el crecimiento estratégico.
+        </p>
+        
+        <div class="hero-cta">
+          <a href="#servicios" class="btn btn-primary">
+            <span>Ver servicios</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+          
+          <a href="#contacto" class="btn btn-secondary">
+            <span>Solicitar demo</span>
+          </a>
+        </div>
+        
+        <!-- Estadísticas/Datos rápidos -->
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number"><span class="counter">85</span>%</div>
+            <div class="stat-text">Aumento de eficiencia</div>
+          </div>
+          
+          <div class="stat-divider"></div>
+          
+          <div class="stat-item">
+            <div class="stat-number">+<span class="counter">100</span></div>
+            <div class="stat-text">Clientes satisfechos</div>
+          </div>
+          
+          <div class="stat-divider"></div>
+          
+          <div class="stat-item">
+            <div class="stat-number"><span class="counter">30</span>%</div>
+            <div class="stat-text">Reducción de costos</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Elemento visual del cohete a la derecha -->
+      <div class="hero-visual">
+        <div class="hero-image">
+          <img src="assets/ChatGPT Image 21 abr 2025, 11_45_56.png" alt="Ilustración de cohete IA" class="rocket-image">
+          <div class="decoration dec-1"></div>
+          <div class="decoration dec-2"></div>
+          <div class="decoration dec-3"></div>
+        </div>
+      </div>
+
+    
+    <!-- Scroll down indicator -->
+    <div class="scroll-indicator">
+      <a href="#servicios">
+        <div class="mouse">
+          <div class="wheel"></div>
+        </div>
+        <div class="arrow">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- SERVICIOS -->
+       <!-- Sección de Servicios con diseño moderno e interactivo -->
+       <section class="servicios-section">
+        <!-- Shapes decorativas -->
+        <div class="decorative-shape shape-1" aria-hidden="true"></div>
+        <div class="decorative-shape shape-2" aria-hidden="true"></div>
+        <div class="decorative-shape shape-3" aria-hidden="true"></div>
+    
+        <header class="servicios-header animate-fadeInUp">
+          <div class="servicios-tag pulse-animation">Soluciones Avanzadas</div>
+          <h2>Nuestros Servicios</h2>
+          <p>Transformamos tu negocio con tecnología de vanguardia en Inteligencia Artificial. Explora nuestras soluciones personalizadas diseñadas para <span class="highlight-text">maximizar tu potencial</span> y acelerar tu crecimiento.</p>
+        </header>
+    
+        <div class="servicios-filter animate-fadeInUp delay-1">
+          <div class="filter-heading">
+            <h3>Explora por categoría:</h3>
+          </div>
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="analisis">Análisis</button>
+            <button class="filter-btn" data-filter="soluciones">Soluciones</button>
+            <button class="filter-btn" data-filter="consultoria">Consultoría</button>
+            <button class="filter-btn" data-filter="nube">Nube</button>
+          </div>
+        </div>
+    
+        <div class="servicios-grid animate-fadeInUp delay-2">
+    
+          <!-- Tarjeta 1: Análisis -->
+          <article class="servicio-card" data-category="analisis" tabindex="0">
+            <div class="servicio-card-inner">
+              <!-- Cara Frontal -->
+              <div class="servicio-card-front">
+                <div class="servicio-icon float-animation" aria-hidden="true">
+                  <i class="fas fa-search"></i>
+                </div>
+                <h3>Análisis Inteligente</h3>
+                <p>Detectamos áreas de mejora mediante un análisis exhaustivo para optimizar tus procesos y desbloquear el potencial.</p>
+                <button class="servicio-card-button" aria-label="Ver más sobre Análisis Inteligente">
+                  <span>Descubre Más</span>
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+              <!-- Cara Trasera -->
+              <div class="servicio-card-back">
+                <div class="servicio-card-back-header">
+                  <h3>Detalles del Análisis</h3>
+                  <button class="close-button" aria-label="Cerrar detalles">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <div class="servicio-card-back-content">
+                  <h4>Servicios Avanzados:</h4>
+                  <ul>
+                    <li><i class="fas fa-check-circle"></i> Análisis predictivo de tendencias</li>
+                    <li><i class="fas fa-check-circle"></i> Segmentación avanzada de clientes</li>
+                    <li><i class="fas fa-check-circle"></i> Modelado de escenarios futuros</li>
+                    <li><i class="fas fa-check-circle"></i> Detección de anomalías en datos</li>
+                    <li><i class="fas fa-check-circle"></i> Dashboard personalizado de KPIs</li>
+                  </ul>
+                </div>
+                <div class="cta-container">
+                  <a href="#contacto" class="cta-button">Solicitar Demostración <i class="fas fa-arrow-right cta-arrow"></i></a>
+                </div>
+              </div>
+            </div>
+          </article>
+    
+          <!-- Tarjeta 2: Soluciones -->
+          <article class="servicio-card" data-category="soluciones" tabindex="0">
+            <div class="servicio-card-inner">
+              <!-- Cara Frontal -->
+              <div class="servicio-card-front">
+                <div class="servicio-icon float-animation" aria-hidden="true">
+                  <i class="fas fa-robot"></i>
+                </div>
+                <h3>Soluciones IA Personalizadas</h3>
+                <p>Creamos herramientas adaptadas a tus necesidades con algoritmos avanzados, integrando IA en aspectos clave.</p>
+                <button class="servicio-card-button" aria-label="Ver más sobre Soluciones IA Personalizadas">
+                  <span>Descubre Más</span>
+                  <i class="fas fa-arrow-right"></i>
+                </button>
+              </div>
+              <!-- Cara Trasera -->
+              <div class="servicio-card-back">
+                <div class="servicio-card-back-header">
+                  <h3>Tecnologías Implementadas</h3>
+                  <button class="close-button" aria-label="Cerrar detalles">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <div class="servicio-card-back-content">
+                  <h4>Incluye:</h4>
+                  <ul>
+                    <li><i class="fas fa-check-circle"></i> Chatbots y asistentes virtuales</li>
+                    <li><i class="fas fa-check-circle"></i> Automatización de procesos</li>
+                    <li><i class="fas fa-check-circle"></i> Sistemas de recomendación</li>
+                    <li><i class="fas fa-check-circle"></i> Integración con APIs existentes</li>
+                    <li><i class="fas fa-check-circle"></i> Mantenimiento y actualizaciones</li>
+                  </ul>
+                </div>
+                <div class="cta-container">
+                  <a href="#contacto" class="cta-button">Solicitar Presupuesto <i class="fas fa-arrow-right cta-arrow"></i></a>
+                </div>
+              </div>
+              </div>
+              </article>
+              
+              <!-- Tarjeta 3: Consultoría -->
+              <article class="servicio-card" data-category="consultoria" tabindex="0">
+              <div class="servicio-card-inner">
+                <!-- Cara Frontal -->
+                <div class="servicio-card-front">
+                  <div class="servicio-icon float-animation" aria-hidden="true">
+                    <i class="fas fa-lightbulb"></i>
+                  </div>
+                  <h3>Consultoría Estratégica</h3>
+                  <p>Nuestros expertos te acompañan en cada etapa, desde la evaluación inicial hasta la implementación completa de soluciones IA.</p>
+                  <button class="servicio-card-button" aria-label="Ver más sobre Consultoría Estratégica">
+                    <span>Descubre Más</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <!-- Cara Trasera -->
+                <div class="servicio-card-back">
+                  <div class="servicio-card-back-header">
+                    <h3>Beneficios Clave</h3>
+                    <button class="close-button" aria-label="Cerrar detalles">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="servicio-card-back-content">
+                    <h4>Ventajas:</h4>
+                    <ul>
+                      <li><i class="fas fa-check-circle"></i> Roadmap personalizado para tu empresa</li>
+                      <li><i class="fas fa-check-circle"></i> Evaluación de madurez tecnológica</li>
+                      <li><i class="fas fa-check-circle"></i> Workshops para equipos directivos</li>
+                      <li><i class="fas fa-check-circle"></i> Identificación de oportunidades de mercado</li>
+                      <li><i class="fas fa-check-circle"></i> Seguimiento y medición de resultados</li>
+                    </ul>
+                  </div>
+                  <div class="cta-container">
+                    <a href="#contacto" class="cta-button">Agendar Consulta <i class="fas fa-arrow-right cta-arrow"></i></a>
+                  </div>
+                </div>
+              </div>
+              </article>
+              
+              <!-- Tarjeta 4: Nube -->
+              <article class="servicio-card" data-category="nube" tabindex="0">
+              <div class="servicio-card-inner">
+                <!-- Cara Frontal -->
+                <div class="servicio-card-front">
+                  <div class="servicio-icon float-animation" aria-hidden="true">
+                    <i class="fas fa-cloud"></i>
+                  </div>
+                  <h3>Soluciones en la Nube</h3>
+                  <p>Implementamos infraestructuras escalables en la nube para manejar grandes volúmenes de datos y procesamiento IA.</p>
+                  <button class="servicio-card-button" aria-label="Ver más sobre Soluciones en la Nube">
+                    <span>Descubre Más</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <!-- Cara Trasera -->
+                <div class="servicio-card-back">
+                  <div class="servicio-card-back-header">
+                    <h3>Arquitectura Cloud</h3>
+                    <button class="close-button" aria-label="Cerrar detalles">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="servicio-card-back-content">
+                    <h4>Servicios:</h4>
+                    <ul>
+                      <li><i class="fas fa-check-circle"></i> Migración de infraestructura a la nube</li>
+                      <li><i class="fas fa-check-circle"></i> Optimización de costes cloud</li>
+                      <li><i class="fas fa-check-circle"></i> Computación de alto rendimiento</li>
+                      <li><i class="fas fa-check-circle"></i> Almacenamiento y procesamiento distribuido</li>
+                      <li><i class="fas fa-check-circle"></i> Seguridad y cumplimiento normativo</li>
+                    </ul>
+                  </div>
+                  <div class="cta-container">
+                    <a href="#contacto" class="cta-button">Solicitar Evaluación <i class="fas fa-arrow-right cta-arrow"></i></a>
+                  </div>
+                </div>
+              </div>
+              </article>
+              
+              <!-- Tarjeta 5: Análisis de Datos -->
+              <article class="servicio-card" data-category="analisis" tabindex="0">
+              <div class="servicio-card-inner">
+                <!-- Cara Frontal -->
+                <div class="servicio-card-front">
+                  <div class="servicio-icon float-animation" aria-hidden="true">
+                    <i class="fas fa-chart-line"></i>
+                  </div>
+                  <h3>Análisis de Datos Avanzado</h3>
+                  <p>Transformamos tus datos en información accionable mediante técnicas estadísticas y aprendizaje automático.</p>
+                  <button class="servicio-card-button" aria-label="Ver más sobre Análisis de Datos Avanzado">
+                    <span>Descubre Más</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <!-- Cara Trasera -->
+                <div class="servicio-card-back">
+                  <div class="servicio-card-back-header">
+                    <h3>Analítica Predictiva</h3>
+                    <button class="close-button" aria-label="Cerrar detalles">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="servicio-card-back-content">
+                    <h4>Metodologías:</h4>
+                    <ul>
+                      <li><i class="fas fa-check-circle"></i> Análisis exploratorio de datos</li>
+                      <li><i class="fas fa-check-circle"></i> Modelos de machine learning</li>
+                      <li><i class="fas fa-check-circle"></i> Visualización interactiva de datos</li>
+                      <li><i class="fas fa-check-circle"></i> Forecasting y predicción de tendencias</li>
+                      <li><i class="fas fa-check-circle"></i> ETL y limpieza de datos</li>
+                    </ul>
+                  </div>
+                  <div class="cta-container">
+                    <a href="#contacto" class="cta-button">Solicitar Demo <i class="fas fa-arrow-right cta-arrow"></i></a>
+                  </div>
+                </div>
+              </div>
+              </article>
+              
+              <!-- Tarjeta 6: Soluciones Personalizadas -->
+              <article class="servicio-card" data-category="soluciones" tabindex="0">
+              <div class="servicio-card-inner">
+                <!-- Cara Frontal -->
+                <div class="servicio-card-front">
+                  <div class="servicio-icon float-animation" aria-hidden="true">
+                    <i class="fas fa-cogs"></i>
+                  </div>
+                  <h3>Integración de Sistemas</h3>
+                  <p>Conectamos tus sistemas existentes con nuevas tecnologías IA, garantizando una transición fluida y eficiente.</p>
+                  <button class="servicio-card-button" aria-label="Ver más sobre Integración de Sistemas">
+                    <span>Descubre Más</span>
+                    <i class="fas fa-arrow-right"></i>
+                  </button>
+                </div>
+                <!-- Cara Trasera -->
+                <div class="servicio-card-back">
+                  <div class="servicio-card-back-header">
+                    <h3>Tecnología Integrada</h3>
+                    <button class="close-button" aria-label="Cerrar detalles">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                  <div class="servicio-card-back-content">
+                    <h4>Capacidades:</h4>
+                    <ul>
+                      <li><i class="fas fa-check-circle"></i> APIs y microservicios</li>
+                      <li><i class="fas fa-check-circle"></i> Integración con CRM y ERP</li>
+                      <li><i class="fas fa-check-circle"></i> Orquestación de procesos</li>
+                      <li><i class="fas fa-check-circle"></i> Automatización de workflows</li>
+                      <li><i class="fas fa-check-circle"></i> Monitorización y alertas</li>
+                    </ul>
+                  </div>
+                  <div class="cta-container">
+                    <a href="#contacto" class="cta-button">Solicitar Información <i class="fas fa-arrow-right cta-arrow"></i></a>
+                  </div>
+                </div>
+              </div>
+              </article>
+              
+              </div>
+              </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- SOMOS -->
+<!-- Sección "Quiénes Somos" Mejorada -->
+<section class="about" id="about">
+  <div class="about-bg-wrapper">
+      <div class="about-bg"></div>
+      <div class="about-bg-overlay"></div>
+      <!-- Elementos decorativos en el fondo -->
+      <div class="floating-shapes">
+          <div class="shape shape-1"></div>
+          <div class="shape shape-2"></div>
+          <div class="shape shape-3"></div>
+          <div class="shape shape-4"></div>
+          <div class="shape shape-5"></div>
+      </div>
+      <div class="particles-container" id="particles-js"></div>
+  </div>
+  
+  <div class="container">
+      <div class="about-grid">
+          <div class="about-content">
+              <div class="section-header" data-aos="fade-up">
+                  <span class="section-tag">Nuestro Equipo</span>
+                  <h2 class="section-title">¿Quiénes Somos?</h2>
+                  <div class="title-underline"></div>
+              </div>
+              
+              <div class="about-description" data-aos="fade-up" data-aos-delay="100">
+                  <p class="highlight-text">
+                    Somos un equipo de <span class="highlight">apasionados por la tecnología y la innovación</span>, 
+                    con amplia experiencia en el desarrollo de soluciones basadas en 
+                    <span class="highlight">Inteligencia Artificial</span>.
+                  </p>
+                  
+                  <p>
+                      Nuestra misión es impulsar la transformación digital de las empresas, 
+                      optimizando recursos y descubriendo nuevas oportunidades de negocio 
+                      que generen un impacto real y medible.
+                  </p>
+                  
+                  <div class="about-values">
+                      <div class="value-item" data-aos="fade-right" data-aos-delay="150">
+                          <div class="value-icon">
+                              <i class="fas fa-lightbulb"></i>
+                          </div>
+                          <div class="value-content">
+                              <h3>Innovación</h3>
+                              <p>Exploramos constantemente nuevas tecnologías para ofrecer soluciones de vanguardia.</p>
+                          </div>
+                      </div>
+                      
+                      <div class="value-item" data-aos="fade-right" data-aos-delay="200">
+                          <div class="value-icon">
+                              <i class="fas fa-handshake"></i>
+                          </div>
+                          <div class="value-content">
+                              <h3>Compromiso</h3>
+                              <p>Nos involucramos completamente en cada proyecto para garantizar resultados excepcionales.</p>
+                          </div>
+                      </div>
+                      
+                      <div class="value-item" data-aos="fade-right" data-aos-delay="250">
+                          <div class="value-icon">
+                              <i class="fas fa-chart-line"></i>
+                          </div>
+                          <div class="value-content">
+                              <h3>Resultados</h3>
+                              <p>Nuestro enfoque siempre está orientado a generar valor medible para tu negocio.</p>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div class="about-cta" data-aos="fade-up" data-aos-delay="300">
+                      <a href="#team" class="btn btn-primary">
+                          <i class="fas fa-users mr-2"></i> Conoce a Nuestro Equipo
+                      </a>
+                      <a href="#contacto" class="btn btn-outline">
+                          <i class="fas fa-envelope mr-2"></i> Contáctanos
+                      </a>
+                  </div>
+              </div>
+          </div>
+          
+          <div class="about-stats-wrapper" data-aos="fade-left" data-aos-delay="150">
+              <!-- Animación Lottie para visualización de datos -->
+              <div class="lottie-container2" id="lottie-animation"></div>
+<!-- 
+              <div class="about-stats">
+                  <div class="stat-card" data-value="10" data-aos="zoom-in" data-aos-delay="200">
+                      <div class="stat-icon">
+                          <i class="fas fa-clock"></i>
+                      </div>
+                      <div class="stat-info">
+                          <h3 class="counter">+<span class="count-num">10</span></h3>
+                          <p>años de experiencia en IA</p>
+                          <div class="progress-bar">
+                              <div class="progress" style="width: 80%"></div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div class="stat-card" data-value="50" data-aos="zoom-in" data-aos-delay="250">
+                      <div class="stat-icon">
+                          <i class="fas fa-smile"></i>
+                      </div>
+                      <div class="stat-info">
+                          <h3 class="counter">+<span class="count-num">50</span></h3>
+                          <p>clientes satisfechos</p>
+                          <div class="progress-bar">
+                              <div class="progress" style="width: 90%"></div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div class="stat-card" data-value="100" data-aos="zoom-in" data-aos-delay="300">
+                      <div class="stat-icon">
+                          <i class="fas fa-cogs"></i>
+                      </div>
+                      <div class="stat-info">
+                          <h3 class="counter">+<span class="count-num">100</span></h3>
+                          <p>proyectos implementados</p>
+                          <div class="progress-bar">
+                              <div class="progress" style="width: 85%"></div>
+                          </div>
+                      </div>
+                  </div>
+                  
+                  <div class="stat-card" data-value="24" data-aos="zoom-in" data-aos-delay="350">
+                      <div class="stat-icon">
+                          <i class="fas fa-users"></i>
+                      </div>
+                      <div class="stat-info">
+                          <h3 class="counter">+<span class="count-num">24</span></h3>
+                          <p>expertos en nuestro equipo</p>
+                          <div class="progress-bar">
+                              <div class="progress" style="width: 75%"></div>
+                          </div>
+                      </div>
+                  </div>
+              </div> -->
+
+              <!-- Tecnologías con las que trabajamos -->
+              <div class="tech-stack" data-aos="fade-up">
+                  <h3>Tecnologías que dominamos</h3>
+                  <div class="tech-icons">
+                      <div class="tech-icon">
+                          <i class="fab fa-python"></i>
+                          <span>Python</span>
+                      </div>
+                      <div class="tech-icon">
+                          <i class="fab fa-aws"></i>
+                          <span>AWS</span>
+                      </div>
+                      <div class="tech-icon">
+                          <i class="fab fa-react"></i>
+                          <span>React</span>
+                      </div>
+                      <div class="tech-icon">
+                          <i class="fab fa-node-js"></i>
+                          <span>Node.js</span>
+                      </div>
+                      <div class="tech-icon">
+                          <i class="fas fa-database"></i>
+                          <span>Big Data</span>
+                      </div>
+                      <div class="tech-icon">
+                          <i class="fas fa-brain"></i>
+                          <span>Machine Learning</span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+<!-- METODOLOGIA -->
+<section class="metodologia-section">
+  <!-- Shapes decorativas -->
+  <div class="decorative-shape shape-1"></div>
+  <div class="decorative-shape shape-2"></div>
+  <div class="decorative-shape shape-3"></div>
+  
+  <div class="metodologia-header animate-fadeInUp">
+      <div class="metodologia-tag pulse-animation">Nuestra Metodología</div>
+      <h2>Cómo Trabajamos para Asegurar Tu Éxito</h2>
+      <p>Descubre el proceso innovador que nos ha permitido transformar más de <span class="highlight-text">500 empresas</span> y alcanzar un 98% de satisfacción de nuestros clientes.</p>
+  </div>
+
+  <div class="proceso-container animate-fadeInUp delay-1">
+      <div class="proceso-barra">
+          <div class="proceso-progreso" id="procesoProgreso"></div>
+      </div>
+
+      <div class="proceso-steps" id="procesoSteps">
+          <div class="proceso-step active" data-step="1">
+              <div class="paso-numero">01</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-search-plus"></i>
+              </div>
+              <h3 class="paso-titulo">Descubrimiento</h3>
+              <p class="paso-descripcion">Profundizamos en tu negocio para entender completamente tus necesidades, objetivos y desafíos actuales.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Análisis detallado de necesidades</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Identificación de oportunidades</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="proceso-step" data-step="2">
+              <div class="paso-numero">02</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-sitemap"></i>
+              </div>
+              <h3 class="paso-titulo">Estrategia</h3>
+              <p class="paso-descripcion">Desarrollamos un plan estratégico a medida con objetivos claros, KPIs y cronogramas definidos.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Roadmap personalizado</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Definición de métricas de éxito</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="proceso-step" data-step="3">
+              <div class="paso-numero">03</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-pen-fancy"></i>
+              </div>
+              <h3 class="paso-titulo">Diseño & Prototipado</h3>
+              <p class="paso-descripcion">Creamos prototipos interactivos para visualizar la solución antes de comenzar el desarrollo.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Experiencia de usuario optimizada</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Validación temprana</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="proceso-step" data-step="4">
+              <div class="paso-numero">04</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-code"></i>
+              </div>
+              <h3 class="paso-titulo">Desarrollo</h3>
+              <p class="paso-descripcion">Implementamos soluciones robustas utilizando tecnologías avanzadas y metodologías ágiles.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Código limpio y escalable</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Iteraciones continuas</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="proceso-step" data-step="5">
+              <div class="paso-numero">05</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-vial"></i>
+              </div>
+              <h3 class="paso-titulo">Pruebas & QA</h3>
+              <p class="paso-descripcion">Realizamos pruebas exhaustivas para garantizar calidad, seguridad y rendimiento óptimo.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Testing automatizado</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Optimización de rendimiento</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="proceso-step" data-step="6">
+              <div class="paso-numero">06</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-rocket"></i>
+              </div>
+              <h3 class="paso-titulo">Lanzamiento</h3>
+              <p class="paso-descripcion">Implementamos la solución con un enfoque planificado para minimizar interrupciones en tu negocio.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Despliegue controlado</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Capacitación de usuarios</span>
+                  </div>
+              </div>
+          </div>
+
+          <div class="proceso-step" data-step="7">
+              <div class="paso-numero">07</div>
+              <div class="paso-icono float-animation">
+                  <i class="fas fa-chart-line"></i>
+              </div>
+              <h3 class="paso-titulo">Crecimiento</h3>
+              <p class="paso-descripcion">Monitoreamos el rendimiento y trabajamos en la mejora continua para maximizar tu ROI.</p>
+              <div class="paso-beneficios">
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Análisis de datos constante</span>
+                  </div>
+                  <div class="paso-beneficio">
+                      <i class="fas fa-check-circle"></i>
+                      <span>Evolución estratégica</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+      <div class="indicadores-container" id="indicadoresContainer">
+          <!-- Indicadores generados dinámicamente -->
+      </div>
+
+      <div class="proceso-controles">
+          <button class="proceso-boton" id="prevBtn">
+              <i class="fas fa-arrow-left"></i> Anterior
+          </button>
+          <button class="proceso-boton primary" id="verTodosBtn">
+              <i class="fas fa-th-large"></i> Ver Todos
+          </button>
+          <button class="proceso-boton" id="nextBtn">
+              Siguiente <i class="fas fa-arrow-right"></i>
+          </button>
+      </div>
+  </div>
+
+  
+</section>
+
+
+
+
+
+
+
+
+
+<!-- ACCION -->
+<section class="cta-section">
+    <div class="container_accion">
+      <div class="cta-wrapper">
+        <div class="cta-content">
+          <h2 class="cta-title">¿Listo para <span class="highlight">impulsar tu empresa</span> con IA?</h2>
+          <p class="cta-description">
+            Nuestros expertos te ayudarán a implementar soluciones de inteligencia artificial personalizadas para tu negocio 
+            y se pondrán en contacto contigo en <span class="highlight-text">menos de 24 horas</span>.
+          </p>
+          
+          <div class="cta-benefits">
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-rocket"></i>
+              </div>
+              <div class="benefit-text">Implementación rápida</div>
+            </div>
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-chart-line"></i>
+              </div>
+              <div class="benefit-text">Resultados medibles</div>
+            </div>
+            <div class="benefit-item">
+              <div class="benefit-icon">
+                <i class="fas fa-shield-alt"></i>
+              </div>
+              <div class="benefit-text">Seguridad garantizada</div>
+            </div>
+          </div>
+          
+          <div class="cta-action-area">
+            <div class="cta-button-container">
+              <a href="#contacto" class="btn btn-primary">
+                <span>Solicitar consulta gratuita</span>
+                <i class="fas fa-arrow-right"></i>
+              </a>
+              <a href="#servicios" class="btn btn-secondary">
+                <span>Ver servicios</span>
+                <i class="fas fa-eye"></i>
+              </a>
+            </div>
+            
+            <div class="trust-section">
+              <div class="reviews-card">
+                <div class="stars">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+                <p class="reviews-text"><strong>4.9/5</strong> de <strong>200+</strong> opiniones</p>
+              </div>
+              
+              
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contenedor para la animación -->
+        <div class="lottie-container" id="lottie-animation-cta">
+          <!-- Placeholder animado mientras carga   Lottie -->
+          <div style="width: 80%; height: 80%; background: linear-gradient(45deg, #2563eb, #f59e0b); border-radius: 50%; animation: pulse 2s infinite; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">
+            <i class="fas fa-robot"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+
+
+
+
+
+
+
+<!-- GRAFICAS -->
+<section class="ai-graphics" id="graficas">
+  <div class="container_graficas">
+    <h2>Impacto de la IA en las Empresas</h2>
+    <p class="section-intro">
+      Las siguientes gráficas muestran cómo la inteligencia artificial ha transformado diferentes áreas de negocio,
+      desde la eficiencia operativa hasta la toma de decisiones estratégicas.
+    </p>
+
+    <!-- Si sólo hay una gráfica, no necesitas .charts-grid -->
+    <div class="chart-card">
+      <h3 class="chart-title">Eficiencia Operativa Mejorada</h3>
+      <div class="chart-wrapper">
+        <canvas id="efficiencyChart"></canvas>
+      </div>
+      <div class="chart-info">
+        Comparativa de eficiencia operativa antes y después de implementar soluciones de IA
+      </div>
+      <div class="stats-row">
+        <!-- ... -->
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- CONTACTO -->
+<section class="cnt-section" id="contacto">
+    <div class="cnt-container">
+      <div class="cnt-header">
+        <h2 class="cnt-title">Conecta con Nosotros</h2>
+        <p class="cnt-subtitle">¿Tienes alguna pregunta o propuesta? Rellena el formulario o utiliza nuestros datos de contacto directo. ¡Estamos deseando escucharte!</p>
+      </div>
+
+      <div class="cnt-flex-wrapper">
+        <!-- Lado Info (Izquierda en Desktop, Abajo en Mobile) -->
+        <div class="cnt-info-side">
+           <div class="cnt-info-welcome">
+              <div class="cnt-welcome-icon"><i class="fas fa-headset"></i></div>
+              <div class="cnt-welcome-text">
+                  <h3>¿Necesitas Ayuda?</h3>
+                  <p>Nuestro equipo está listo para asistirte.<br>Tiempo de respuesta habitual: <span class="cnt-highlight">~ 4 horas laborables</span></p>
+              </div>
+           </div>
+          <div class="cnt-info-card cnt-location">
+            <div class="cnt-icon-wrapper"><i class="fas fa-map-marker-alt"></i></div>
+            <div class="cnt-text-content">
+              <h3>Oficina Central</h3> <p>Avenida Innovación 42, Suite 300, TecnoCiudad</p>
+              <a href="https://maps.google.com/?q=Avenida+Innovacion+42+TecnoCiudad" target="_blank" rel="noopener noreferrer" class="cnt-map-link">Ver en Google Maps <i class="fas fa-external-link-alt"></i></a>
+            </div>
+          </div>
+          <div class="cnt-info-card cnt-phone">
+            <div class="cnt-icon-wrapper"><i class="fas fa-phone-alt"></i></div>
+            <div class="cnt-text-content">
+              <h3>Teléfono</h3> <p><a href="tel:+34912345678">+34 912 345 678</a></p>
+              <span class="cnt-availability">Lun-Vie: 9:00h - 18:00h (CET)</span>
+            </div>
+          </div>
+          <div class="cnt-info-card cnt-email">
+            <div class="cnt-icon-wrapper"><i class="fas fa-envelope"></i></div>
+            <div class="cnt-text-content">
+              <h3>Email Directo</h3> <p><a href="mailto:soporte@tuempresa.dev">soporte@tuempresa.dev</a></p>
+              <span class="cnt-response-time">Garantizamos respuesta en 24h laborables</span>
+            </div>
+          </div>
+          <div class="cnt-social-media">
+            <h3 class="cnt-social-title">Síguenos</h3>
+            <div class="cnt-social-icons">
+              <a href="#" class="cnt-social-icon cnt-facebook" aria-label="Facebook" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="cnt-social-icon cnt-twitter" aria-label="Twitter" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="cnt-social-icon cnt-instagram" aria-label="Instagram" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="cnt-social-icon cnt-linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lado Form (Derecha en Desktop, Arriba en Mobile) -->
+        <div class="cnt-form-side">
+           <h3 class="cnt-form-title">Envíanos tu Mensaje</h3>
+
+          <form class="cnt-form" id="contactoForm" novalidate>
+
+            <!-- Campo Nombre -->
+            <div class="cnt-form-row">
+              <div class="cnt-input-group">
+                <input type="text" id="nombre" name="nombre" required class="cnt-input" autocomplete="name" placeholder=" " />
+                <label for="nombre" class="cnt-label">Nombre Completo *</label>
+                <span class="cnt-border"></span>
+                <span class="cnt-valid-tick"><i class="fas fa-check-circle"></i></span>
+                <span class="cnt-error-message" id="nombreError"></span>
+              </div>
+            </div>
+
+            <!-- Campo Email -->
+            <div class="cnt-form-row">
+              <div class="cnt-input-group">
+                <input type="email" id="email" name="email" required class="cnt-input" autocomplete="email" placeholder=" " />
+                <label for="email" class="cnt-label">Correo Electrónico *</label>
+                <span class="cnt-border"></span>
+                 <span class="cnt-valid-tick"><i class="fas fa-check-circle"></i></span>
+                <span class="cnt-error-message" id="emailError"></span>
+              </div>
+            </div>
+
+            <!-- Campo Asunto -->
+            <div class="cnt-form-row">
+              <div class="cnt-input-group">
+                <!-- Placeholder option is hidden but allows label to float correctly initially -->
+                <select id="asunto" name="asunto" class="cnt-select" required>
+                  <option value="" disabled selected hidden></option>
+                  <option value="información">Información General</option>
+                  <option value="presupuesto">Solicitud de Presupuesto</option>
+                  <option value="colaboración">Propuesta de Colaboración</option>
+                  <option value="soporte">Soporte Técnico / Ayuda</option>
+                  <option value="feedback">Sugerencias / Feedback</option>
+                  <option value="otro">Otro Motivo</option>
+                </select>
+                <label for="asunto" class="cnt-label cnt-select-label">Motivo de Contacto *</label>
+                <span class="cnt-border"></span>
+                <span class="cnt-valid-tick"><i class="fas fa-check-circle"></i></span>
+                <span class="cnt-error-message" id="asuntoError"></span>
+              </div>
+            </div>
+
+            <!-- Campo Empresa (Opcional) -->
+            <div class="cnt-form-row">
+              <div class="cnt-input-group">
+                <input type="text" id="empresa" name="empresa" class="cnt-input" autocomplete="organization" placeholder=" " />
+                <label for="empresa" class="cnt-label">Nombre de tu Empresa (opcional)</label>
+                <span class="cnt-border"></span>
+                <!-- No tick needed for optional field -->
+                <span class="cnt-error-message" id="empresaError"></span>
+              </div>
+            </div>
+
+            <!-- ***** NUEVO CAMPO DESCUENTO (Opcional) ***** -->
+            <div class="cnt-form-row">
+              <div class="cnt-input-group">
+                <input type="text" id="descuento" name="descuento" class="cnt-input" placeholder=" " />
+                <label for="descuento" class="cnt-label">Código de Descuento (opcional)</label>
+                <span class="cnt-border"></span>
+                <!-- No se necesita tick de validación aquí ya que es opcional -->
+                <span class="cnt-error-message" id="descuentoError"></span>
+              </div>
+            </div>
+            <!-- ***** FIN NUEVO CAMPO DESCUENTO ***** -->
+
+
+             <!-- Saludo Personalizado (Aparece dinámicamente) -->
+            <div class="cnt-greeting" id="userGreeting"></div>
+
+            <!-- Campo Mensaje (Con Auto-Resize) -->
+            <div class="cnt-form-row">
+              <div class="cnt-input-group cnt-textarea-group">
+                <!-- rows="1" para empezar con una línea -->
+                <textarea id="mensaje" name="mensaje" rows="1" required class="cnt-textarea" placeholder=" " minlength="20" maxlength="500"></textarea>
+                <!-- Label ajustado -->
+                <label for="mensaje" class="cnt-label">Tu Mensaje *</label>
+                <span class="cnt-border"></span>
+                <span class="cnt-valid-tick"><i class="fas fa-check-circle"></i></span>
+                <!-- Contador y Hint movidos abajo con CSS -->
+                <div class="cnt-character-count"><span id="charCount">0</span> / 500</div>
+                <span class="cnt-minlength-hint" id="mensajeMinLengthHint">Mínimo 20 caracteres</span>
+                <span class="cnt-error-message" id="mensajeError"></span>
+              </div>
+            </div>
+
+            <!-- Checkbox Privacidad -->
+            <div class="cnt-privacy-check">
+              <!-- Tick appears here when valid -->
+              <span class="cnt-valid-tick privacy-tick"><i class="fas fa-check-circle"></i></span>
+              <input type="checkbox" id="privacidad" name="privacidad" required class="cnt-checkbox" />
+              <label for="privacidad" class="cnt-checkbox-label">
+                Acepto la <a href="/politica-privacidad" class="cnt-privacy-link" target="_blank" rel="noopener noreferrer">Política de Privacidad</a> y los Términos de Servicio *
+              </label>
+              <span class="cnt-error-message" id="privacidadError"></span>
+            </div>
+
+            <!-- Indicador de Progreso -->
+            <div class="cnt-progress-indicator-wrapper">
+              <span class="cnt-progress-label">Progreso:</span>
+              <div class="cnt-progress-indicator">
+                  <div class="cnt-progress-indicator-fill" id="progressIndicatorFill"></div>
+              </div>
+              <span class="cnt-progress-percentage" id="progressPercentage">0%</span>
+            </div>
+
+            <!-- Botón de Envío -->
+            <div class="cnt-submit-button-wrapper">
+               <button type="submit" class="cnt-submit-button" id="submitBtn">
+                 <span class="cnt-btn-text">Enviar Mensaje</span>
+                 <span class="cnt-btn-icon"><i class="fas fa-paper-plane"></i></span>
+                 <span class="cnt-btn-loader"></span>
+               </button>
+            </div>
+
+            <!-- Mensaje de Estado General (Errores de envío, etc.) -->
+            <div class="cnt-form-status" id="formStatus"></div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de confirmación -->
+    <div class="cnt-success-modal" id="successModal">
+      <div class="cnt-modal-content">
+        <div class="cnt-modal-success-icon"><i class="fas fa-check-circle"></i></div>
+        <h3>¡Mensaje Enviado!</h3>
+        <p>Gracias por ponerte en contacto. Hemos recibido tu consulta y nuestro equipo se pondrá en contacto contigo a la mayor brevedad posible.</p>
+        <div class="cnt-modal-footer">
+          <button class="cnt-modal-close-btn" id="closeSuccessModal">Entendido</button>
+        </div>
+      </div>
+    </div>
+    <!-- Elemento para Feedback Toast (se añade y quita con JS) -->
+    <!-- <div class="cnt-feedback-message" id="feedbackToast">...</div> -->
+
+  </section>
+
+
+  <!-- RULETA -->
+  <!-- Botón para abrir la ruleta -->
+  <div id="wheel-panel">
+    <!-- La pestaña controla el panel -->
+    <div id="panel-toggle">
+      <!-- Icono inicial (panel cerrado, indica "tirar hacia la izquierda") -->
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+      </svg>
+    </div>
+    <!-- Contenido del panel -->
+    <div class="panel-content">
+      <button class="close-panel">✕</button>
+      <h2>¡Gira la Ruleta!</h2>
+      <div class="wheel-container">
+        <div class="winner-glow"></div>
+        <!-- Canvas necesita el tamaño ajustado en CSS -->
+        <canvas id="wheel" width="300" height="300"></canvas>
+        <div id="pointer">
+          <!-- Ícono SVG de flecha/puntero -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#f72585"><path d="M12 0L3 12l9 3 9-3z"/></svg> <!-- Ajustado para que apunte hacia abajo -->
+        </div>
+        <div id="wheel-center">
+           <!-- Ícono SVG de estrella -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+      </div>
+      <button id="spin">¡Girar Ahora!</button>
+      <div id="time-remaining"></div>
+    </div>
+  </div>
+
+  <!-- Mensaje de premio a pantalla completa -->
+  <div id="prize-message">
+    <div class="prize-container">
+      <!-- El contenido se agregará dinámicamente en JS -->
+    </div>
+  </div>
+
+  <!-- Popup de notificación para invitar a abrir la ruleta (opcional, se puede quitar si no se usa) -->
+  
+    
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- PREGUNTAS-->
+<section class="faq-section" id="preguntas-frecuentes">
+    <div class="faq-container">
+
+      <!-- Encabezado de la Sección -->
+      <div class="faq-header">
+        <span class="faq-badge">FAQ</span>
+        <h2>Preguntas Frecuentes</h2>
+        <p>Encuentra respuestas rápidas a las preguntas más comunes sobre nuestras soluciones de IA y cómo pueden ayudarte.</p>
+      </div>
+
+      <!-- Buscador y Tópicos -->
+      <div class="faq-search">
+        <div class="search-box">
+          <i class="fas fa-search"></i>
+          <input type="text" id="faq-search-input" placeholder="Buscar preguntas...">
+          <button id="search-clear" aria-label="Limpiar búsqueda" style="display: none;">×</button>
+          <!-- Contenedor para sugerencias (agregado por JS) -->
+          <!-- <div id="suggestion-list" class="suggestion-items"></div> -->
+        </div>
+         <!-- Contador de resultados (agregado por JS) -->
+         <!-- <div id="results-counter" class="results-counter"></div> -->
+        <div class="faq-topics">
+          <button class="topic-btn active" data-topic="all">Todos</button>
+          <button class="topic-btn" data-topic="general">General</button>
+          <button class="topic-btn" data-topic="integracion">Integración</button>
+          <button class="topic-btn" data-topic="seguridad">Seguridad</button>
+          <button class="topic-btn" data-topic="precios">Precios</button>
+          <button class="topic-btn" data-topic="soporte">Soporte</button>
+        </div>
+      </div>
+
+      <!-- Mensaje de No Resultados (Controlado por JS) -->
+      <div class="faq-no-results" style="display: none;">
+        <!-- Si tienes assets/img/no-results.svg, perfecto. Si no, considera un icono FA: -->
+        <!-- <i class="fas fa-search-minus fa-3x" style="color: var(--faq-primary-light); margin-bottom: 1rem; display:block;"></i> -->
+        <img src="assets/img/no-results.svg" alt="No se encontraron resultados" width="100" height="100">
+        <h3>No se encontraron resultados</h3>
+        <p>Intenta con otros términos de búsqueda o explora los tópicos.</p>
+        <a href="#contacto" class="contact-link">
+          <i class="fas fa-headset"></i>
+          Contactar Soporte
+        </a>
+      </div>
+
+      <!-- Lista de Preguntas -->
+      <div class="faq-items">
+
+        <!-- Pregunta 1: General -->
+        <div class="faq-item" data-topic="general">
+          <div class="faq-question" role="button" aria-expanded="false">
+            <div class="question-icon"><i class="fas fa-info-circle"></i></div>
+            <div class="question-text">
+              <h3>¿Qué es exactamente la Inteligencia Artificial que ofrecen?</h3>
+              <!-- Botón de compartir (añadido por JS) -->
+              <!-- <button class="share-faq-btn"><i class="fas fa-share-alt"></i></button> -->
+            </div>
+            <div class="question-toggle"><i class="fas fa-chevron-down"></i></div>
+          </div>
+          <div class="faq-answer">
+            <p>Nuestra plataforma de IA utiliza algoritmos avanzados de aprendizaje automático (Machine Learning) y procesamiento del lenguaje natural (NLP) para automatizar tareas, analizar datos complejos, generar insights y mejorar la toma de decisiones en tu negocio.</p>
+            <p>Nos enfocamos en soluciones personalizadas que se adaptan a las necesidades específicas de cada industria.</p>
+            <!-- Feedback (añadido por JS) -->
+            <!-- <div class="answer-feedback">...</div> -->
+          </div>
+        </div>
+
+        <!-- Pregunta 2: Integración -->
+        <div class="faq-item" data-topic="integracion">
+          <div class="faq-question" role="button" aria-expanded="false">
+            <div class="question-icon"><i class="fas fa-cogs"></i></div>
+            <div class="question-text">
+              <h3>¿Cómo se integra su solución de IA con mis sistemas actuales (CRM, ERP, etc.)?</h3>
+            </div>
+            <div class="question-toggle"><i class="fas fa-chevron-down"></i></div>
+          </div>
+          <div class="faq-answer">
+            <p>Ofrecemos múltiples opciones de integración:</p>
+            <ul>
+              <li><strong>APIs Robustas:</strong> Nuestra API RESTful permite una comunicación fluida entre nuestra IA y tus sistemas existentes.</li>
+              <li><strong>Conectores Pre-construidos:</strong> Disponemos de conectores para plataformas populares como Salesforce, SAP, HubSpot, y más.</li>
+              <li><strong>Integración Personalizada:</strong> Nuestro equipo de expertos puede desarrollar soluciones de integración a medida si tus sistemas lo requieren.</li>
+            </ul>
+            <p>El proceso generalmente sigue estos pasos:</p>
+            <div class="timeline">
+              <div class="timeline-item">
+                <div class="timeline-marker">1</div>
+                <div class="timeline-content">
+                  <h4>Análisis de Sistemas</h4>
+                  <p>Evaluamos tu infraestructura actual y los puntos de integración necesarios.</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-marker">2</div>
+                <div class="timeline-content">
+                  <h4>Configuración API/Conector</h4>
+                  <p>Configuramos o desarrollamos la conexión entre sistemas.</p>
+                </div>
+              </div>
+              <div class="timeline-item">
+                <div class="timeline-marker">3</div>
+                <div class="timeline-content">
+                  <h4>Pruebas y Validación</h4>
+                  <p>Aseguramos que el flujo de datos sea correcto y seguro.</p>
+                </div>
+              </div>
+               <div class="timeline-item">
+                <div class="timeline-marker">4</div>
+                <div class="timeline-content">
+                  <h4>Puesta en Marcha</h4>
+                  <p>Activamos la integración en tu entorno de producción.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+         <!-- Pregunta 3: Seguridad -->
+        <div class="faq-item" data-topic="seguridad">
+          <div class="faq-question" role="button" aria-expanded="false">
+            <div class="question-icon"><i class="fas fa-shield-alt"></i></div>
+            <div class="question-text">
+              <h3>¿Qué medidas de seguridad toman para proteger mis datos?</h3>
+            </div>
+            <div class="question-toggle"><i class="fas fa-chevron-down"></i></div>
+          </div>
+          <div class="faq-answer">
+            <p>La seguridad y privacidad de tus datos son nuestra máxima prioridad. Implementamos múltiples capas de seguridad:</p>
+            <div class="security-layers">
+               <div class="security-layer">
+                  <div class="layer-icon"><i class="fas fa-lock"></i></div>
+                  <div class="layer-content">
+                     <h4>Cifrado de Datos</h4>
+                     <p>Todos los datos, tanto en tránsito (TLS 1.2+) como en reposo (AES-256), están cifrados.</p>
+                  </div>
+               </div>
+               <div class="security-layer">
+                  <div class="layer-icon"><i class="fas fa-user-shield"></i></div>
+                  <div class="layer-content">
+                     <h4>Control de Acceso</h4>
+                     <p>Autenticación robusta y gestión de permisos basada en roles (RBAC).</p>
+                  </div>
+               </div>
+               <div class="security-layer">
+                  <div class="layer-icon"><i class="fas fa-server"></i></div>
+                  <div class="layer-content">
+                     <h4>Infraestructura Segura</h4>
+                     <p>Alojamiento en centros de datos certificados con medidas de seguridad física y lógica.</p>
+                  </div>
+               </div>
+               <div class="security-layer">
+                  <div class="layer-icon"><i class="fas fa-clipboard-check"></i></div>
+                  <div class="layer-content">
+                     <h4>Auditorías Regulares</h4>
+                     <p>Realizamos auditorías de seguridad internas y externas periódicamente.</p>
+                  </div>
+               </div>
+            </div>
+            <p>Cumplimos con normativas como GDPR y CCPA. Además, contamos con las siguientes certificaciones:</p>
+            <div class="security-certifications">
+                <span class="certification">ISO 27001</span>
+                <span class="certification">SOC 2 Tipo II</span>
+                <!-- Añadir más si aplica -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Pregunta 4: Precios -->
+        <div class="faq-item" data-topic="precios">
+          <div class="faq-question" role="button" aria-expanded="false">
+            <div class="question-icon"><i class="fas fa-dollar-sign"></i></div>
+            <div class="question-text">
+              <h3>¿Cuál es el modelo de precios? ¿Hay costos ocultos?</h3>
+            </div>
+            <div class="question-toggle"><i class="fas fa-chevron-down"></i></div>
+          </div>
+          <div class="faq-answer">
+            <p>Ofrecemos planes flexibles basados en el uso, características y nivel de soporte requerido. Nuestro objetivo es la transparencia.</p>
+            <div class="pricing-compare">
+              <div class="price-option">
+                 <div class="price-header"><h4>Básico</h4><span class="price-tag">Desde $99/mes</span></div>
+                 <ul>
+                    <li>Funcionalidades esenciales</li>
+                    <li>Soporte por email</li>
+                    <li>1 integración estándar</li>
+                 </ul>
+              </div>
+              <div class="price-option featured">
+                 <div class="price-header"><h4>Pro</h4><span class="price-tag">Desde $299/mes</span></div>
+                 <ul>
+                    <li>Funcionalidades avanzadas</li>
+                    <li>Soporte prioritario</li>
+                    <li>Hasta 5 integraciones</li>
+                    <li>Analíticas detalladas</li>
+                 </ul>
+              </div>
+              <div class="price-option">
+                 <div class="price-header"><h4>Empresarial</h4><span class="price-tag">Personalizado</span></div>
+                 <ul>
+                    <li>Todas las funcionalidades</li>
+                    <li>Soporte dedicado 24/7</li>
+                    <li>Integraciones ilimitadas</li>
+                    <li>SLA personalizado</li>
+                 </ul>
+              </div>
+            </div>
+            <p class="pricing-note">Los precios pueden variar según el volumen de datos y personalizaciones. No hay costos ocultos; cualquier cargo adicional por configuración o servicios profesionales se discute y acuerda previamente.</p>
+             <div class="answer-cta">
+               <a href="#contacto" class="btn-cta"><i class="fas fa-calculator"></i> Solicitar Cotización</a>
+             </div>
+          </div>
+        </div>
+
+        <!-- Pregunta 5: Soporte -->
+        <div class="faq-item" data-topic="soporte">
+          <div class="faq-question" role="button" aria-expanded="false">
+            <div class="question-icon"><i class="fas fa-headset"></i></div>
+            <div class="question-text">
+              <h3>¿Qué tipo de soporte y formación ofrecen?</h3>
+            </div>
+            <div class="question-toggle"><i class="fas fa-chevron-down"></i></div>
+          </div>
+          <div class="faq-answer">
+            <p>Estamos comprometidos con tu éxito. Ofrecemos varios niveles de soporte y recursos de formación:</p>
+            <div class="support-tiers">
+              <div class="support-tier">
+                 <div class="tier-header"><h4>Soporte Estándar</h4></div>
+                 <ul>
+                    <li>Acceso a base de conocimientos</li>
+                    <li>Soporte por email (respuesta en 24h hábiles)</li>
+                    <li>Actualizaciones de plataforma</li>
+                 </ul>
+              </div>
+              <div class="support-tier">
+                 <div class="tier-header"><h4>Soporte Premium</h4> <span class="tier-badge">Pro+</span></div>
+                 <ul>
+                    <li>Todo lo de Estándar</li>
+                    <li>Soporte telefónico y chat</li>
+                    <li>Respuesta prioritaria (4h hábiles)</li>
+                    <li>Gestor de cuenta asignado</li>
+                 </ul>
+              </div>
+            </div>
+            <p>Además, ofrecemos módulos de formación para tu equipo:</p>
+            <div class="training-modules">
+               <div class="training-module">
+                  <div class="module-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+                  <div class="module-details">
+                     <h4>Introducción a la Plataforma</h4>
+                     <p>Conceptos básicos y navegación.</p>
+                     <span class="module-duration">Duración: 2 horas</span>
+                  </div>
+               </div>
+               <div class="training-module">
+                  <div class="module-icon"><i class="fas fa-brain"></i></div>
+                  <div class="module-details">
+                     <h4>Uso Avanzado y Optimización</h4>
+                     <p>Sacando el máximo partido a las funcionalidades de IA.</p>
+                     <span class="module-duration">Duración: 4 horas</span>
+                  </div>
+               </div>
+                <div class="training-module">
+                  <div class="module-icon"><i class="fas fa-tools"></i></div>
+                  <div class="module-details">
+                     <h4>Administración y Mantenimiento</h4>
+                     <p>Para equipos técnicos y administradores.</p>
+                     <span class="module-duration">Duración: 3 horas</span>
+                  </div>
+               </div>
+            </div>
+             <div class="answer-quote">
+              <blockquote>"El equipo de soporte fue increíblemente rápido y útil durante nuestra implementación. La formación nos permitió empezar a ver resultados casi de inmediato."</blockquote>
+              <cite>María López, Directora de Operaciones en Ejemplo Corp</cite>
+             </div>
+          </div>
+        </div>
+
+        <!-- Pregunta 6: General / ROI -->
+        <div class="faq-item" data-topic="general">
+          <div class="faq-question" role="button" aria-expanded="false">
+            <div class="question-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="question-text">
+              <h3>¿Cómo puedo medir el Retorno de la Inversión (ROI) de implementar IA?</h3>
+            </div>
+            <div class="question-toggle"><i class="fas fa-chevron-down"></i></div>
+          </div>
+          <div class="faq-answer">
+            <p>Medir el ROI es crucial. Te ayudamos a definir y rastrear KPIs clave según tus objetivos. Algunos ejemplos comunes incluyen:</p>
+             <div class="requirements-grid"> <!-- Reutilizando grid para KPIs -->
+               <div class="requirement-card">
+                  <i class="fas fa-clock"></i>
+                  <h4>Reducción de Tiempo</h4>
+                  <p>Disminución del tiempo empleado en tareas manuales.</p>
+               </div>
+               <div class="requirement-card">
+                  <i class="fas fa-euro-sign"></i>
+                  <h4>Ahorro de Costos</h4>
+                  <p>Reducción de costos operativos o de personal.</p>
+               </div>
+               <div class="requirement-card">
+                  <i class="fas fa-arrow-up"></i>
+                  <h4>Aumento de Ingresos</h4>
+                  <p>Mejora en ventas, conversión o retención de clientes.</p>
+               </div>
+               <div class="requirement-card">
+                  <i class="fas fa-thumbs-up"></i>
+                  <h4>Satisfacción del Cliente</h4>
+                  <p>Mejora en NPS, CSAT o reducción de quejas.</p>
+               </div>
+             </div>
+             <p>Nuestra plataforma incluye dashboards analíticos para visualizar estas métricas. Ejemplo de impacto:</p>
+             <div class="roi-chart">
+                <div class="roi-bar">
+                   <div class="roi-label">Eficiencia Operativa</div>
+                   <!-- Ancho controlado por JS, valor inicial 0% -->
+                   <div class="roi-value" style="width: 75%;">+75%</div>
+                </div>
+                <div class="roi-bar">
+                   <div class="roi-label">Precisión en Pronósticos</div>
+                   <div class="roi-value" style="width: 85%;">+85%</div>
+                </div>
+                 <div class="roi-bar">
+                   <div class="roi-label">Tiempo de Respuesta al Cliente</div>
+                   <div class="roi-value" style="width: 60%; background-color: var(--faq-secondary-color);">-60%</div> <!-- Ejemplo con otro color -->
+                </div>
+             </div>
+          </div>
+        </div>
+
+        <!-- Añadir más preguntas según sea necesario -->
+
+      </div>
+
+      <!-- Footer de la sección FAQ -->
+      <div class="faq-footer">
+        <p>¿No encuentras la respuesta que buscas?</p>
+        <div class="footer-actions">
+          <a href="#contacto" class="btn-contact contact-link"> <!-- Unificar clases -->
+            <i class="fas fa-envelope"></i> Contacta con nosotros
+          </a>
+          <a href="/documentacion" class="btn-docs">
+            <i class="fas fa-book-open"></i> Ver Documentación
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+
+
+
+
+
+
+
+
+
+<!-- FOOTER -->
+      <footer class="footer">
+        <div class="footer-curve">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 120">
+            <path fill="#0b1d35" fill-opacity="1" d="M0,96L80,80C160,64,320,32,480,26.7C640,21,800,43,960,53.3C1120,64,1280,64,1360,64L1440,64L1440,120L1360,120C1280,120,1120,120,960,120C800,120,640,120,480,120C320,120,160,120,80,120L0,120Z"></path>
+            </svg>
+        </div>
+        
+        <div class="footer-content container">
+            <div class="footer-main">
+            <!-- Columna 1: Logo y descripción -->
+            <div class="footer-col brand-col">
+                <div class="footer-logo">
+                <h2>LYXIA</h2>
+                <span class="logo-accent"></span>
+                </div>
+                <p class="footer-desc">
+                Potenciamos tu negocio con Inteligencia Artificial y 
+                soluciones a medida.
+                </p>
+                <div class="social-icons">
+                <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            
+            <!-- Columna 2: Enlaces -->
+            <div class="footer-col links-col">
+                <h4>Enlaces</h4>
+                <ul class="footer-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#about">Quiénes Somos</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#metodologia">Metodología</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </div>
+            
+            <!-- Columna 3: Contacto -->
+            <div class="footer-col contact-col">
+                <h4>Contacto</h4>
+                <ul class="contact-info">
+                <li>
+                    <div class="contact-icon">
+                    <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="contact-text">
+                    <a href="mailto:info@nexa.com">info@LYXIA.com</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="contact-icon">
+                    <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <div class="contact-text">
+                    <a href="tel:+34600000000">+34 600 000 000</a>
+                    </div>
+                </li>
+                <li>
+                    <div class="contact-icon">
+                    <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="contact-text">
+                    Calle Ejemplo 123, Ciudad, País
+                    </div>
+                </li>
+                </ul>
+            </div>
+
+            <!-- Columna 4: Suscripción newsletter -->
+            <div class="footer-col newsletter-col">
+                <h4>Newsletter</h4>
+                <p>Suscríbete para recibir novedades y ofertas especiales.</p>
+                <form id="newsletter-form" class="newsletter-form">
+                <div class="form-group">
+                    <input type="email" placeholder="Tu email" required>
+                    <button type="submit" aria-label="Suscribirse">
+                    <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                </form>
+                <div id="newsletter-message" class="newsletter-message"></div>
+            </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="container">
+            <p>© 2025 LYXIA. Todos los derechos reservados.</p>
+            <div class="footer-legal">
+                <a href="#">Política de Privacidad</a>
+                <span class="separator">|</span>
+                <a href="#">Términos y Condiciones</a>
+                <span class="separator">|</span>
+                <a href="#">Cookies</a>
+            </div>
+            </div>
+        </div>
+
+        <button id="back-to-top" aria-label="Volver arriba">
+            <i class="fas fa-chevron-up"></i>
+        </button>
+        </footer>
+
+      <script src="script.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.4/lottie.min.js"></script>
+</body>
+</html>
