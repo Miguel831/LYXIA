@@ -1547,55 +1547,216 @@ body {
 /*================================================================
   10. FOOTER
 =================================================================*/
-.footer { position: relative; background-color: var(--color-bg-dark); color: var(--color-text-white); overflow: hidden; }
-.footer-curve { display: block; line-height: 0; margin-bottom: -1px; }
-.footer-curve svg { width: 100%; height: auto; }
-.footer-content { padding: 50px 0 30px; }
-.footer-main { display: flex; flex-direction: column; gap: 30px; }
-.footer-col h4 { font-size: 1.1rem; font-weight: 700; margin: 0 0 15px 0; padding-bottom: 10px; position: relative; color: var(--color-text-white); }
-.footer-col h4::after { content: ''; position: absolute; bottom: 0; left: 0; width: 40px; height: 2px; background-color: var(--color-accent); }
-.footer-desc, .newsletter-col p { color: var(--color-text-muted); line-height: 1.7; margin: 15px 0; }
-.footer-logo h2 { font-size: 1.8rem; font-weight: 700; margin: 0; background: linear-gradient(90deg, var(--color-text-white), var(--color-accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-.social-icons { display: flex; gap: 12px; margin-top: 15px; }
-.social-icon { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.1); color: var(--color-text-white); text-decoration: none; transition: var(--transition-main); }
-.social-icon:hover { background-color: var(--color-accent); transform: translateY(-3px); }
-.social-icon i { font-size: 1rem; }
-.footer-links, .contact-info { list-style: none; padding: 0; margin: 0; }
+/*================================================================
+  10. FOOTER - VERSIÓN COMPLETA Y MEJORADA
+=================================================================*/
+
+/* NUEVO (Si no tienes una clase container, puedes usar esta) */
+/* Un contenedor genérico para centrar el contenido */
+.container {
+  width: 100%;
+  max-width: 1200px; /* O tu ancho preferido */
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.footer {
+  position: relative;
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-white);
+  overflow: hidden;
+}
+
+.footer-curve {
+  display: block;
+  line-height: 0;
+  margin-bottom: -1px; /* Evita un pequeño espacio bajo el SVG */
+}
+
+.footer-curve svg {
+  width: 100%;
+  height: auto;
+}
+
+.footer-content {
+  /* MEJORA: Padding vertical fluido */
+  padding-block: clamp(40px, 8vw, 80px);
+}
+
+.footer-main {
+  display: grid;
+  /* MEJORA CLAVE: Una sola línea para un layout totalmente responsive */
+  /* - 'auto-fit' crea tantas columnas como quepan.
+     - 'minmax(250px, 1fr)' dice que cada columna debe tener un mínimo de 250px
+       y puede crecer para ocupar el espacio disponible (1fr). */
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: clamp(30px, 5vw, 50px); /* MEJORA: Gap fluido */
+}
+
+.footer-col h4 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 0 0 15px 0;
+  padding-bottom: 10px;
+  position: relative;
+  color: var(--color-text-white);
+}
+
+.footer-col h4::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background-color: var(--color-accent);
+}
+
+.footer-desc, .newsletter-col p {
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin: 15px 0;
+}
+
+.footer-logo h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(90deg, var(--color-text-white), var(--color-accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.social-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--color-text-white);
+  text-decoration: none;
+  transition: var(--transition-main);
+}
+
+.social-icon:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-3px);
+}
+
+.social-icon i {
+  font-size: 1rem;
+}
+
+.footer-links, .contact-info {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
 .footer-links li { margin-bottom: 12px; }
 .footer-links a { color: var(--color-text-muted); text-decoration: none; transition: var(--transition-main); }
 .footer-links a:hover { color: var(--color-accent); padding-left: 5px; }
-.contact-info li { display: flex; align-items: center; margin-bottom: 15px; }
+.contact-info li { display: flex; align-items: start; margin-bottom: 15px; } /* MEJORA: align-items: start para textos largos */
 .contact-icon { display: flex; align-items: center; justify-content: center; flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background-color: rgba(255, 255, 255, 0.1); margin-right: 15px; color: var(--color-accent); transition: var(--transition-main); }
 .contact-icon:hover { background-color: var(--color-accent); color: var(--color-text-white); }
 .contact-icon i { font-size: 0.9rem; }
 .contact-text, .contact-text a { color: var(--color-text-muted); text-decoration: none; line-height: 1.5; transition: var(--transition-main); }
 .contact-text a:hover { color: var(--color-accent); }
-.newsletter-form .form-group { display: flex; border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-sm); }
-.newsletter-form input { flex-grow: 1; padding: 14px; border: none; outline: none; font-size: 0.9rem; }
-.newsletter-form button { background-color: var(--color-accent); color: var(--color-text-white); border: none; padding: 0 20px; cursor: pointer; transition: var(--transition-main); }
+
+.newsletter-form .form-group {
+  display: flex;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  background: #fff; /* AÑADIDO: Fondo para que el input se vea bien */
+}
+.newsletter-form input {
+  flex-grow: 1;
+  padding: 14px;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  background: transparent; /* AÑADIDO: El input debe ser transparente */
+  color: var(--color-bg-dark); /* AÑADIDO: Color del texto del input */
+}
+.newsletter-form button {
+  background-color: var(--color-accent);
+  color: var(--color-text-white);
+  border: none;
+  padding: 0 20px;
+  cursor: pointer;
+  transition: var(--transition-main);
+  flex-shrink: 0; /* AÑADIDO: Evita que el botón se encoja */
+}
 .newsletter-form button:hover { background-color: var(--color-accent-dark); }
 .newsletter-form button i { font-size: 1rem; }
 .newsletter-message { font-size: 0.85rem; margin-top: 10px; min-height: 20px; }
-.footer-bottom { padding: 20px 0; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center; }
-.footer-bottom .container { display: flex; flex-direction: column; gap: 15px; }
-.footer-bottom p { margin: 0; color: var(--color-text-muted); font-size: 0.85rem; }
-.footer-legal { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
-.footer-legal a { color: var(--color-text-muted); text-decoration: none; font-size: 0.85rem; transition: var(--transition-main); }
+
+.footer-bottom {
+  padding-block: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom-content { /* NUEVO: Wrapper para el flexbox */
+  display: flex;
+  flex-direction: column; /* Mobile first: apilado */
+  align-items: center;
+  gap: 15px;
+  text-align: center;
+}
+
+.footer-bottom p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 8px 16px; /* MEJORA: Gap vertical y horizontal */
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.footer-legal a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: var(--transition-main);
+}
 .footer-legal a:hover { color: var(--color-accent); }
-.footer-legal .separator { display: none; }
+.footer-legal .separator { display: none; } /* Mantenido para el breakpoint */
+
+/* Botón de volver arriba (sin cambios, ya está bien) */
 #back-to-top { position: fixed; bottom: 20px; right: 20px; width: 45px; height: 45px; background-color: var(--color-accent); color: var(--color-text-white); border: none; border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center; box-shadow: var(--shadow-md); opacity: 0; transform: translateY(20px); transition: opacity 0.3s, transform 0.3s; z-index: 999; }
 #back-to-top.visible { opacity: 1; transform: translateY(0); }
 #back-to-top:hover { background-color: var(--color-accent-dark); }
 #back-to-top i { font-size: 1.1rem; }
 
+/* =================== MEDIA QUERIES SIMPLIFICADAS =================== */
+
 @media (min-width: 768px) {
-  .footer-main { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 30px; display: grid; }
-  .footer-bottom .container { flex-direction: row; justify-content: space-between; align-items: center; }
-  .footer-legal .separator { display: inline; color: var(--color-text-muted); }
+  .footer-bottom-content {
+    flex-direction: row; /* En pantallas más grandes, se pone en fila */
+    justify-content: space-between;
+  }
+
+  .footer-legal .separator {
+    display: inline;
+    color: var(--color-text-muted);
+  }
 }
-@media (min-width: 1024px) {
-  .footer-main { grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr; gap: 40px; }
-}
+
+/* ELIMINADO: El media query para 1024px ya no es necesario gracias al layout de rejilla auto-fit */
 
 
 
