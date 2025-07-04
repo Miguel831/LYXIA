@@ -97,18 +97,20 @@ body {
 }
 
 .nexa-navbar-container {
-  /* CAMBIO: Se hace más ancho por defecto. */
-  max-width: 100%; /* Ocupa todo el ancho */
+  /* MEJORA: Hacemos que ocupe todo el ancho y controlamos el espacio con padding.
+     Esto es más robusto que un max-width fijo para el contenedor principal. */
+  max-width: 100%; 
   margin: 0 auto;
-  padding: 0 50px; /* Añade espacio a los lados */
+  padding: 0 50px; /* Mantenemos el espaciado para pantallas grandes */
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center; /* Mantiene el logo centrado */
+  justify-content: center;
   flex-wrap: wrap;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* ... (el resto del CSS del logo y nav-links se mantiene igual) ... */
 .nexa-logo-center {
   position: absolute;
   left: 50%;
@@ -193,7 +195,7 @@ body {
   right: 60px; /* Ajustado para el nuevo ancho */
   top: 50%;
   transform: translateY(-50%);
-  opacity: 1; /* Hacemos el CTA visible por defecto en desktop */
+  opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -276,6 +278,8 @@ body {
 .nexa-menu-active .nexa-menu-icon span:nth-child(2) { opacity: 0; width: 0; }
 .nexa-menu-active .nexa-menu-icon span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
 
+/* Media Queries corregidas */
+
 @media (max-width: 1100px) {
   .nexa-nav-item { margin: 0 15px; }
   .nexa-nav-cta { right: 40px; }
@@ -284,11 +288,19 @@ body {
 
 @media (max-width: 991px) {
   .nexa-mobile-menu-toggle { display: block; }
-  /* CORRECCIÓN: Se cambia el padding de 1px a 20px para un espaciado correcto en móviles. */
-  .nexa-navbar-container { justify-content: space-between; padding: 0 20px; }
-  .nexa-logo-center { position: static; transform: none; margin: 0 auto; }
+  /* ===== CORRECCIÓN CLAVE AQUÍ ===== */
+  /* Cambiamos el padding de 1px a 20px para dar espacio en los laterales en móvil. */
+  .nexa-navbar-container { 
+      justify-content: space-between; 
+      padding: 0 20px; 
+  }
+  .nexa-logo-center { 
+      position: static; 
+      transform: none; 
+      margin: 0 auto; 
+  }
   .nexa-nav-cta {
-    /* CORRECCIÓN: Asegura que el botón de CTA esté bien posicionado en móvil. */
+    /* Aseguramos que el CTA esté bien posicionado. */
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
@@ -313,7 +325,7 @@ body {
     backdrop-filter: blur(10px);
   }
   .nexa-nav-links { flex-direction: column; align-items: center; }
-  .nexa-nav-item { margin: 20px 0; font-size: 1.2rem; } /* Aumenta el tamaño para mejor toque */
+  .nexa-nav-item { margin: 20px 0; font-size: 1.2rem; }
   .nexa-menu-active + .nexa-nav-left { left: 0; }
   .nexa-nav-right { display: none; }
 }
@@ -739,13 +751,12 @@ body {
 
 
 /*================================================================
-  5. QUIÉNES SOMOS (ABOUT) - CORREGIDO
+  5. QUIÉNES SOMOS (ABOUT)
 =================================================================*/
 .about {
   position: relative; overflow: hidden; display: flex;
   flex-direction: column; justify-content: center; align-items: center;
-  /* CAMBIO: Más padding vertical y padding estándar horizontal */
-  padding: 100px 20px;
+  padding: 80px 40px;
 }
 .about-bg-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
 .about-bg {
@@ -767,11 +778,7 @@ body {
 .about .shape-5 { width: 90px;  height: 90px;  background: var(--color-primary); top: 50%; right: 5%; animation-delay: 8s; }
 #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6; }
 
-.about-grid { display: grid; grid-template-columns: repeat(12, 1fr); 
-  /* CAMBIO: Más espacio entre columnas */
-  gap: 60px; 
-  position: relative; z-index: 2; width: 100%; max-width: 1200px; /* Asegura que el contenido esté centrado */
-}
+.about-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; position: relative; z-index: 2; width: 100%; }
 .about-content { grid-column: 1 / 7; color: var(--color-text-white); }
 .about-stats-wrapper { grid-column: 7 / 13; position: relative; }
 
@@ -827,16 +834,49 @@ body {
 .value-item:hover .value-content h3 { color: var(--color-accent); }
 .value-content p { margin-bottom: 0; font-size: 0.95rem; line-height: 1.6; }
 
+.about-cta { display: flex; gap: 20px; margin-top: 20px; }
+.about .btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 14px 28px; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;
+  font-size: 1rem; transition: var(--transition-main); text-align: center;
+  letter-spacing: 0.5px; position: relative; overflow: hidden; z-index: 1;
+}
+.about .btn i { margin-right: 8px; font-size: 1.1rem; }
+.about .btn-primary { background-color: var(--color-text-white); color: var(--color-primary-dark); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
+.about .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); }
+.about .btn-outline { background-color: transparent; border: 2px solid var(--color-text-white); color: var(--color-text-white); }
+.about .btn-outline:hover { color: var(--color-primary-dark); background-color: var(--color-text-white); }
+
+.lottie-container {
+  height: 200px; margin-bottom: 30px; display: flex; justify-content: center; align-items: center;
+}
+.fallback-animation { display: flex; justify-content: center; align-items: center; height: 100%; }
+
+.tech-stack {
+  background: var(--color-text-white); border-radius: var(--radius-md); padding: 25px;
+  margin-top: 30px; box-shadow: var(--shadow-md); position: relative; z-index: 1;
+}
+.tech-stack h3 { font-size: 1.4rem; color: var(--color-primary-dark); margin-bottom: 20px; text-align: center; }
+.tech-icons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }
+.tech-icon { display: flex; flex-direction: column; align-items: center; transition: var(--transition-main); }
+.tech-icon i { font-size: 2.5rem; color: var(--color-primary); margin-bottom: 10px; transition: var(--transition-main); }
+.tech-icon span { font-size: 0.9rem; color: var(--color-text-light); }
+.tech-icon:hover { transform: translateY(-5px); animation: pulse 0.5s ease-in-out; }
+.tech-icon:hover i { color: var(--color-accent); transform: scale(1.1); }
+.tech-stack:hover::before { opacity: 1; }
+
 @media (max-width: 992px) {
   .about-grid { grid-template-columns: 1fr; gap: 60px; }
   .about-content, .about-stats-wrapper { grid-column: 1 / -1; }
   .about .section-title { font-size: 2.5rem; }
+  .tech-icons { grid-template-columns: repeat(3, 1fr); }
 }
-
 @media (max-width: 768px) {
   .about { padding: 50px 20px; }
   .value-item { padding: 20px; flex-direction: column; text-align: center; align-items: center;}
   .value-icon { margin-right: 0; margin-bottom: 15px; }
+  .about-cta { flex-direction: column; gap: 15px; }
+  .about .btn, .value-item:hover, .tech-icon:hover { transform: none !important; }
 }
 
 
@@ -1320,8 +1360,7 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23e0e4f1' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   opacity: 0.6; z-index: 0;
 }
-.cnt-container { max-width: 1200px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; padding-right: 65px; }
-.cnt-header { text-align: center; margin-bottom: 60px; }
+cnt-header { text-align: center; margin-bottom: 60px; }
 .cnt-title { font-size: 2.8rem; color: var(--color-text-dark); margin-bottom: 15px; position: relative; display: inline-block; font-weight: 700; }
 .cnt-title::after { content: ''; position: absolute; width: 80px; height: 5px; background: var(--gradient-primary); bottom: -15px; left: 50%; transform: translateX(-50%); border-radius: 10px; }
 .cnt-subtitle { font-size: 1.1rem; color: var(--color-text-light); max-width: 650px; margin: 30px auto 0; line-height: 1.7; }
@@ -1458,9 +1497,45 @@ body {
   .cnt-submit-button { width: 100%; }
 }
 
-#wheel-panel { position: fixed; top: 50%; transform: translateY(-50%); right: -420px; width: 400px; max-width: 90%; background: rgba(255,255,255,0.97); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 20px 0 0 20px; box-shadow: -5px 5px 30px rgba(0,0,0,0.15); transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 1100; height: auto; max-height: 90vh; border-left: 3px solid var(--color-accent); }
+#wheel-panel { 
+  position: fixed; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  right: -100%; /* MEJORA: Usamos porcentaje para ocultarlo completamente */
+  width: 400px; 
+  max-width: 90%; /* MEJORA: La ruleta nunca será más ancha que el 90% de la pantalla */
+  background: rgba(255,255,255,0.97); 
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px); 
+  border-radius: 20px 0 0 20px; 
+  box-shadow: -5px 5px 30px rgba(0,0,0,0.15); 
+  transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+  z-index: 1100; 
+  height: auto; 
+  max-height: 90vh; 
+  border-left: 3px solid var(--color-accent); 
+}
 #wheel-panel.open { right: 0; }
-#panel-toggle { position: absolute; top: 50%; left: -40px; transform: translateY(-50%); width: 40px; height: 110px; background: linear-gradient(145deg, var(--color-accent), var(--color-accent-dark)); border-radius: 10px 0 0 10px; color: white; font-size: 1.5rem; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: -3px 3px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; }
+#panel-toggle { 
+  position: absolute; 
+  top: 50%; 
+  left: -40px; /* MEJORA: Esto ahora funcionará bien sin el padding extra */
+  transform: translateY(-50%); 
+  width: 40px; 
+  height: 110px; 
+  background: linear-gradient(145deg, var(--color-accent), var(--color-accent-dark)); 
+  border-radius: 10px 0 0 10px; 
+  color: white; 
+  font-size: 1.5rem; 
+  font-weight: bold; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  cursor: pointer; 
+  box-shadow: -3px 3px 15px rgba(0,0,0,0.2); 
+  transition: all 0.3s ease; 
+}
+
 #panel-toggle:hover { background: linear-gradient(145deg, var(--color-accent-dark), var(--color-accent)); width: 45px; left: -45px; }
 .panel-content { padding: 25px; text-align: center; position: relative; overflow-y: auto; max-height: calc(90vh - 50px); scrollbar-width: thin; scrollbar-color: var(--color-accent) #f0f0f0; }
 #panel-toggle svg { width: 20px; height: 20px; display: block; }
@@ -1470,7 +1545,15 @@ body {
 .panel-content h2::after { content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); width: 60px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--color-primary), var(--color-accent)); }
 .wheel-container { position: relative; display: inline-block; margin: 20px 0 30px; filter: drop-shadow(0px 15px 25px rgba(0,0,0,0.18)); perspective: 1000px; transform-style: preserve-3d; transition: transform 0.4s ease; }
 .wheel-container:hover { transform: translateY(-5px) scale(1.02); }
-#wheel { border-radius: 50%; transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 300px; height: 300px; border: 5px solid rgba(255,255,255,0.8); }
+#wheel {
+    width: 300px; /* Este tamaño fijo está bien, ya que el contenedor se encogerá */
+    max-width: 100%; /* Hacemos el canvas responsive dentro de su contenedor */
+    height: auto; /* Mantenemos la proporción */
+    border-radius: 50%; 
+    transition: transform 5s cubic-bezier(0.22, 0.61, 0.36, 1); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); 
+    border: 5px solid rgba(255,255,255,0.8);
+}
 #pointer { position: absolute; top: -18px; left: calc(50% - 18px); width: 36px; height: 36px; z-index: 10; filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.3)); animation: bounce 1.5s infinite alternate ease-in-out; }
 @keyframes bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
 #pointer svg { width: 100%; height: 100%; }
