@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
   handleScroll();
 });
 
+
 //================================================================
 // 2. HERO
 //================================================================
@@ -534,21 +535,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 //================================================================
-// 10. SECCIÓN DE ACCIÓN (CTA)
+// 10. SECCIÓN DE ACCIÓN (CTA) - VERSIÓN CORREGIDA
 //================================================================
 document.addEventListener('DOMContentLoaded', function() {
+  // Ahora encontrará la sección porque el ID está en el HTML
   const ctaSection = document.getElementById('accion');
   if (!ctaSection) return;
 
   // Cargar Lottie para la animación
   const lottieContainer = document.getElementById('lottie-animation-cta');
+  // Esta comprobación es vital. Asegúrate de tener la librería Lottie cargada.
   if (typeof lottie !== 'undefined' && lottieContainer) {
     lottie.loadAnimation({
       container: lottieContainer,
       renderer: 'svg',
       loop: true,
       autoplay: true,
-      path: 'assets/lottie3.json'
+      // PASO 4: Verifica que esta ruta es correcta desde tu archivo HTML.
+      // Abre la consola del navegador (F12) y mira en la pestaña "Network" si hay un error 404.
+      path: 'assets/lottie3.json' 
     });
   }
 
@@ -563,7 +568,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }, { threshold: 0.1 });
 
-  const elementsToAnimate = ctaSection.querySelectorAll('.cta-title, .cta-description, .benefit-item, .cta-action-area, .lottie-container');
+  // PASO 2: Quitamos '.lottie-container' de la lista de elementos a animar.
+  // De esta forma, la animación no se ocultará con opacity: 0 y será visible desde el principio.
+  const elementsToAnimate = ctaSection.querySelectorAll('.cta-title, .cta-description, .benefit-item, .cta-action-area');
+  
   elementsToAnimate.forEach(el => {
     el.style.opacity = '0';
     el.style.transform = 'translateY(20px)';
