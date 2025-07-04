@@ -81,7 +81,7 @@ body {
 
 
 /*================================================================
-  2. NAVBAR
+  2. NAVBAR - CORREGIDO
 =================================================================*/
 .nexa-navbar-wrapper {
   position: fixed;
@@ -96,21 +96,15 @@ body {
   -webkit-backdrop-filter: blur(12px);
 }
 
-.nexa-navbar-wide .nexa-navbar-container {
-  max-width: 100%;
-  margin: 0;
-  padding: 0 50px;
-}
-
 .nexa-navbar-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 1440px;
+  /* CAMBIO: Se hace más ancho por defecto. */
+  max-width: 100%; /* Ocupa todo el ancho */
   margin: 0 auto;
-  padding: 1rem;
+  padding: 0 50px; /* Añade espacio a los lados */
   position: relative;
   display: flex;
+  align-items: center;
+  justify-content: center; /* Mantiene el logo centrado */
   flex-wrap: wrap;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -173,7 +167,7 @@ body {
   position: relative;
   padding: 8px 4px;
   display: inline-block;
-  transition: color var(--transition-speed-normal) ease;
+  transition: color var(--transition-speed-normal) ease, transform var(--transition-speed-normal) ease;
 }
 
 .nexa-nav-indicator {
@@ -196,12 +190,12 @@ body {
 
 .nexa-nav-cta {
   position: absolute;
-  right: 60px;
-  top: 150%;
-  transform: translateY(20px) scale(0.95);
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
+  right: 60px; /* Ajustado para el nuevo ancho */
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 1; /* Hacemos el CTA visible por defecto en desktop */
+  visibility: visible;
+  pointer-events: auto;
   transition: all 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
   z-index: 20;
 }
@@ -254,20 +248,6 @@ body {
   box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2), 0 2px 8px rgba(114, 9, 183, 0.1);
 }
 
-.nexa-navbar-scrolled .nexa-nav-cta,
-.nexa-cta-visible {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(-50%) scale(1);
-  pointer-events: auto;
-}
-
-@keyframes borderGlow {
-  0% { box-shadow: 0 0 0 0 rgba(72, 149, 239, 0.4); }
-  70% { box-shadow: 0 0 0 10px rgba(72, 149, 239, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(72, 149, 239, 0); }
-}
-
 .nexa-mobile-menu-toggle {
   display: none;
   cursor: pointer;
@@ -297,17 +277,27 @@ body {
 .nexa-menu-active .nexa-menu-icon span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
 
 @media (max-width: 1100px) {
-  .nexa-nav-left, .nexa-nav-right { width: auto; }
-  .nexa-nav-left { margin-right: 50px; }
-  .nexa-nav-right { margin-left: 50px; }
-  .nexa-nav-item { margin: 0 10px; }
+  .nexa-nav-item { margin: 0 15px; }
   .nexa-nav-cta { right: 40px; }
+  .nexa-navbar-container { padding: 0 40px; }
 }
 
 @media (max-width: 991px) {
   .nexa-mobile-menu-toggle { display: block; }
-  .nexa-navbar-container { justify-content: space-between; padding: 0 1px; }
+  /* CORRECCIÓN: Se cambia el padding de 1px a 20px para un espaciado correcto en móviles. */
+  .nexa-navbar-container { justify-content: space-between; padding: 0 20px; }
   .nexa-logo-center { position: static; transform: none; margin: 0 auto; }
+  .nexa-nav-cta {
+    /* CORRECCIÓN: Asegura que el botón de CTA esté bien posicionado en móvil. */
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .nexa-cta-button {
+    padding: 8px 14px;
+    font-size: 13px;
+    height: 40px;
+  }
   .nexa-nav-left, .nexa-nav-right {
     position: fixed;
     top: 0;
@@ -317,32 +307,24 @@ body {
     background: rgba(18, 18, 24, 0.98);
     flex-direction: column;
     justify-content: center;
+    align-items: center; /* Centra los elementos del menú */
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     z-index: 5;
     backdrop-filter: blur(10px);
   }
   .nexa-nav-links { flex-direction: column; align-items: center; }
-  .nexa-nav-item { margin: 15px 0; }
+  .nexa-nav-item { margin: 20px 0; font-size: 1.2rem; } /* Aumenta el tamaño para mejor toque */
   .nexa-menu-active + .nexa-nav-left { left: 0; }
   .nexa-nav-right { display: none; }
-  .nexa-navbar-scrolled .nexa-nav-cta { transform: translateY(-90%) scale(1); }
-  .nexa-cta-button {
-    padding: 10px 18px;
-    font-size: 14px;
-    height: auto;
-    min-width: auto;
-    border-radius: 10px;
-  }
 }
 
 @media (max-width: 480px) {
-  .nexa-navbar-wrapper { padding: 15px 0; min-height: 60px; }
-  .nexa-navbar-scrolled { padding: 10px 0; min-height: 55px; }
+  .nexa-navbar-wrapper { padding: 10px 0; min-height: 60px; }
   .nexa-logo-img { height: 40px; }
   .nexa-navbar-container { padding: 0 15px; }
   .nexa-mobile-menu-toggle { left: 15px; }
   .nexa-nav-cta { right: 15px; }
-  .nexa-cta-button { padding: 4px 10px; font-size: 13px; }
+  .nexa-cta-button { padding: 4px 10px; font-size: 12px; height: 36px; }
 }
 
 
@@ -757,12 +739,13 @@ body {
 
 
 /*================================================================
-  5. QUIÉNES SOMOS (ABOUT)
+  5. QUIÉNES SOMOS (ABOUT) - CORREGIDO
 =================================================================*/
 .about {
   position: relative; overflow: hidden; display: flex;
   flex-direction: column; justify-content: center; align-items: center;
-  padding: 80px 40px;
+  /* CAMBIO: Más padding vertical y padding estándar horizontal */
+  padding: 100px 20px;
 }
 .about-bg-wrapper { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; }
 .about-bg {
@@ -784,7 +767,11 @@ body {
 .about .shape-5 { width: 90px;  height: 90px;  background: var(--color-primary); top: 50%; right: 5%; animation-delay: 8s; }
 #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6; }
 
-.about-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; position: relative; z-index: 2; width: 100%; }
+.about-grid { display: grid; grid-template-columns: repeat(12, 1fr); 
+  /* CAMBIO: Más espacio entre columnas */
+  gap: 60px; 
+  position: relative; z-index: 2; width: 100%; max-width: 1200px; /* Asegura que el contenido esté centrado */
+}
 .about-content { grid-column: 1 / 7; color: var(--color-text-white); }
 .about-stats-wrapper { grid-column: 7 / 13; position: relative; }
 
@@ -840,49 +827,16 @@ body {
 .value-item:hover .value-content h3 { color: var(--color-accent); }
 .value-content p { margin-bottom: 0; font-size: 0.95rem; line-height: 1.6; }
 
-.about-cta { display: flex; gap: 20px; margin-top: 20px; }
-.about .btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  padding: 14px 28px; border-radius: var(--radius-full); font-weight: 600; text-decoration: none;
-  font-size: 1rem; transition: var(--transition-main); text-align: center;
-  letter-spacing: 0.5px; position: relative; overflow: hidden; z-index: 1;
-}
-.about .btn i { margin-right: 8px; font-size: 1.1rem; }
-.about .btn-primary { background-color: var(--color-text-white); color: var(--color-primary-dark); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); }
-.about .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2); }
-.about .btn-outline { background-color: transparent; border: 2px solid var(--color-text-white); color: var(--color-text-white); }
-.about .btn-outline:hover { color: var(--color-primary-dark); background-color: var(--color-text-white); }
-
-.lottie-container {
-  height: 200px; margin-bottom: 30px; display: flex; justify-content: center; align-items: center;
-}
-.fallback-animation { display: flex; justify-content: center; align-items: center; height: 100%; }
-
-.tech-stack {
-  background: var(--color-text-white); border-radius: var(--radius-md); padding: 25px;
-  margin-top: 30px; box-shadow: var(--shadow-md); position: relative; z-index: 1;
-}
-.tech-stack h3 { font-size: 1.4rem; color: var(--color-primary-dark); margin-bottom: 20px; text-align: center; }
-.tech-icons { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; text-align: center; }
-.tech-icon { display: flex; flex-direction: column; align-items: center; transition: var(--transition-main); }
-.tech-icon i { font-size: 2.5rem; color: var(--color-primary); margin-bottom: 10px; transition: var(--transition-main); }
-.tech-icon span { font-size: 0.9rem; color: var(--color-text-light); }
-.tech-icon:hover { transform: translateY(-5px); animation: pulse 0.5s ease-in-out; }
-.tech-icon:hover i { color: var(--color-accent); transform: scale(1.1); }
-.tech-stack:hover::before { opacity: 1; }
-
 @media (max-width: 992px) {
   .about-grid { grid-template-columns: 1fr; gap: 60px; }
   .about-content, .about-stats-wrapper { grid-column: 1 / -1; }
   .about .section-title { font-size: 2.5rem; }
-  .tech-icons { grid-template-columns: repeat(3, 1fr); }
 }
+
 @media (max-width: 768px) {
   .about { padding: 50px 20px; }
   .value-item { padding: 20px; flex-direction: column; text-align: center; align-items: center;}
   .value-icon { margin-right: 0; margin-bottom: 15px; }
-  .about-cta { flex-direction: column; gap: 15px; }
-  .about .btn, .value-item:hover, .tech-icon:hover { transform: none !important; }
 }
 
 
