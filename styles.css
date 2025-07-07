@@ -982,7 +982,7 @@ body {
   5. QUIÉNES SOMOS (ABOUT)
 =================================================================*/
 .about {
-  position: relative; overflow: hidden; display: flex;
+  position: relative; display: flex;
   flex-direction: column; justify-content: center; align-items: center;
   padding: 80px 15px;
 }
@@ -1006,7 +1006,7 @@ body {
 .about .shape-5 { width: 90px;  height: 90px;  background: var(--color-primary); top: 50%; right: 5%; animation-delay: 8s; }
 #particles-js { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; opacity: 0.6; }
 
-.about-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; position: relative; z-index: 2; width: 100%; }
+.about-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; position: relative; z-index: 2; width: 100%; }
 .about-content { grid-column: 1 / 7; color: var(--color-text-white); }
 .about-stats-wrapper { grid-column: 7 / 13; position: relative; }
 
@@ -1095,7 +1095,7 @@ body {
 
 @media (max-width: 992px) {
   .about-grid { grid-template-columns: 1fr; gap: 60px; }
-  .about-content, .about-stats-wrapper { grid-column: 1 / -1; }
+  .about-content, .about-stats-wrapper {  width: 100%;  max-width: none; }
   .about .section-title { font-size: 2.5rem; }
   .tech-icons { grid-template-columns: repeat(3, 1fr); }
 }
@@ -1106,6 +1106,31 @@ body {
   .about-cta { flex-direction: column; gap: 15px; }
   .about .btn, .value-item:hover, .tech-icon:hover { transform: none !important; }
 }
+
+
+@media (max-width: 576px) {
+  .about {
+    padding: 40px 10px;
+  }
+  .about-grid {
+    grid-template-columns: 1fr;  /* Una sola columna */
+    gap: 20px;
+  }
+  .about-content,
+  .about-stats-wrapper {
+    padding: 0;                 /* Eliminamos padding extra */
+    margin: 0 auto;             /* Centramos */
+  }
+  .about .section-title {
+    font-size: 2.2rem;          /* Ajustamos el tamaño */
+  }
+  .about-description p,
+  .about .highlight-text {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}
+
 
 
 /*================================================================
