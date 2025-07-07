@@ -416,17 +416,21 @@ body {
 
 @media (max-width: 991px) {
   .nexa-mobile-menu-toggle { display: block; }
-  /* ===== CORRECCIÓN CLAVE AQUÍ ===== */
-  /* Cambiamos el padding de 1px a 20px para dar espacio en los laterales en móvil. */
-  .nexa-navbar-container { 
-      justify-content: space-between; 
-      padding: 0 20px; 
+
+  .nexa-navbar-container {
+    justify-content: space-between; /* Mantenemos esto para separar los elementos */
+    align-items: center; /* CAMBIO CLAVE: Alinea verticalmente el logo y el icono */
+    padding: 0 20px; /* CAMBIO CLAVE: Añade 20px de espacio a la izquierda y derecha */
   }
-  .nexa-logo-center { 
-      position: static; 
-      transform: none; 
-      margin: 0 auto; 
+  .nexa-logo-center {
+    /* Devolvemos el logo al flujo normal del documento */
+    position: static;
+    transform: none;
+    /* Eliminamos el 'order' que no es necesario y reseteamos el margen */
+    order: 0; 
+    margin: 0;
   }
+
   .nexa-nav-cta {
     /* Aseguramos que el CTA esté bien posicionado. */
     right: 20px;
