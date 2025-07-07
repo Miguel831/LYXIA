@@ -84,16 +84,13 @@ body {
   2. NAVBAR - CORREGIDO
 =================================================================*/
 .nexa-navbar-wrapper {
-  position: fixed;
+  position: fixed; /* 1. Fija la barra en la parte superior de la pantalla */
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  padding: 15px 0;
-  background-color: rgba(18, 18, 24, 0.75);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  z-index: var(--z-index-menu-hamburguesa); /* 2. Se asegura de que esté por encima de otro contenido */
+  background-color: rgba(18, 18, 24, 0.75); /* 3. Le da un color de fondo oscuro y semi-transparente */
+  backdrop-filter: blur(12px); /* 4. Crea el efecto de desenfoque en el contenido que está detrás */
 }
 
 .nexa-navbar-container {
@@ -423,13 +420,10 @@ body {
     padding: 0 20px; /* CAMBIO CLAVE: Añade 20px de espacio a la izquierda y derecha */
   }
   .nexa-logo-center {
-    /* Devolvemos el logo al flujo normal del documento */
-    position: static;
-    transform: none;
-    /* Eliminamos el 'order' que no es necesario y reseteamos el margen */
-    order: 0; 
-    margin: 0;
-  }
+  position: static; /* Se elimina el posicionamiento absoluto */
+  transform: none; /* Se quita la transformación de centrado */
+  margin: 0 auto; /* Se centra horizontalmente con margen automático */
+}
 
   .nexa-nav-cta {
     /* Aseguramos que el CTA esté bien posicionado. */
@@ -460,11 +454,13 @@ body {
   .nexa-nav-item { margin: 20px 0; font-size: 1.2rem; }
   .nexa-menu-active + .nexa-nav-left { left: 0; }
   .nexa-nav-right { display: none; }
-  .nexa-nav-left,
-  .nexa-nav-right,
-  .nexa-nav-cta {
-    display: none;
-  }
+  .nexa-nav-left, .nexa-nav-right {
+  position: fixed; /* Se posicionan de forma fija para crear un panel lateral */
+  left: -100%;    /* Se mueven completamente fuera de la pantalla hacia la izquierda */
+  width: 80%;
+  height: 100vh;  /* Ocupan toda la altura de la pantalla */
+  /* ...otros estilos para el menú desplegable... */
+}
   
   /* Mostramos el botón de hamburguesa */
   .nexa-mobile-menu-toggle {
