@@ -84,13 +84,16 @@ body {
   2. NAVBAR - CORREGIDO
 =================================================================*/
 .nexa-navbar-wrapper {
-  position: fixed; /* 1. Fija la barra en la parte superior de la pantalla */
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  z-index: var(--z-index-menu-hamburguesa); /* 2. Se asegura de que esté por encima de otro contenido */
-  background-color: rgba(18, 18, 24, 0.75); /* 3. Le da un color de fondo oscuro y semi-transparente */
-  backdrop-filter: blur(12px); /* 4. Crea el efecto de desenfoque en el contenido que está detrás */
+  z-index: 1000;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 15px 0;
+  background-color: rgba(18, 18, 24, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .nexa-navbar-container {
@@ -420,10 +423,13 @@ body {
     padding: 0 20px; /* CAMBIO CLAVE: Añade 20px de espacio a la izquierda y derecha */
   }
   .nexa-logo-center {
-  position: static; /* Se elimina el posicionamiento absoluto */
-  transform: none; /* Se quita la transformación de centrado */
-  margin: 0 auto; /* Se centra horizontalmente con margen automático */
-}
+    /* Devolvemos el logo al flujo normal del documento */
+    position: static;
+    transform: none;
+    /* Eliminamos el 'order' que no es necesario y reseteamos el margen */
+    order: 0; 
+    margin: 0;
+  }
 
   .nexa-nav-cta {
     /* Aseguramos que el CTA esté bien posicionado. */
@@ -454,13 +460,11 @@ body {
   .nexa-nav-item { margin: 20px 0; font-size: 1.2rem; }
   .nexa-menu-active + .nexa-nav-left { left: 0; }
   .nexa-nav-right { display: none; }
-  .nexa-nav-left, .nexa-nav-right {
-  position: fixed; /* Se posicionan de forma fija para crear un panel lateral */
-  left: -100%;    /* Se mueven completamente fuera de la pantalla hacia la izquierda */
-  width: 80%;
-  height: 100vh;  /* Ocupan toda la altura de la pantalla */
-  /* ...otros estilos para el menú desplegable... */
-}
+  .nexa-nav-left,
+  .nexa-nav-right,
+  .nexa-nav-cta {
+    display: none;
+  }
   
   /* Mostramos el botón de hamburguesa */
   .nexa-mobile-menu-toggle {
@@ -1078,10 +1082,18 @@ body {
   transition: width 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 .proceso-steps {
-  display: flex; flex-wrap: nowrap; overflow-x: hidden;
-  scroll-behavior: smooth; -ms-overflow-style: none; scrollbar-width: none;
+  display: flex; flex-wrap: nowrap;
+  overflow-x: scroll; 
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; scrollbar-width: none;
   padding: 20px 0; gap: 30px; position: relative;
+  cursor: grab; 
+  user-select: none; 
 }
+.proceso-steps.active {
+    cursor: grabbing; 
+}
+
 .proceso-steps::-webkit-scrollbar { display: none; }
 .proceso-step {
   flex: 0 0 380px; min-height: 300px; background-color: var(--color-text-white);
@@ -1124,21 +1136,7 @@ body {
 .paso-beneficio { display: flex; align-items: center; margin-bottom: 10px; font-size: 14px; color: var(--color-text-light); }
 .paso-beneficio i { color: var(--color-success); margin-right: 10px; font-size: 16px; }
 
-.proceso-controles { display: flex; justify-content: center; margin-top: 50px; gap: 20px; }
-.proceso-boton {
-  background-color: var(--color-text-white); border: none; color: var(--color-text-dark);
-  padding: 15px 25px; border-radius: var(--radius-md); cursor: pointer;
-  font-size: 16px; font-weight: 600; transition: var(--transition-main);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: var(--shadow-sm); min-width: 160px;
-}
-.proceso-boton:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
-.proceso-boton.primary { background: var(--gradient-primary); color: var(--color-text-white); box-shadow: var(--shadow-primary); }
-.proceso-boton.primary:hover { box-shadow: var(--shadow-primary-hover); }
-.proceso-boton i { margin-right: 10px; font-size: 18px; }
-.proceso-boton.next i { margin-right: 0; margin-left: 10px; }
-
-.indicadores-container { display: flex; justify-content: center; margin-top: 30px; gap: 8px; }
+.indicadores-container { display: flex; justify-content: center; margin-top: 50px; gap: 8px; }
 .indicador { width: 12px; height: 12px; border-radius: 50%; background-color: var(--color-border); cursor: pointer; transition: all 0.3s ease; }
 .indicador.active { background-color: var(--color-primary); transform: scale(1.3); }
 
@@ -1162,6 +1160,47 @@ body {
   border: none; cursor: pointer;
 }
 .cta-boton:hover { transform: translateY(-5px); box-shadow: var(--shadow-primary-hover); }
+
+.decorative-shape {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--color-primary-light);
+  opacity: 0.1;
+}
+.shape-1 { width: 200px; height: 200px; top: 10%; left: 5%; }
+.shape-2 { width: 150px; height: 150px; bottom: 15%; right: 10%; }
+.shape-3 { width: 100px; height: 100px; top: 50%; right: 30%; }
+
+/* Animación para fadeInUp */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Animación para pulso */
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); }
+}
+
+/* Animación para flotación */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Clases de utilidad para invocar esas animaciones */
+.animate-fadeInUp {
+  animation: fadeInUp 0.8s ease forwards;
+  opacity: 0;
+}
+.pulse-animation {
+  animation: pulse 2s ease-in-out infinite;
+}
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
 
 @media (max-width: 768px) {
   .metodologia-header h2 { font-size: 36px; }

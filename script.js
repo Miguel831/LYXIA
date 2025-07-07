@@ -224,28 +224,33 @@ document.addEventListener('DOMContentLoaded', () => {
 //================================================================
 // 5. METODOLOGIA
 //================================================================
-document.addEventListener('DOMContentLoaded', function() {
+window.addEventListener('load', function() {
     const stepsContainer = document.getElementById('procesoSteps');
     if (!stepsContainer) return;
 
     const steps = document.querySelectorAll('.proceso-step');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
     const progressBar = document.getElementById('procesoProgreso');
     const indicadoresContainer = document.getElementById('indicadoresContainer');
     
     let currentStep = 0;
-    const stepWidth = steps.length > 0 ? steps[0].offsetWidth + 30 : 0;
+    // Ahora 'stepWidth' se calcula de forma segura
+    const stepWidth = steps.length > 0 ? steps[0].offsetWidth + 30 : 0; // +30 por el gap
     
-    const updateUI = () => {
-      if (!stepsContainer.style.display || stepsContainer.style.display === 'flex') {
-        stepsContainer.scrollLeft = currentStep * stepWidth;
-      }
-      steps.forEach((step, i) => step.classList.toggle('active', i === currentStep));
-      const progress = (currentStep / (steps.length - 1)) * 100;
-      progressBar.style.width = `${progress}%`;
-      const indicators = indicadoresContainer.children;
-      Array.from(indicators).forEach((ind, i) => ind.classList.toggle('active', i === currentStep));
+    const updateUI = (snap = true) => {
+        if (snap && stepWidth > 0) {
+            stepsContainer.scrollTo({
+                left: currentStep * stepWidth,
+                behavior: 'smooth'
+            });
+        }
+        
+        steps.forEach((step, i) => step.classList.toggle('active', i === currentStep));
+        
+        const progress = (currentStep / (steps.length - 1)) * 100;
+        progressBar.style.width = `${progress}%`;
+        
+        const indicators = indicadoresContainer.children;
+        Array.from(indicators).forEach((ind, i) => ind.classList.toggle('active', i === currentStep));
     };
 
     steps.forEach((_, index) => {
@@ -258,8 +263,81 @@ document.addEventListener('DOMContentLoaded', function() {
         indicadoresContainer.appendChild(indicador);
     });
 
-    prevBtn.addEventListener('click', () => { currentStep = Math.max(0, currentStep - 1); updateUI(); });
-    nextBtn.addEventListener('click', () => { currentStep = Math.min(steps.length - 1, currentStep + 1); updateUI(); });
+    // --- LÓGICA DE ARRASTRE ---
+    let isDown = false;
+    let startX;
+    let scrollLeft;
+    let lastScrollLeft = 0; // Para detectar la dirección del swipe
+    let velocity = 0; // Velocidad del swipe
+    let lastTime = 0;
+
+    const startDrag = (e) => {
+        isDown = true;
+        stepsContainer.classList.add('active');
+        startX = (e.pageX || e.touches[0].pageX) - stepsContainer.offsetLeft;
+        scrollLeft = stepsContainer.scrollLeft;
+        stepsContainer.style.scrollBehavior = 'auto';
+        lastTime = Date.now();
+    };
+
+    const endDrag = (e) => {
+        if (!isDown) return;
+        isDown = false;
+        stepsContainer.classList.remove('active');
+        stepsContainer.style.scrollBehavior = 'smooth';
+        
+        const finalScrollLeft = stepsContainer.scrollLeft;
+        const dragDistance = finalScrollLeft - scrollLeft;
+        
+        // Lógica de snap mejorada: considera la dirección y velocidad del swipe
+        let newStep = currentStep;
+        if (Math.abs(dragDistance) > 50 || Math.abs(velocity) > 0.5) { // Umbral de distancia o velocidad
+             if (dragDistance > 0) { // Swipe a la izquierda
+                newStep = Math.min(steps.length - 1, currentStep + 1);
+             } else if (dragDistance < 0) { // Swipe a la derecha
+                newStep = Math.max(0, currentStep - 1);
+             }
+        } else {
+            // Si el arrastre es corto, volvemos al paso actual
+            newStep = Math.round(finalScrollLeft / stepWidth);
+        }
+        
+        currentStep = Math.max(0, Math.min(steps.length - 1, newStep));
+        
+        updateUI(); 
+    };
+
+    const moveDrag = (e) => {
+        if (!isDown) return;
+        e.preventDefault(); // Prevenir scroll vertical en móvil mientras se arrastra horizontalmente
+        const x = (e.pageX || e.touches[0].pageX) - stepsContainer.offsetLeft;
+        const walk = (x - startX);
+        stepsContainer.scrollLeft = scrollLeft - walk;
+        
+        // Calcular velocidad
+        const now = Date.now();
+        const dt = now - lastTime;
+        if (dt > 0) {
+            velocity = (stepsContainer.scrollLeft - lastScrollLeft) / dt;
+        }
+        lastTime = now;
+        lastScrollLeft = stepsContainer.scrollLeft;
+    };
+    
+    stepsContainer.addEventListener('mousedown', startDrag);
+    stepsContainer.addEventListener('mouseleave', endDrag);
+    stepsContainer.addEventListener('mouseup', endDrag);
+    stepsContainer.addEventListener('mousemove', moveDrag);
+    
+    stepsContainer.addEventListener('touchstart', startDrag, { passive: true }); // passive:true para mejor rendimiento si no prevenimos default
+    stepsContainer.addEventListener('touchend', endDrag);
+    stepsContainer.addEventListener('touchmove', (e) => {
+        if(isDown) { // Solo prevenir el comportamiento por defecto si estamos arrastrando
+            e.preventDefault();
+            moveDrag(e);
+        }
+    }, { passive: false });
+
 
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
@@ -269,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }, { threshold: 0.1 });
-    document.querySelectorAll('.metodologia-section .animate-fadeInUp, .metodologia-section .estadistica').forEach(el => observer.observe(el));
+    document.querySelectorAll('.metodologia-section .animate-fadeInUp').forEach(el => observer.observe(el));
     
     updateUI();
 });
