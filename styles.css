@@ -619,20 +619,58 @@ body {
 .hero-cta .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); transform: translateY(-3px); }
 
 .hero-stats {
-  display: flex; align-items: center; margin-top: 15px; margin-bottom: 15px;
-  padding: 5px 5px; border-radius: var(--radius-lg);
-  background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 1s 0.6s ease forwards; opacity: 0;
+  display: flex; /* Mantiene los elementos en línea */
+  align-items: center; /* Centra verticalmente los items */
+  justify-content: space-around; /* Distribuye el espacio entre los items */
+  flex-wrap: nowrap; /* MUY IMPORTANTE: Evita que los items salten a otra línea */
+  width: 100%; /* Ocupa todo el ancho disponible en su contenedor */
+  margin-top: 15px;
+  margin-bottom: 15px;
+  padding: 10px 5px; /* Padding reducido para más flexibilidad */
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  animation: fadeInUp 1s 0.6s ease forwards;
+  opacity: 0;
+  gap: 10px; /* Espacio flexible entre los elementos, mejor que un margin fijo */
 }
-.stat-item { display: flex; flex-direction: column; align-items: flex-start; }
-.stat-divider { width: 1px; height: 40px; background: rgba(255, 255, 255, 0.1); margin: 0 30px; }
-.stat-number { font-size: 32px; font-weight: 700; color: var(--color-text-white); margin-bottom: 5px; position: relative; }
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centramos el texto para que se vea bien al encogerse */
+  text-align: center; /* Asegura que el texto de abajo también esté centrado */
+  flex: 1 1 0; /* Permite que el elemento se encoja y crezca según el espacio. Es la clave de la adaptabilidad. */
+  min-width: 0; /* Necesario para que flex-shrink funcione correctamente en algunos navegadores */
+}
+
+.stat-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0; /* Evita que el divisor se encoja */
+}
+
+.stat-number {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--color-text-white);
+  margin-bottom: 5px;
+  position: relative;
+}
+/* Eliminamos el after del número porque puede verse mal en espacios pequeños */
 .stat-number::after {
-  content: ''; position: absolute; width: 100%; height: 2px;
-  background: var(--gradient-primary); bottom: -2px; left: 0;
+  display: none; 
 }
-.stat-text { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
+
+.stat-text {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.2; /* Ligeramente más compacto */
+}
+
 
 .hero-visual { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 1rem; }
 .hero-image { position: relative; max-width: 500px; width: 100%; }
@@ -643,9 +681,17 @@ body {
 .dec-3 { width: 40px; height: 40px; bottom: 10%; right: 30%; background: rgba(114, 9, 183, 0.5); animation-delay: 0.5s; }
 
 .scroll-indicator {
-  position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center;
-  animation: fadeIn 1s 1s ease forwards; opacity: 0; transition: var(--transition-main);
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: fadeIn 1s 1s ease forwards;
+  opacity: 0;
+  transition: var(--transition-main);
+  z-index: 6; /* AÑADIDO: Asegura que esté por encima del .hero-content (z-index: 5) */
 }
 .scroll-indicator:hover { transform: translateX(-50%) translateY(-5px); }
 .scroll-indicator a { text-decoration: none; color: var(--color-text-white); }
@@ -671,10 +717,19 @@ body {
 @media (max-width: 992px) {
   .hero-content { flex-direction: column; justify-content: center; padding-top: 80px; }
   .hero-text-container, .hero-visual { width: 100%; max-width: 600px; padding-right: 0; text-align: center; }
-  .hero-text-container { margin-bottom: 50px; }
+  .hero-text-container { margin-bottom: 40px; justify-content: center; }
   .hero-description { max-width: 100%; margin-left: auto; margin-right: auto; }
   .hero-cta { justify-content: center; }
-  .hero-stats { justify-content: center; }
+  .stat-divider {
+    margin: 0; /* Eliminamos márgenes fijos para que el 'gap' controle el espacio */
+  }
+  .stat-number {
+    font-size: 24px;
+  }
+  .stat-text {
+    font-size: 12px;
+  }
+
   .hero-title::after { left: 50%; transform: translateX(-50%); }
   .stat-item { align-items: center; }
 }
@@ -691,8 +746,26 @@ body {
   .hero-title { font-size: 45px; }
   .hero-cta { flex-direction: column; }
   .hero-cta .btn-secondary { margin-left: 0; margin-top: 15px; }
-  .hero-stats { flex-direction: column; gap: 20px; padding: 20px; }
-  .stat-divider { display: none; }
+  .hero-stats {
+    /* YA NO SE CAMBIA A COLUMNA. MANTENEMOS FLEX ROW. */
+    padding: 10px;
+    gap: 5px; /* Reducimos aún más el espacio entre elementos */
+  }
+
+  /* El divisor se oculta para ganar espacio valioso en pantallas muy pequeñas */
+  .stat-divider {
+    display: none;
+  }
+
+  /* Hacemos los números un poco más pequeños para asegurar que quepan */
+  .stat-number {
+    font-size: 20px;
+  }
+
+  /* Y el texto también */
+  .stat-text {
+    font-size: 10px;
+  }
   .scroll-indicator { bottom: 20px; }
 }
 
@@ -730,7 +803,7 @@ body {
 .servicios-tag:hover { transform: translateY(-4px); box-shadow: var(--shadow-primary-hover); }
 
 .servicios-header h2 {
-  font-size: clamp(2.5rem, 5vw, 3rem);
+  font-size: clamp(1.5rem, 5vw, 2.8rem);
   margin: 0 0 15px;
   background: var(--gradient-primary);
   -webkit-background-clip: text; background-clip: text; color: transparent;
@@ -806,7 +879,7 @@ body {
 
 .servicio-icon {
   width: 90px; height: 90px; background: rgba(67, 97, 238, 0.1);
-  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  border-radius:65% 35% 65% 35%  / 50% 80% 50% 80%; 
   display: flex; justify-content: center; align-items: center;
   margin-bottom: 30px; color: var(--color-primary); font-size: 32px;
   transition: all 0.6s ease; position: relative; z-index: 1;
@@ -851,7 +924,7 @@ body {
   margin-bottom: 25px; padding-bottom: 12px;
   border-bottom: 2px solid rgba(67, 97, 238, 0.15); position: relative; z-index: 1;
 }
-.servicio-card-back-header h3 { font-size: 1.25rem; font-weight: 700; color: var(--color-text-white); margin: 0; }
+.servicio-card-back-header h3 { font-size: 1.1rem; font-weight: 700; color: var(--color-text-white); margin: 0; }
 .close-button {
   background: var(--color-bg-light); border: none; color: var(--color-text-light);
   font-size: 0.9rem; cursor: pointer; width: 36px; height: 36px; border-radius: 50%;
@@ -866,12 +939,12 @@ body {
 }
 .servicio-card-back-content h4 {
   font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--color-text-white); margin: 0 0 16px; display: inline-block; padding: 5px 12px;
+  color: var(--color-text-white); margin: 0 0 12px; display: inline-block; padding: 5px 12px;
   background-color: rgba(255, 255, 255, 0.1); border-radius: var(--radius-full); align-self: flex-start;
 }
 .servicio-card-back-content ul { list-style: none; padding: 0; margin: 0 0 25px; }
 .servicio-card-back-content li { display: flex; align-items: flex-start; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.5; }
-.servicio-card-back-content li i.fa-check-circle { color: var(--color-success); margin-right: 12px; font-size: 1.1rem; margin-top: 2px; }
+.servicio-card-back-content li i.fa-check-circle { color: var(--color-success); margin-right: 12px; font-size: 0.9rem; margin-top: 2px; }
 
 .cta-container { margin-top: 20px; z-index: 1; }
 .cta-button {
@@ -888,7 +961,6 @@ body {
 @media (max-width: 992px) {
   .servicios-grid { grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: 25px; }
   .servicio-card { height: 420px; }
-  .servicio-icon { width: 80px; height: 80px; font-size: 28px; }
 }
 @media (max-width: 768px) {
   .servicios-section { padding: 60px 15px; }
