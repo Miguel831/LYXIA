@@ -56,6 +56,41 @@ document.addEventListener('DOMContentLoaded', function() {
   handleScroll();
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+
+  const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+  const navbarWrapper = document.querySelector('.nexa-navbar-wrapper');
+  const mobileMenu = document.getElementById('mobileMenu');
+  const mobileLinks = document.querySelectorAll('.nexa-mobile-link, .nexa-mobile-cta');
+
+  // Función para abrir o cerrar el menú
+  function toggleMenu() {
+    // Añade/quita la clase 'is-open' al contenedor principal del navbar
+    // El CSS se encarga de toda la animación basándose en esta clase
+    navbarWrapper.classList.toggle('is-open');
+
+    // Añade/quita una clase al body para prevenir el scroll cuando el menú está abierto
+    document.body.classList.toggle('body-no-scroll');
+  }
+
+  // Evento para el botón de hamburguesa
+  if (mobileMenuToggle) {
+    mobileMenuToggle.addEventListener('click', toggleMenu);
+  }
+  
+  // Evento para cerrar el menú cuando se hace clic en un enlace
+  // Esto es crucial para páginas de una sola vista (single-page)
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      // Solo cierra el menú si está abierto
+      if (navbarWrapper.classList.contains('is-open')) {
+        toggleMenu();
+      }
+    });
+  });
+
+});
+
 
 //================================================================
 // 2. HERO

@@ -278,6 +278,134 @@ body {
 .nexa-menu-active .nexa-menu-icon span:nth-child(2) { opacity: 0; width: 0; }
 .nexa-menu-active .nexa-menu-icon span:nth-child(3) { top: 9px; transform: rotate(-45deg); }
 
+
+.nexa-mobile-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh; /* Ocupa toda la altura de la pantalla */
+  background: linear-gradient(135deg, #0a192f, #0e141b); /* Un fondo oscuro y elegante */
+  z-index: 999; /* Por debajo del botón de cierre, pero por encima de todo lo demás */
+  
+  /* Centrado del contenido */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  /* Estado inicial (oculto) */
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-100%);
+  transition: all 0.5s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* Estado activo (visible) cuando el header tiene la clase .is-open */
+.nexa-navbar-wrapper.is-open .nexa-mobile-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* --- 2. Lista y enlaces del menú móvil --- */
+.nexa-mobile-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.nexa-mobile-nav-links li {
+  margin: 20px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+/* Animación de entrada para los enlaces cuando el menú se abre */
+.nexa-navbar-wrapper.is-open .nexa-mobile-nav-links li {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Retraso en la animación para cada enlace (efecto cascada) */
+.nexa-navbar-wrapper.is-open .nexa-mobile-nav-links li:nth-child(1) { transition-delay: 0.2s; }
+.nexa-navbar-wrapper.is-open .nexa-mobile-nav-links li:nth-child(2) { transition-delay: 0.3s; }
+.nexa-navbar-wrapper.is-open .nexa-mobile-nav-links li:nth-child(3) { transition-delay: 0.4s; }
+.nexa-navbar-wrapper.is-open .nexa-mobile-nav-links li:nth-child(4) { transition-delay: 0.5s; }
+.nexa-navbar-wrapper.is-open .nexa-mobile-nav-links li:nth-child(5) { transition-delay: 0.6s; }
+
+.nexa-mobile-link {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 500;
+  padding: 10px 20px;
+  transition: color 0.3s ease;
+}
+
+.nexa-mobile-link:hover {
+  color: var(--color-primary-light); /* Usando tus variables de color */
+}
+
+/* Estilo especial para el botón CTA en el menú móvil */
+.nexa-mobile-cta {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 12px 28px;
+  color: #fff;
+  background: var(--gradient-primary);
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: 600;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nexa-mobile-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(67, 97, 238, 0.2);
+}
+
+
+/* --- 3. Icono de hamburguesa (el botón para abrir/cerrar) --- */
+.nexa-mobile-menu-toggle {
+  display: none; /* Oculto por defecto en escritorio */
+  width: 40px;
+  height: 40px;
+  position: relative;
+  z-index: 1000; /* Siempre encima de todo */
+  cursor: pointer;
+}
+
+.nexa-menu-icon {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.nexa-menu-icon span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background-color: #ffffff;
+  margin: 5px 0;
+  transition: all 0.3s ease-in-out;
+  border-radius: 2px;
+}
+
+/* Transformación del icono a una "X" cuando el menú está abierto */
+.nexa-navbar-wrapper.is-open .nexa-menu-icon span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.nexa-navbar-wrapper.is-open .nexa-menu-icon span:nth-child(2) {
+  opacity: 0;
+}
+.nexa-navbar-wrapper.is-open .nexa-menu-icon span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
 /* Media Queries corregidas */
 
 @media (max-width: 1100px) {
@@ -328,6 +456,30 @@ body {
   .nexa-nav-item { margin: 20px 0; font-size: 1.2rem; }
   .nexa-menu-active + .nexa-nav-left { left: 0; }
   .nexa-nav-right { display: none; }
+  .nexa-nav-left,
+  .nexa-nav-right,
+  .nexa-nav-cta {
+    display: none;
+  }
+  
+  /* Mostramos el botón de hamburguesa */
+  .nexa-mobile-menu-toggle {
+    display: block;
+  }
+
+  /* Ajustamos el layout del navbar para que el logo y el botón se alineen */
+  .nexa-navbar-container {
+    justify-content: space-between;
+  }
+  
+  .nexa-logo-center {
+      /* Quitamos la posición absoluta para que fluya con el toggle */
+      position: static;
+      transform: none;
+      order: -1; /* Opcional: para poner el logo a la izquierda del toggle */
+  }
+
+
 }
 
 @media (max-width: 480px) {
@@ -336,7 +488,7 @@ body {
   .nexa-navbar-container { padding: 0 15px; }
   .nexa-mobile-menu-toggle { left: 15px; }
   .nexa-nav-cta { right: 15px; }
-  .nexa-cta-button { padding: 4px 10px; font-size: 12px; height: 36px; }
+  .nexa-cta-button { display: none }
 }
 
 
@@ -463,8 +615,8 @@ body {
 .hero-cta .btn-secondary:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.3); transform: translateY(-3px); }
 
 .hero-stats {
-  display: flex; align-items: center; margin-top: 30px; margin-bottom: 30px;
-  padding: 25px 30px; border-radius: var(--radius-lg);
+  display: flex; align-items: center; margin-top: 15px; margin-bottom: 15px;
+  padding: 5px 5px; border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.05); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   animation: fadeInUp 1s 0.6s ease forwards; opacity: 0;
@@ -478,7 +630,7 @@ body {
 }
 .stat-text { font-size: 14px; color: rgba(255, 255, 255, 0.6); }
 
-.hero-visual { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 2rem; }
+.hero-visual { flex: 1; display: flex; align-items: center; justify-content: center; position: relative; padding: 1rem; }
 .hero-image { position: relative; max-width: 500px; width: 100%; }
 .rocket-image { width: 100%; max-width: 100%; height: auto; animation: float 5s ease-in-out infinite; }
 .decoration { position: absolute; border-radius: 50%; filter: blur(20px); z-index: -1; animation: pulse 4s infinite alternate; }
@@ -524,7 +676,7 @@ body {
 }
 @media (max-width: 768px) {
   .hero-section { min-height: 600px; }
-  .hero-title { font-size: 36px; }
+  .hero-title { font-size: 47px; }
   .hero-description { font-size: 15px; }
   .hero-cta .btn { padding: 14px 28px; font-size: 15px; }
   .stat-divider { margin: 0 15px; }
@@ -532,7 +684,7 @@ body {
   .stat-text { font-size: 12px; }
 }
 @media (max-width: 576px) {
-  .hero-title { font-size: 30px; }
+  .hero-title { font-size: 45px; }
   .hero-cta { flex-direction: column; }
   .hero-cta .btn-secondary { margin-left: 0; margin-top: 15px; }
   .hero-stats { flex-direction: column; gap: 20px; padding: 20px; }
@@ -1561,7 +1713,7 @@ cnt-header { text-align: center; margin-bottom: 60px; }
 #wheel-center:hover { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 8px 20px rgba(0,0,0,0.3); cursor: pointer; }
 #wheel-center svg { color: var(--color-gold); width: 35px; height: 35px; animation: spin 10s linear infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-#spin { background: linear-gradient(145deg, var(--color-primary), var(--color-primary-dark)); color: white; border: none; border-radius: 12px; padding: 16px 36px; cursor: pointer; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35); margin-top: 15px; position: relative; overflow: hidden; }
+#spin { background: linear-gradient(145deg, var(--color-pkbrimary), var(--color-primary-dark)); color: white; border: none; border-radius: 12px; padding: 16px 36px; cursor: pointer; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 8px 20px rgba(67, 97, 238, 0.35); margin-top: 15px; position: relative; overflow: hidden; }
 #spin:hover { background: linear-gradient(145deg, var(--color-primary-dark), var(--color-primary)); box-shadow: 0 12px 25px rgba(67, 97, 238, 0.45); transform: translateY(-3px) scale(1.05); }
 #spin:disabled { background: #c4c9e4; cursor: not-allowed; box-shadow: none; transform: none; opacity: 0.7; }
 #prize-message { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 2000; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); opacity: 0; visibility: hidden; display: flex; align-items: center; justify-content: center; transition: all 0.6s ease; }
@@ -1585,9 +1737,6 @@ cnt-header { text-align: center; margin-bottom: 60px; }
 
 /*================================================================
   10. FOOTER
-=================================================================*/
-/*================================================================
-  10. FOOTER - VERSIÓN COMPLETA Y MEJORADA
 =================================================================*/
 
 /* NUEVO (Si no tienes una clase container, puedes usar esta) */
