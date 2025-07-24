@@ -537,87 +537,32 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // --- LÓGICA DEL FORMULARIO DE CONTACTO (CORREGIDA) ---
-  const initContactForm = () => {
+  emailjs.init("YpkUjCbz5Q2OdcxJg"); // Inicializa EmailJS
 
-    
-    // --- CONFIGURA tus datos de EmailJS ---
-    const PUBLIC_KEY  = 'YpkUjCbz5Q2OdcxJg'; // Reemplaza con tu Public Key
-    const SERVICE_ID  = 'service_4ualn0c'; // Reemplaza con tu Service ID
-    const TEMPLATE_ID = 'template_15jgays';// Reemplaza con tu Template ID
+  function initContactForm() {
+      const form = document.getElementById("contactoForm");
 
-    // Inicializa EmailJS (solo si la librería está presente)
-    if (typeof emailjs !== 'undefined') {
-      emailjs.init({ publicKey: PUBLIC_KEY });
-    } else {
-      console.error("La librería EmailJS no está cargada. El formulario de contacto no funcionará.");
-      return;
-    }
-
-    // Referencias al DOM
-    const form         = document.getElementById('contactoForm');
-    const submitBtn    = document.getElementById('submitBtn');
-    const successModal = document.getElementById('successModal');
-    const closeSuccess = document.getElementById('closeSuccessModal');
-
-    // Si el formulario no existe en la página, no continuamos.
-    if (!form) return;
-
-    // Validación del formulario
-    function validateForm() {
-      let valid = true;
-      form.querySelectorAll('[required]').forEach(field => {
-        const row = field.closest('.cnt-form-row');
-        let ok = field.checkValidity();
-        if (field.type === 'email' && field.value) {
-          ok = /^\S+@\S+\.\S+$/.test(field.value);
-        }
-        if (row) {
-           row.classList.toggle('cnt-invalid', !ok);
-        }
-        if (!ok) valid = false;
-      });
-      return valid;
-    }
-
-    // Maneja el submit
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!validateForm()) {
-        form.classList.add('shake');
-        setTimeout(() => form.classList.remove('shake'), 500);
+      if (!form) {
+        console.error("No se encontró el formulario con ID 'contactoForm");
         return;
       }
 
-      submitBtn.disabled    = true;
-      submitBtn.textContent = 'Enviando...';
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
 
-      const templateParams = {
-        nombre:    form.nombre.value.trim(),
-        email:     form.email.value.trim(),
-        asunto:    form.asunto.value,
-        descuento: form.descuento.value.trim(),
-        mensaje:   form.mensaje.value.trim()
-      };
+        emailjs.sendForm("service_4ualn0c", "template_15jgays", this).then(
+          function () {
+            alert("Mensaje enviado correctamente.");
+            form.reset();
+          },
+          function (error) {
+            alert("Error al enviar el mensaje. Inténtalo más tarde.");
+            console.error(error);
+          }
+        );
+      });
+    }
 
-      try {
-        const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
-        console.log('Email enviado:', response.status, response.text);
-        if (successModal) successModal.classList.add('cnt-active');
-        form.reset();
-      } catch (error) {
-        console.error('Error al enviar email:', error);
-        alert('Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
-      } finally {
-        submitBtn.disabled    = false;
-        submitBtn.textContent = 'Enviar Mensaje';
-      }
-    });
-
-    // Cierra el modal
-    closeSuccess?.addEventListener('click', () => {
-      if (successModal) successModal.classList.remove('cnt-active');
-    });
-  };
 
   // --- INICIALIZACIÓN ---
   // Se ejecutan ambas funciones cuando el DOM está listo.
