@@ -465,157 +465,164 @@ document.addEventListener('DOMContentLoaded', function() {
 // 8. CONTACTO Y RULETA
 //================================================================
 document.addEventListener('DOMContentLoaded', () => {
-    const wheelPanel = document.getElementById('wheel-panel');
-    if (!wheelPanel) return;
 
-    // --- RULETA ---
+  // --- LÓGICA DE LA RULETA AVANZADA (SIN CAMBIOS) ---
+  const initAdvancedRoulette = () => {
+    // --- Configuración y Elementos del DOM ---
+    const prizes = [
+        { label: '5% OFF', color: '#4361ee', codePrefix: 'TECH5', weight: 40 },
+        { label: '10% OFF', color: '#3a0ca3', codePrefix: 'TECH10', weight: 30 },
+        { label: '15% OFF', color: '#7209b7', codePrefix: 'TECH15', weight: 15 },
+        { label: '20% OFF', color: '#f72585', codePrefix: 'TECH20', weight: 10 },
+        { label: 'ENVÍO FREE', color: '#4cc9f0', codePrefix: 'FREEDEL', weight: 3 },
+        { label: 'REGALO!', color: '#560bad', codePrefix: 'SURPRISE', weight: 2 }
+    ];
+    const svgChevronLeft = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>';
+    const svgChevronRight = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>';
+
     const canvas = document.getElementById('wheel');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
     const spinBtn = document.getElementById('spin');
     const prizeMsg = document.getElementById('prize-message');
+    const panel = document.getElementById('wheel-panel');
     const panelToggle = document.getElementById('panel-toggle');
-    const closePanelBtn = document.querySelector('.close-panel');
-    const ctx = canvas.getContext('2d');
-    let spinning = false;
+    const closePanelBtn = panel.querySelector('.close-panel');
+    const timeRemainingEl = document.getElementById('time-remaining');
+    const winnerGlow = document.querySelector('.winner-glow');
+    const popupNotification = document.getElementById('popup-notification');
 
-    const prizes = [
-      { label: '5% OFF', color: '#4361ee', codePrefix: 'TECH5', weight: 40 },
-      { label: '10% OFF', color: '#3a0ca3', codePrefix: 'TECH10', weight: 30 },
-      { label: '15% OFF', color: '#7209b7', codePrefix: 'TECH15', weight: 15 },
-      { label: '20% OFF', color: '#f72585', codePrefix: 'TECH20', weight: 10 },
-      { label: 'ENVÍO FREE', color: '#4cc9f0', codePrefix: 'FREEDEL', weight: 3 },
-      { label: 'REGALO!', color: '#560bad', codePrefix: 'SURPRISE', weight: 2 }
-    ];
+    let spinning = false, panelOpen = false, autoOpenTimer, userHasInteracted = false;
 
-    const drawWheel = () => {
-        const numSegments = prizes.length;
-        const anglePerSegment = (2 * Math.PI) / numSegments;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        prizes.forEach((prize, i) => {
-            const startAngle = i * anglePerSegment - (Math.PI / 2);
-            ctx.beginPath();
-            ctx.moveTo(canvas.width / 2, canvas.height / 2);
-            ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2 - 5, startAngle, startAngle + anglePerSegment);
-            ctx.closePath();
-            ctx.fillStyle = prize.color;
-            ctx.fill();
-            ctx.save();
-            ctx.translate(canvas.width / 2, canvas.height / 2);
-            ctx.rotate(startAngle + anglePerSegment / 2);
-            ctx.textAlign = 'center';
-            ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px Montserrat';
-            ctx.fillText(prize.label, (canvas.width / 2 - 5) * 0.65, 5);
-            ctx.restore();
-        });
-    };
+    const handleUserInteraction = () => { if (!userHasInteracted) { userHasInteracted = true; clearTimeout(autoOpenTimer); } };
+    const generateCode = (prefix) => prefix + '-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+    const drawWheel = (segments) => { const numSegments = segments.length; if (numSegments === 0) return; const centerX = canvas.width / 2, centerY = canvas.height / 2; const radius = Math.min(centerX, centerY) - 5; const anglePerSegment = (2 * Math.PI) / numSegments; ctx.clearRect(0, 0, canvas.width, canvas.height); segments.forEach((segment, i) => { const startAngle = i * anglePerSegment - (Math.PI / 2); const endAngle = startAngle + anglePerSegment; ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, startAngle, endAngle); ctx.closePath(); ctx.fillStyle = segment.color; ctx.fill(); ctx.strokeStyle = 'white'; ctx.lineWidth = 3; ctx.stroke(); ctx.save(); ctx.translate(centerX, centerY); const midAngle = startAngle + anglePerSegment / 2; ctx.rotate(midAngle); ctx.textAlign = 'right'; ctx.fillStyle = 'white'; ctx.font = 'bold 13px Montserrat'; const labelParts = segment.label.split(' '); if (labelParts.length > 1 && segment.label.length > 8) { ctx.fillText(labelParts[0], radius * 0.85, -2); ctx.fillText(labelParts[1], radius * 0.85, 12); } else { ctx.fillText(segment.label, radius * 0.85, 5); } ctx.restore(); }); };
+    const spinWheel = () => { if (spinning) return; handleUserInteraction(); spinning = true; spinBtn.disabled = true; const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0); let randomWeight = Math.random() * totalWeight; let winnerIndex = prizes.findIndex(p => (randomWeight -= p.weight) <= 0) ?? 0; const winner = prizes[winnerIndex]; const anglePerSegment = (2 * Math.PI) / prizes.length; const targetAngleCenter = (winnerIndex * anglePerSegment) + (anglePerSegment / 2) - (Math.PI / 2); const rotation = -(targetAngleCenter + (Math.random() - 0.5) * anglePerSegment * 0.6); const totalRotation = rotation + ((Math.floor(Math.random() * 3) + 5) * 2 * Math.PI); canvas.style.transition = 'none'; void canvas.offsetWidth; canvas.style.transition = `transform 5000ms cubic-bezier(0.25, 0.1, 0.25, 1)`; canvas.style.transform = `rotate(${totalRotation}rad)`; canvas.addEventListener('transitionend', function onWheelStop() { canvas.removeEventListener('transitionend', onWheelStop); winnerGlow.classList.add('active'); setTimeout(() => winnerGlow.classList.remove('active'), 800); showPrize(winner); spinning = false; spinBtn.disabled = false; }, { once: true }); };
+    const showPrize = (prize) => { const prizeCode = generateCode(prize.codePrefix); const container = prizeMsg.querySelector('.prize-container'); container.innerHTML = `<button class="close-prize">✕</button><h3 class="prize-title">¡Felicidades!</h3><p class="prize-desc">Has ganado: <strong class="won-label">${prize.label}</strong></p><div class="prize-code-wrapper"><div class="prize-code" title="Haz clic para copiar">${prizeCode}</div><button class="copy-code-btn">Copiar Código</button></div><p>Usa este código en tu próximo mensaje.</p><button class="apply-btn">Aplicar y Contactar</button>`; prizeMsg.classList.add('show'); const copyAction = (btn) => { navigator.clipboard.writeText(prizeCode).then(() => { btn.textContent = '¡Copiado!'; setTimeout(() => { btn.textContent = 'Copiar Código'; }, 2000); }).catch(() => { btn.textContent = 'Error'; setTimeout(() => { btn.textContent = 'Copiar Código'; }, 2000); }); }; container.querySelector('.close-prize').addEventListener('click', () => prizeMsg.classList.remove('show')); const copyBtn = container.querySelector('.copy-code-btn'); container.querySelector('.prize-code').addEventListener('click', () => copyAction(copyBtn)); copyBtn.addEventListener('click', () => copyAction(copyBtn)); container.querySelector('.apply-btn').addEventListener('click', () => { const targetInput = document.getElementById('descuento'); if (targetInput) { targetInput.value = prizeCode; targetInput.dispatchEvent(new Event('input', { bubbles: true })); } document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); prizeMsg.classList.remove('show'); closePanel(); }); };
+    const openPanel = () => { handleUserInteraction(); if (!panelOpen) { panel.classList.add('open'); panelOpen = true; panelToggle.innerHTML = svgChevronRight; } };
+    const closePanel = () => { handleUserInteraction(); if (panelOpen) { panel.classList.remove('open'); panelOpen = false; panelToggle.innerHTML = svgChevronLeft; } };
 
-    const spinWheel = () => {
-        if (spinning) return;
-        spinning = true;
-        spinBtn.disabled = true;
+    spinBtn.addEventListener('click', spinWheel); 
+    panelToggle.addEventListener('click', () => panelOpen ? closePanel() : openPanel()); 
+    closePanelBtn.addEventListener('click', closePanel); 
+    document.getElementById('wheel-center').addEventListener('click', () => { if (!spinBtn.disabled) spinBtn.click(); }); 
+    popupNotification.querySelector('.notification-button')?.addEventListener('click', () => { openPanel(); popupNotification.classList.remove('show'); }); 
+    popupNotification.querySelector('.notification-close')?.addEventListener('click', () => popupNotification.classList.remove('show'));
 
-        const totalWeight = prizes.reduce((s, p) => s + p.weight, 0);
-        let r = Math.random() * totalWeight;
-        let winnerIndex = prizes.findIndex(p => (r -= p.weight) <= 0);
-        const winner = prizes[winnerIndex];
-        
-        const sliceAngle = 2 * Math.PI / prizes.length;
-        const targetAngle = (winnerIndex * sliceAngle) + (Math.random() * sliceAngle * 0.8 + sliceAngle * 0.1);
-        const totalSpinAngle = (5 * 2 * Math.PI) + (2 * Math.PI - targetAngle);
-
-        canvas.style.transition = 'transform 5s cubic-bezier(0.22, 0.61, 0.36, 1)';
-        canvas.style.transform = `rotate(${totalSpinAngle}rad)`;
-
-        canvas.addEventListener('transitionend', () => {
-            showPrize(winner);
-            canvas.style.transition = 'none';
-            const currentRotation = totalSpinAngle % (2 * Math.PI);
-            canvas.style.transform = `rotate(${currentRotation}rad)`;
-            spinning = false;
-            spinBtn.disabled = false;
-        }, { once: true });
-    };
-
-    const showPrize = (prize) => {
-        const prizeCode = `TECH-${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
-        const container = prizeMsg.querySelector('.prize-container');
-        container.innerHTML = `
-            <button class="close-prize">✕</button>
-            <h3 class="prize-title">¡Felicidades!</h3>
-            <p class="prize-desc">Has ganado: <strong class="won-label">${prize.label}</strong></p>
-            <div class="prize-code-wrapper">
-                <div class="prize-code">${prizeCode}</div>
-                <button class="copy-code-btn">Copiar</button>
-            </div>
-            <button class="apply-btn">Aplicar Ahora</button>`;
-        prizeMsg.classList.add('show');
-
-        container.querySelector('.close-prize').addEventListener('click', () => prizeMsg.classList.remove('show'));
-        container.querySelector('.copy-code-btn').addEventListener('click', () => navigator.clipboard.writeText(prizeCode));
-        container.querySelector('.apply-btn').addEventListener('click', () => {
-            const discountInput = document.getElementById('descuento');
-            if (discountInput) {
-                discountInput.value = prizeCode;
-                discountInput.dispatchEvent(new Event('input', { bubbles: true }));
-                document.getElementById('contacto').scrollIntoView({ behavior: 'smooth' });
-            }
-            prizeMsg.classList.remove('show');
-        });
-    };
-
-    panelToggle.addEventListener('click', () => wheelPanel.classList.toggle('open'));
-    closePanelBtn.addEventListener('click', () => wheelPanel.classList.remove('open'));
-    spinBtn.addEventListener('click', spinWheel);
-    drawWheel();
-
-    // --- FORMULARIO DE CONTACTO ---
-    const form = document.getElementById('contactoForm');
-    const submitButton = form.querySelector('#submitBtn');
-    const successModal = document.getElementById('successModal');
-    const requiredFields = Array.from(form.querySelectorAll('[required]'));
-
-    const validateField = (field) => {
-      const value = field.type === 'checkbox' ? field.checked : field.value.trim();
-      let isValid = field.required ? (field.type === 'checkbox' ? value : value !== '') : true;
-      if (isValid && field.type === 'email' && value) {
-        isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
-      }
-      if (isValid && field.minLength > 0 && value) {
-        isValid = value.length >= field.minLength;
-      }
-      field.classList.toggle('cnt-invalid', !isValid);
-      const errorEl = document.getElementById(`${field.id}Error`);
-      if (errorEl) errorEl.classList.toggle('cnt-error-visible', !isValid);
-      return isValid;
-    };
+    const autoOpenedKey = 'rouletteAutoOpened_v2'; 
+    if (!sessionStorage.getItem(autoOpenedKey)) { 
+      autoOpenTimer = setTimeout(() => { 
+        if (!userHasInteracted) { 
+          openPanel(); 
+          sessionStorage.setItem(autoOpenedKey, 'true'); 
+        } 
+      }, 15000); 
+    }
     
-    const validateForm = () => requiredFields.every(validateField);
+    const notificationShownKey = 'rouletteNotificationShown_v2'; 
+    const handleScroll = () => { 
+      const scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight); 
+      if (scrolled > 0.20 && !sessionStorage.getItem(notificationShownKey)) { 
+        sessionStorage.setItem(notificationShownKey, 'true'); 
+        if (!panelOpen && !userHasInteracted) { 
+          popupNotification.classList.add('show'); 
+          setTimeout(() => popupNotification.classList.remove('show'), 10000); 
+        } 
+        window.removeEventListener('scroll', handleScroll); 
+      } 
+    }; 
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    drawWheel(prizes);
+  };
 
-    form.addEventListener('submit', function(e) {
+  // --- LÓGICA DEL FORMULARIO DE CONTACTO (CORREGIDA) ---
+  const initContactForm = () => {
+
+    
+    // --- CONFIGURA tus datos de EmailJS ---
+    const PUBLIC_KEY  = 'YpkUjCbz5Q2OdcxJg'; // Reemplaza con tu Public Key
+    const SERVICE_ID  = 'service_4ualn0c'; // Reemplaza con tu Service ID
+    const TEMPLATE_ID = 'template_15jgays';// Reemplaza con tu Template ID
+
+    // Inicializa EmailJS (solo si la librería está presente)
+    if (typeof emailjs !== 'undefined') {
+      emailjs.init({ publicKey: PUBLIC_KEY });
+    } else {
+      console.error("La librería EmailJS no está cargada. El formulario de contacto no funcionará.");
+      return;
+    }
+
+    // Referencias al DOM
+    const form         = document.getElementById('contactoForm');
+    const submitBtn    = document.getElementById('submitBtn');
+    const successModal = document.getElementById('successModal');
+    const closeSuccess = document.getElementById('closeSuccessModal');
+
+    // Si el formulario no existe en la página, no continuamos.
+    if (!form) return;
+
+    // Validación del formulario
+    function validateForm() {
+      let valid = true;
+      form.querySelectorAll('[required]').forEach(field => {
+        const row = field.closest('.cnt-form-row');
+        let ok = field.checkValidity();
+        if (field.type === 'email' && field.value) {
+          ok = /^\S+@\S+\.\S+$/.test(field.value);
+        }
+        if (row) {
+           row.classList.toggle('cnt-invalid', !ok);
+        }
+        if (!ok) valid = false;
+      });
+      return valid;
+    }
+
+    // Maneja el submit
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (validateForm()) {
-        submitButton.classList.add('cnt-loading');
-        submitButton.disabled = true;
-        const formData = new FormData(form);
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyTekPg8XgYWiGED9o_jNBV5QVyY8fuGl2mRb_gtD8fo_mI11b-ClFLcXv9JHUZQlGr/exec";
+      if (!validateForm()) {
+        form.classList.add('shake');
+        setTimeout(() => form.classList.remove('shake'), 500);
+        return;
+      }
 
-        fetch(WEB_APP_URL, { method: 'POST', body: formData, mode: 'no-cors' })
-          .then(() => {
-            successModal.classList.add('cnt-active');
-            form.reset();
-            requiredFields.forEach(f => f.classList.remove('cnt-invalid'));
-            document.querySelectorAll('.cnt-error-message').forEach(el => el.classList.remove('cnt-error-visible'));
-          })
-          .catch(error => console.error('Error:', error))
-          .finally(() => {
-            submitButton.classList.remove('cnt-loading');
-            submitButton.disabled = false;
-          });
+      submitBtn.disabled    = true;
+      submitBtn.textContent = 'Enviando...';
+
+      const templateParams = {
+        nombre:    form.nombre.value.trim(),
+        email:     form.email.value.trim(),
+        asunto:    form.asunto.value,
+        descuento: form.descuento.value.trim(),
+        mensaje:   form.mensaje.value.trim()
+      };
+
+      try {
+        const response = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
+        console.log('Email enviado:', response.status, response.text);
+        if (successModal) successModal.classList.add('cnt-active');
+        form.reset();
+      } catch (error) {
+        console.error('Error al enviar email:', error);
+        alert('Ha ocurrido un error al enviar el mensaje. Por favor, inténtalo de nuevo más tarde.');
+      } finally {
+        submitBtn.disabled    = false;
+        submitBtn.textContent = 'Enviar Mensaje';
       }
     });
 
-    requiredFields.forEach(field => field.addEventListener('input', () => validateField(field)));
-    document.getElementById('closeSuccessModal').addEventListener('click', () => successModal.classList.remove('cnt-active'));
+    // Cierra el modal
+    closeSuccess?.addEventListener('click', () => {
+      if (successModal) successModal.classList.remove('cnt-active');
+    });
+  };
+
+  // --- INICIALIZACIÓN ---
+  // Se ejecutan ambas funciones cuando el DOM está listo.
+  initAdvancedRoulette();
+  initContactForm();
 });
 
 //================================================================
