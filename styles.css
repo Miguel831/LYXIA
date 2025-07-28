@@ -970,7 +970,7 @@ body {
   .servicios-grid { gap: 20px; }
   .servicio-card { height: 430px; }
   .servicio-card-front, .servicio-card-back { padding: 30px 20px; }
-  .servicio-card-back-content { max-height: calc(100% - 140px); }
+  .servicio-card-back-content { max-height: calc(100% - 140px); font-size: 0.8rem;}
   .servicio-card-inner {transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
 }
 @media (max-width: 480px) {
