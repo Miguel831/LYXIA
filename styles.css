@@ -1766,7 +1766,7 @@ body {
     .notification-close { position: absolute; top: 8px; right: 8px; cursor: pointer; opacity: 0.5; }
 
     @media (max-width: 500px) {
-      #wheel-panel { width: 95%; right: -95%; height: 520px; }
+      #wheel-panel { width: 95%; right: -90%; height: 520px; }
       #panel-toggle { left: -30px; width: 30px; height: 80px; }
       #wheel { width: 220px; height: 220px; }
       #pointer { width: 26px; height: 26px; left: calc(50% - 13px); top: -13px; }
