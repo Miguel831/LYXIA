@@ -978,7 +978,7 @@ body {
   .servicios-tag { padding: 8px 18px; font-size: 12px; }
   .servicios-grid { grid-template-columns: 1fr; }
   .servicio-card { height: 450px; }
-  .servicio-card-back-content { max-height: calc(100% - 130px); }
+  .servicio-card-back-content { max-height: calc(100% - 130px); font-size: 0.8rem; }
 }
 
 
