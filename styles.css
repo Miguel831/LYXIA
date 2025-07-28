@@ -1824,7 +1824,7 @@ body {
     .cnt-modal-close-btn { margin-top: 20px; padding: 12px 25px; border-radius: var(--radius-md); font-weight: 600; cursor: pointer; border: none; background: var(--color-primary); color: var(--color-text-white); }
     .cnt-form-card.shake { animation: shake-form 0.5s cubic-bezier(.36,.07,.19,.97); }
     @keyframes shake-form { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-3px); } 40%, 60% { transform: translateX(3px); } }
-    @media (min-width: 768px) { .cnt-flex-wrapper { flex-direction: row; align-items: stretch; gap: 40px; } .cnt-form-title { text-align: left; } }
+    @media (min-width: 768px) { .cnt-flex-wrapper { flex-direction: row; align-items: stretch; gap: 40px; } .cnt-form-title { text-align: left; } #wheel-panel { width: 95%; right: -90%; height: 520px; } }
 
 /*================================================================
   10. FOOTER
