@@ -468,104 +468,356 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- LÓGICA DE LA RULETA AVANZADA (SIN CAMBIOS) ---
   const initAdvancedRoulette = () => {
-    // --- Configuración y Elementos del DOM ---
-    const prizes = [
-        { label: '5% OFF', color: '#4361ee', codePrefix: 'TECH5', weight: 40 },
-        { label: '10% OFF', color: '#3a0ca3', codePrefix: 'TECH10', weight: 30 },
-        { label: '15% OFF', color: '#7209b7', codePrefix: 'TECH15', weight: 15 },
-        { label: '20% OFF', color: '#f72585', codePrefix: 'TECH20', weight: 10 },
-        { label: 'ENVÍO FREE', color: '#4cc9f0', codePrefix: 'FREEDEL', weight: 3 },
-        { label: 'REGALO!', color: '#560bad', codePrefix: 'SURPRISE', weight: 2 }
-    ];
+    const prizes = [ { label: '5% OFF', color: '#4361ee', codePrefix: 'TECH5' }, { label: '10% OFF', color: '#3a0ca3', codePrefix: 'TECH10' }, { label: '15% OFF', color: '#7209b7', codePrefix: 'TECH15' }, { label: '20% OFF', color: '#f72585', codePrefix: 'TECH20' }, { label: 'ENVÍO FREE', color: '#4cc9f0', codePrefix: 'FREEDEL' }, { label: 'REGALO!', color: '#560bad', codePrefix: 'SURPRISE' } ];
     const svgChevronLeft = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>';
     const svgChevronRight = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>';
-
     const canvas = document.getElementById('wheel');
     if (!canvas) return;
-
     const ctx = canvas.getContext('2d');
     const spinBtn = document.getElementById('spin');
     const prizeMsg = document.getElementById('prize-message');
     const panel = document.getElementById('wheel-panel');
     const panelToggle = document.getElementById('panel-toggle');
     const closePanelBtn = panel.querySelector('.close-panel');
-    const timeRemainingEl = document.getElementById('time-remaining');
     const winnerGlow = document.querySelector('.winner-glow');
-    const popupNotification = document.getElementById('popup-notification');
+    let spinning = false, panelOpen = false;
+    
+    // <<< LÓGICA AÑADIDA >>> Función para gestionar el temporizador
+    const manageSpinCooldown = (endTime) => {
+        const timeRemainingEl = document.getElementById('time-remaining');
+        const wheelCenter = document.getElementById('wheel-center');
 
-    let spinning = false, panelOpen = false, autoOpenTimer, userHasInteracted = false;
+        spinBtn.disabled = true;
+        wheelCenter.style.cursor = 'not-allowed';
+        timeRemainingEl.style.display = 'block';
 
-    const handleUserInteraction = () => { if (!userHasInteracted) { userHasInteracted = true; clearTimeout(autoOpenTimer); } };
+        const timerInterval = setInterval(() => {
+            const timeLeft = endTime - Date.now();
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                timeRemainingEl.style.display = 'none';
+                spinBtn.disabled = false;
+                wheelCenter.style.cursor = 'pointer';
+                localStorage.removeItem('lastSpinTimestamp');
+                return;
+            }
+            const hours = Math.floor(timeLeft / (3600000));
+            const minutes = Math.floor((timeLeft % 3600000) / 60000);
+            const seconds = Math.floor((timeLeft % 60000) / 1000);
+            timeRemainingEl.textContent = `Próximo giro: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    };
+
+    // <<< LÓGICA AÑADIDA >>> Comprobación al cargar la página
+    const lastSpinTime = localStorage.getItem('lastSpinTimestamp');
+    if (lastSpinTime) {
+        const cooldownEnd = parseInt(lastSpinTime, 10) + (24 * 60 * 60 * 1000);
+        if (Date.now() < cooldownEnd) {
+            manageSpinCooldown(cooldownEnd);
+        } else {
+            localStorage.removeItem('lastSpinTimestamp');
+        }
+    }
+
     const generateCode = (prefix) => prefix + '-' + Math.random().toString(36).substring(2, 7).toUpperCase();
     const drawWheel = (segments) => { const numSegments = segments.length; if (numSegments === 0) return; const centerX = canvas.width / 2, centerY = canvas.height / 2; const radius = Math.min(centerX, centerY) - 5; const anglePerSegment = (2 * Math.PI) / numSegments; ctx.clearRect(0, 0, canvas.width, canvas.height); segments.forEach((segment, i) => { const startAngle = i * anglePerSegment - (Math.PI / 2); const endAngle = startAngle + anglePerSegment; ctx.beginPath(); ctx.moveTo(centerX, centerY); ctx.arc(centerX, centerY, radius, startAngle, endAngle); ctx.closePath(); ctx.fillStyle = segment.color; ctx.fill(); ctx.strokeStyle = 'white'; ctx.lineWidth = 3; ctx.stroke(); ctx.save(); ctx.translate(centerX, centerY); const midAngle = startAngle + anglePerSegment / 2; ctx.rotate(midAngle); ctx.textAlign = 'right'; ctx.fillStyle = 'white'; ctx.font = 'bold 13px Montserrat'; const labelParts = segment.label.split(' '); if (labelParts.length > 1 && segment.label.length > 8) { ctx.fillText(labelParts[0], radius * 0.85, -2); ctx.fillText(labelParts[1], radius * 0.85, 12); } else { ctx.fillText(segment.label, radius * 0.85, 5); } ctx.restore(); }); };
-    const spinWheel = () => { if (spinning) return; handleUserInteraction(); spinning = true; spinBtn.disabled = true; const totalWeight = prizes.reduce((sum, p) => sum + p.weight, 0); let randomWeight = Math.random() * totalWeight; let winnerIndex = prizes.findIndex(p => (randomWeight -= p.weight) <= 0) ?? 0; const winner = prizes[winnerIndex]; const anglePerSegment = (2 * Math.PI) / prizes.length; const targetAngleCenter = (winnerIndex * anglePerSegment) + (anglePerSegment / 2) - (Math.PI / 2); const rotation = -(targetAngleCenter + (Math.random() - 0.5) * anglePerSegment * 0.6); const totalRotation = rotation + ((Math.floor(Math.random() * 3) + 5) * 2 * Math.PI); canvas.style.transition = 'none'; void canvas.offsetWidth; canvas.style.transition = `transform 5000ms cubic-bezier(0.25, 0.1, 0.25, 1)`; canvas.style.transform = `rotate(${totalRotation}rad)`; canvas.addEventListener('transitionend', function onWheelStop() { canvas.removeEventListener('transitionend', onWheelStop); winnerGlow.classList.add('active'); setTimeout(() => winnerGlow.classList.remove('active'), 800); showPrize(winner); spinning = false; spinBtn.disabled = false; }, { once: true }); };
-    const showPrize = (prize) => { const prizeCode = generateCode(prize.codePrefix); const container = prizeMsg.querySelector('.prize-container'); container.innerHTML = `<button class="close-prize">✕</button><h3 class="prize-title">¡Felicidades!</h3><p class="prize-desc">Has ganado: <strong class="won-label">${prize.label}</strong></p><div class="prize-code-wrapper"><div class="prize-code" title="Haz clic para copiar">${prizeCode}</div><button class="copy-code-btn">Copiar Código</button></div><p>Usa este código en tu próximo mensaje.</p><button class="apply-btn">Aplicar y Contactar</button>`; prizeMsg.classList.add('show'); const copyAction = (btn) => { navigator.clipboard.writeText(prizeCode).then(() => { btn.textContent = '¡Copiado!'; setTimeout(() => { btn.textContent = 'Copiar Código'; }, 2000); }).catch(() => { btn.textContent = 'Error'; setTimeout(() => { btn.textContent = 'Copiar Código'; }, 2000); }); }; container.querySelector('.close-prize').addEventListener('click', () => prizeMsg.classList.remove('show')); const copyBtn = container.querySelector('.copy-code-btn'); container.querySelector('.prize-code').addEventListener('click', () => copyAction(copyBtn)); copyBtn.addEventListener('click', () => copyAction(copyBtn)); container.querySelector('.apply-btn').addEventListener('click', () => { const targetInput = document.getElementById('descuento'); if (targetInput) { targetInput.value = prizeCode; targetInput.dispatchEvent(new Event('input', { bubbles: true })); } document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); prizeMsg.classList.remove('show'); closePanel(); }); };
-    const openPanel = () => { handleUserInteraction(); if (!panelOpen) { panel.classList.add('open'); panelOpen = true; panelToggle.innerHTML = svgChevronRight; } };
-    const closePanel = () => { handleUserInteraction(); if (panelOpen) { panel.classList.remove('open'); panelOpen = false; panelToggle.innerHTML = svgChevronLeft; } };
-
-    spinBtn.addEventListener('click', spinWheel); 
-    panelToggle.addEventListener('click', () => panelOpen ? closePanel() : openPanel()); 
-    closePanelBtn.addEventListener('click', closePanel); 
-    document.getElementById('wheel-center').addEventListener('click', () => { if (!spinBtn.disabled) spinBtn.click(); }); 
-    popupNotification.querySelector('.notification-button')?.addEventListener('click', () => { openPanel(); popupNotification.classList.remove('show'); }); 
-    popupNotification.querySelector('.notification-close')?.addEventListener('click', () => popupNotification.classList.remove('show'));
-
-    const autoOpenedKey = 'rouletteAutoOpened_v2'; 
-    if (!sessionStorage.getItem(autoOpenedKey)) { 
-      autoOpenTimer = setTimeout(() => { 
-        if (!userHasInteracted) { 
-          openPanel(); 
-          sessionStorage.setItem(autoOpenedKey, 'true'); 
-        } 
-      }, 15000); 
-    }
     
-    const notificationShownKey = 'rouletteNotificationShown_v2'; 
-    const handleScroll = () => { 
-      const scrolled = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight); 
-      if (scrolled > 0.20 && !sessionStorage.getItem(notificationShownKey)) { 
-        sessionStorage.setItem(notificationShownKey, 'true'); 
-        if (!panelOpen && !userHasInteracted) { 
-          popupNotification.classList.add('show'); 
-          setTimeout(() => popupNotification.classList.remove('show'), 10000); 
-        } 
-        window.removeEventListener('scroll', handleScroll); 
-      } 
-    }; 
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    const spinWheel = () => {
+      if (spinning || spinBtn.disabled) return; // <-- CORRECCIÓN: Comprueba si el botón ya está deshabilitado
+      spinning = true;
+      spinBtn.disabled = true;
+
+      // Guarda la hora del giro y comienza el temporizador
+      const now = Date.now();
+      localStorage.setItem('lastSpinTimestamp', now.toString());
+      const cooldownEnd = now + (24 * 60 * 60 * 1000);
+      manageSpinCooldown(cooldownEnd);
+
+      const currentTransform = window.getComputedStyle(canvas).getPropertyValue('transform');
+      let currentAngleRad = 0;
+      if (currentTransform !== 'none') {
+        const matrix = new DOMMatrix(currentTransform);
+        currentAngleRad = Math.atan2(matrix.b, matrix.a);
+      }
+      
+      const randomExtraRotation = (Math.floor(Math.random() * 4) + 5) * 2 * Math.PI;
+      const finalRandomAngle = Math.random() * 2 * Math.PI;
+      const totalRotationInRad = currentAngleRad + randomExtraRotation + finalRandomAngle;
+
+      canvas.style.transition = 'transform 6000ms cubic-bezier(0.1, 0.7, 0.3, 1)';
+      canvas.style.transform = `rotate(${totalRotationInRad}rad)`;
+
+      canvas.addEventListener('transitionend', function onWheelStop() {
+        canvas.removeEventListener('transitionend', onWheelStop);
+
+        const effectiveAngle = totalRotationInRad % (2 * Math.PI);
+        const pointerAngle = ((2 * Math.PI) - effectiveAngle) % (2 * Math.PI);
+        const anglePerSegment = (2 * Math.PI) / prizes.length;
+        const winnerIndex = Math.floor(pointerAngle / anglePerSegment);
+        const winner = prizes[winnerIndex];
+
+        showPrize(winner);
+
+        // <<< CORRECCIONES CLAVE >>>
+        spinning = false; // La ruleta ya no está girando
+        // Se elimina 'spinBtn.disabled = false;' para que el temporizador tenga el control.
+      }, { once: true });
+    };
+
+    const showPrize = (prize) => { const prizeCode = generateCode(prize.codePrefix); const container = prizeMsg.querySelector('.prize-container'); container.innerHTML = `<button class="close-prize">✕</button><h3 class="prize-title">¡Felicidades!</h3><p class="prize-desc">Has ganado: <strong class="won-label">${prize.label}</strong></p><div class="prize-code-wrapper"><div class="prize-code" title="Haz clic para copiar">${prizeCode}</div><button class="copy-code-btn">Copiar Código</button></div><p>Usa este código en tu próximo mensaje.</p><button class="apply-btn">Aplicar y Contactar</button>`; prizeMsg.classList.add('show'); const copyAction = (btn) => { navigator.clipboard.writeText(prizeCode).then(() => { btn.textContent = '¡Copiado!'; setTimeout(() => { btn.textContent = 'Copiar Código'; }, 2000); }).catch(() => { btn.textContent = 'Error'; setTimeout(() => { btn.textContent = 'Copiar Código'; }, 2000); }); }; container.querySelector('.close-prize').addEventListener('click', () => prizeMsg.classList.remove('show')); const copyBtn = container.querySelector('.copy-code-btn'); container.querySelector('.prize-code').addEventListener('click', () => copyAction(copyBtn)); copyBtn.addEventListener('click', () => copyAction(copyBtn)); container.querySelector('.apply-btn').addEventListener('click', () => { const targetInput = document.getElementById('descuento'); if (targetInput) { targetInput.value = prizeCode; targetInput.dispatchEvent(new Event('input', { bubbles: true })); } document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth', block: 'center' }); prizeMsg.classList.remove('show'); closePanel(); }); };
+    const openPanel = () => { if (!panelOpen) { panel.classList.add('open'); panelOpen = true; panelToggle.innerHTML = svgChevronRight; } };
+    const closePanel = () => { if (panelOpen) { panel.classList.remove('open'); panelOpen = false; panelToggle.innerHTML = svgChevronLeft; } };
+    spinBtn.addEventListener('click', spinWheel); panelToggle.addEventListener('click', () => panelOpen ? closePanel() : openPanel()); closePanelBtn.addEventListener('click', closePanel); document.getElementById('wheel-center').addEventListener('click', () => { if (!spinBtn.disabled) spinBtn.click(); });
     drawWheel(prizes);
   };
 
-  // --- LÓGICA DEL FORMULARIO DE CONTACTO (CORREGIDA) ---
-  emailjs.init("YpkUjCbz5Q2OdcxJg"); // Inicializa EmailJS
-
-  function initContactForm() {
-      const form = document.getElementById("contactoForm");
-
-      if (!form) {
-        console.error("No se encontró el formulario con ID 'contactoForm");
-        return;
-      }
-
-      form.addEventListener("submit", function (event) {
-        event.preventDefault();
-
-        emailjs.sendForm("service_4ualn0c", "template_15jgays", this).then(
-          function () {
-            alert("Mensaje enviado correctamente.");
-            form.reset();
-          },
-          function (error) {
-            alert("Error al enviar el mensaje. Inténtalo más tarde.");
-            console.error(error);
-          }
-        );
-      });
+  // --- LÓGICA DEL FORMULARIO DE CONTACTO CON VALIDACIÓN AVANZADA ---
+  const initContactForm = () => {
+    const form = document.getElementById("contactoForm");
+    if (!form) {
+      console.error("No se encontró el formulario con ID 'contactoForm'");
+      return;
     }
 
+    // --- RECUERDA CAMBIAR ESTOS VALORES POR LOS TUYOS EN EMAILJS ---
+    emailjs.init("YpkUjCbz5Q2OdcxJg"); // Tu Public Key
+    const serviceID = "service_4ualn0c";
+    const templateID = "template_15jgays";
 
-  // --- INICIALIZACIÓN ---
-  // Se ejecutan ambas funciones cuando el DOM está listo.
+    const inputs = {
+      nombre: form.querySelector('#nombre'),
+      email: form.querySelector('#email'),
+      asunto: form.querySelector('#asunto'),
+      mensaje: form.querySelector('#mensaje'),
+      privacidad: form.querySelector('#privacidad')
+    };
+    const submitBtn = form.querySelector('#submitBtn');
+
+    // --- Toda tu lógica de validación (showError, hideError, etc.) permanece igual ---
+    // (Tu código de validación va aquí, no es necesario cambiarlo)
+    const showError = (input, message) => {
+      const formRow = input.closest('.cnt-form-row');
+      const errorSpan = formRow.querySelector('.cnt-error-message');
+      formRow.classList.add('cnt-invalid');
+      if (errorSpan) errorSpan.textContent = message;
+    };
+
+    const hideError = (input) => {
+      const formRow = input.closest('.cnt-form-row');
+      formRow.classList.remove('cnt-invalid');
+    };
+
+    const validateNombre = () => {
+      if (inputs.nombre.value.trim() === '') {
+        showError(inputs.nombre, 'El nombre es obligatorio.');
+        return false;
+      }
+      hideError(inputs.nombre);
+      return true;
+    };
+
+    const validateEmail = () => {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (inputs.email.value.trim() === '') {
+        showError(inputs.email, 'El correo electrónico es obligatorio.');
+        return false;
+      }
+      if (!emailRegex.test(inputs.email.value.trim())) {
+        showError(inputs.email, 'Por favor, introduce un formato de correo válido.');
+        return false;
+      }
+      hideError(inputs.email);
+      return true;
+    };
+
+    const validateAsunto = () => {
+      if (inputs.asunto.value === '') {
+        showError(inputs.asunto, 'Debes seleccionar un motivo.');
+        return false;
+      }
+      hideError(inputs.asunto);
+      return true;
+    };
+
+    const validatePrivacidad = () => {
+      if (!inputs.privacidad.checked) {
+        showError(inputs.privacidad, 'Debes aceptar la política de privacidad.');
+        return false;
+      }
+      hideError(inputs.privacidad);
+      return true;
+    };
+
+    const validateForm = () => {
+      const isNombreValid = validateNombre();
+      const isEmailValid = validateEmail();
+      const isAsuntoValid = validateAsunto();
+      const isPrivacidadValid = validatePrivacidad();
+      return isNombreValid && isEmailValid && isAsuntoValid && isPrivacidadValid;
+    };
+
+    Object.values(inputs).forEach(input => {
+      const eventType = (input.type === 'checkbox' || input.tagName === 'SELECT') ? 'change' : 'input';
+      input.addEventListener(eventType, () => {
+        switch (input.id) {
+          case 'nombre': validateNombre(); break;
+          case 'email': validateEmail(); break;
+          case 'asunto': validateAsunto(); break;
+          case 'privacidad': validatePrivacidad(); break;
+        }
+      });
+    });
+
+    // --- NOVEDAD: Función que genera el HTML del correo ---
+    // Esta función toma los datos del formulario y devuelve el string HTML completo.
+    const createBeautifulEmailHTML = (nombre, email, asunto, mensaje) => {
+        const descuento = "BIENVENIDO15"; // Puedes generar esto dinámicamente si quieres
+        
+        // Usamos plantillas literales (backticks ``) para insertar el HTML fácilmente.
+        return `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Contacto desde LYXIA</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+                * { margin: 0; padding: 0; box-sizing: border-box; }
+                body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f7fa; padding: 20px; }
+                .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); }
+                .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; }
+                .welcome-icon { background: rgba(255, 255, 255, 0.2); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.3); }
+                .welcome-icon svg { width: 40px; height: 40px; stroke: white; stroke-width: 2; fill: none; }
+                .header h1 { color: white; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+                .header p { color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 300; }
+                .content { padding: 40px 30px; }
+                .greeting { font-size: 20px; font-weight: 600; color: #2d3748; margin-bottom: 20px; }
+                .message-box { background: #f7fafc; border-left: 4px solid #667eea; padding: 25px; margin: 25px 0; border-radius: 0 12px 12px 0; position: relative; }
+                .message-box::before { content: '"'; font-size: 60px; color: #667eea; position: absolute; top: -10px; left: 10px; opacity: 0.2; font-family: serif; }
+                .message-content { font-style: italic; color: #4a5568; line-height: 1.7; position: relative; z-index: 1; }
+                .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
+                .feature { text-align: center; padding: 20px; background: #f8f9ff; border-radius: 12px; border: 1px solid #e2e8f0; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+                .feature:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(102, 126, 234, 0.1); }
+                .feature-icon { width: 50px; height: 50px; margin: 0 auto 15px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+                .feature-icon svg { width: 24px; height: 24px; stroke: white; stroke-width: 2; fill: none; }
+                .feature h3 { font-size: 14px; font-weight: 600; color: #2d3748; margin-bottom: 8px; }
+                .feature p { font-size: 12px; color: #718096; line-height: 1.4; }
+                .footer { background: #2d3748; color: #cbd5e0; padding: 30px; text-align: center; }
+                .footer p { margin-bottom: 15px; font-size: 14px; }
+                .footer a { color: #667eea; text-decoration: none; }
+            </style>
+        </head>
+        <body>
+            <div class="email-container">
+                <div class="header">
+                    <div class="welcome-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/></svg>
+                    </div>
+                    <h1>Nuevo Contacto Recibido</h1>
+                    <p>Has recibido un nuevo mensaje desde tu web.</p>
+                </div>
+                <div class="content">
+                    <div class="greeting">
+                        Hola, equipo de LYXIA 🚀
+                    </div>
+                    <p>Un nuevo cliente potencial os ha contactado. Aquí están los detalles del mensaje sobre <strong>"${asunto}"</strong>:</p>
+                    
+                    <div class="message-box">
+                        <div class="message-content">
+                            <strong>Mensaje del usuario:</strong><br>
+                            "${mensaje}"
+                        </div>
+                    </div>
+                    
+                    <div class="features">
+                        <div class="feature">
+                            <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
+                            <h3>Email del Cliente</h3>
+                            <p>${email}</p>
+                        </div>
+                        <div class="feature">
+                            <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
+                            <h3>Nombre</h3>
+                            <p>${nombre}</p>
+                        </div>
+                    </div>
+                    
+                    <p style="margin-top: 30px; font-size: 14px; text-align: center; color: #718096;">
+                        Recuerda responder lo antes posible para ofrecer el mejor servicio.
+                    </p>
+                </div>
+                <div class="footer">
+                    <p>Este es un correo automático generado desde el formulario de contacto de <strong>www.lyxia.com</strong>.</p>
+                    <p style="margin-top: 25px; font-size: 12px; opacity: 0.7;">
+                        © ${new Date().getFullYear()} LYXIA. Todos los derechos reservados.
+                    </p>
+                </div>
+            </div>
+        </body>
+        </html>
+        `;
+    };
+
+    // --- SECCIÓN MODIFICADA DEL EVENTO SUBMIT ---
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!validateForm()) {
+        const formCard = form.closest('.cnt-form-card');
+        if (formCard) {
+          formCard.classList.add('shake');
+          setTimeout(() => formCard.classList.remove('shake'), 500);
+        }
+        return;
+      }
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
+
+      // 1. Generamos el HTML del correo llamando a nuestra nueva función
+      const emailHTML = createBeautifulEmailHTML(
+          inputs.nombre.value.trim(),
+          inputs.email.value.trim(),
+          inputs.asunto.value,
+          inputs.mensaje.value.trim()
+      );
+
+      // 2. Creamos el objeto de parámetros. Solo necesitamos enviar el HTML.
+      // También enviamos 'from_email' para usarlo en el campo "Reply-to".
+      const templateParams = {
+          from_name: inputs.nombre.value.trim(),
+          from_email: inputs.email.value.trim(),
+          html_content: emailHTML // Aquí va todo el código HTML del correo
+      };
+
+      // 3. Usamos emailjs.send() con nuestros nuevos parámetros
+      emailjs.send(serviceID, templateID, templateParams).then(
+        () => {
+          const successModal = document.getElementById('successModal');
+          if (successModal) successModal.classList.add('cnt-active');
+          form.reset();
+          Object.values(inputs).forEach(hideError);
+          form.querySelectorAll('.cnt-input, .cnt-textarea').forEach(el => el.dispatchEvent(new Event('input')));
+        },
+        (error) => {
+          alert("Error al enviar el mensaje. Por favor, inténtalo más tarde.");
+          console.error("Error de EmailJS:", error);
+        }
+      ).finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar Mensaje';
+      });
+    });
+
+    const closeSuccessModalBtn = document.getElementById('closeSuccessModal');
+    const successModal = document.getElementById('successModal');
+    if (closeSuccessModalBtn && successModal) {
+      closeSuccessModalBtn.addEventListener('click', () => {
+        successModal.classList.remove('cnt-active');
+      });
+    }
+};
+
+  // --- INICIALIZACIÓN DE AMBAS FUNCIONES ---
   initAdvancedRoulette();
   initContactForm();
 });
@@ -574,28 +826,24 @@ document.addEventListener('DOMContentLoaded', () => {
 // 9. FOOTER
 //================================================================
 document.addEventListener('DOMContentLoaded', function() {
-  const backToTopButton = document.getElementById('back-to-top');
-  if (!backToTopButton) return;
+        // Botón de "Volver Arriba"
+        const backToTopButton = document.getElementById('back-to-top');
+        if (backToTopButton) {
+            window.addEventListener('scroll', () => {
+                backToTopButton.classList.toggle('visible', window.pageYOffset > 300);
+            });
+            backToTopButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
 
-  window.addEventListener('scroll', () => {
-    backToTopButton.classList.toggle('visible', window.pageYOffset > 300);
-  });
-  backToTopButton.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  const newsletterForm = document.getElementById('newsletter-form');
-  if(newsletterForm) {
-    newsletterForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const msgEl = document.getElementById('newsletter-message');
-        msgEl.textContent = '¡Gracias por suscribirte!';
-        msgEl.style.color = 'var(--color-success)';
-        this.querySelector('input').value = '';
-        setTimeout(() => { msgEl.textContent = ''; }, 5000);
+        // Actualizar el año del copyright
+        const yearSpan = document.getElementById('current-year');
+        if (yearSpan) {
+            yearSpan.textContent = new Date().getFullYear();
+        }
     });
-  }
-});
 
 
 

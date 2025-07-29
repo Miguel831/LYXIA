@@ -41,7 +41,7 @@
     </nav>
     <div class="nexa-logo-center">
       <a href="#inicio" class="nexa-logo-link">
-        <img src="assets/LOGO3.png" alt="Logo de LYXIA - Inteligencia Artificial para Negocios" class="nexa-logo-img"/>
+        <img src="assets/LOGO.png" alt="Logo de LYXIA - Inteligencia Artificial para Negocios" class="nexa-logo-img"/>
         <div class="nexa-logo-glow"></div>
       </a>
     </div>
@@ -444,7 +444,9 @@
         <h2 class="cnt-title">Conecta con Nosotros</h2>
         <p class="cnt-subtitle">¿Tienes alguna pregunta o propuesta? Rellena el formulario o utiliza nuestros datos de contacto directo.</p>
       </header>
+      
       <div class="cnt-flex-wrapper">
+        <!-- Columna de Información -->
         <div class="cnt-info-side">
           <div class="cnt-info-welcome"><div class="cnt-welcome-icon"><i class="fas fa-headset"></i></div><div class="cnt-welcome-text"><h3>¿Necesitas Ayuda?</h3><p>Respuesta media: <span class="cnt-highlight">~4h laborables</span></p></div></div>
           <div class="cnt-info-card"><div class="cnt-icon-wrapper"><i class="fas fa-map-marker-alt"></i></div><div class="cnt-text-content"><h3>Oficina Central</h3><p>Avenida Innovación 42, TecnoCiudad</p></div></div>
@@ -452,14 +454,52 @@
           <div class="cnt-info-card"><div class="cnt-icon-wrapper"><i class="fas fa-envelope"></i></div><div class="cnt-text-content"><h3>Email Directo</h3><p><a href="mailto:soporte@tuempresa.dev">soporte@tuempresa.dev</a></p></div></div>
           <div class="cnt-social-media"><h3 class="cnt-social-title">Síguenos</h3><div class="cnt-social-icons"><a href="#" class="cnt-social-icon cnt-facebook" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a><a href="#" class="cnt-social-icon cnt-twitter" aria-label="Twitter"><i class="fab fa-twitter"></i></a><a href="#" class="cnt-social-icon cnt-instagram" aria-label="Instagram"><i class="fab fa-instagram"></i></a><a href="#" class="cnt-social-icon cnt-linkedin" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a></div></div>
         </div>
+        
+        <!-- Columna del Formulario -->
         <form class="cnt-form-card" id="contactoForm" novalidate>
           <h3 class="cnt-form-title">Envíanos tu Mensaje</h3>
-          <div class="cnt-form-row"><input type="text" id="nombre" name="nombre" required class="cnt-input" autocomplete="name" placeholder=" " /><label for="nombre" class="cnt-label">Nombre Completo *</label><span class="cnt-error-message">Campo obligatorio</span></div>
-          <div class="cnt-form-row"><input type="email" id="email" name="email" required class="cnt-input" autocomplete="email" placeholder=" " /><label for="email" class="cnt-label">Correo Electrónico *</label><span class="cnt-error-message">Introduce un email válido</span></div>
-          <div class="cnt-form-row"><select id="asunto" name="asunto" class="cnt-select" required><option value="" disabled selected hidden></option><option value="información">Información</option><option value="presupuesto">Presupuesto</option><option value="soporte">Soporte</option><option value="otro">Otro</option></select><label for="asunto" class="cnt-label">Motivo de Contacto *</label><span class="cnt-error-message">Selecciona un motivo</span></div>
-          <div class="cnt-form-row"><input type="text" id="descuento" name="descuento" class="cnt-input" placeholder=" " /><label for="descuento" class="cnt-label">Código de Descuento</label></div>
-          <div class="cnt-form-row"><textarea id="mensaje" name="mensaje" rows="1" required class="cnt-textarea" placeholder=" " minlength="20"></textarea><label for="mensaje" class="cnt-label">Tu Mensaje *</label><span class="cnt-error-message">Mínimo 20 caracteres</span></div>
-          <div class="cnt-form-row cnt-privacy-check"><input type="checkbox" id="privacidad" name="privacidad" required class="cnt-checkbox" /><label for="privacidad" class="cnt-checkbox-label">Acepto la <a href="#" class="cnt-privacy-link">Política de Privacidad</a> *</label></div>
+          
+          <div class="cnt-form-row">
+              <input type="text" id="nombre" name="nombre" required class="cnt-input" autocomplete="name" placeholder=" " />
+              <label for="nombre" class="cnt-label">Nombre Completo *</label>
+              <span class="cnt-error-message"></span>
+          </div>
+
+          <div class="cnt-form-row">
+              <input type="email" id="email" name="email" required class="cnt-input" autocomplete="email" placeholder=" " />
+              <label for="email" class="cnt-label">Correo Electrónico *</label>
+              <span class="cnt-error-message"></span>
+          </div>
+
+          <div class="cnt-form-row">
+              <select id="asunto" name="asunto" class="cnt-select" required>
+                  <option value="" disabled selected hidden></option>
+                  <option value="Información General">Información</option>
+                  <option value="Solicitud de Presupuesto">Presupuesto</option>
+                  <option value="Soporte Técnico">Soporte</option>
+                  <option value="Otro Motivo">Otro</option>
+              </select>
+              <label for="asunto" class="cnt-label">Motivo de Contacto *</label>
+              <span class="cnt-error-message"></span>
+          </div>
+          
+          <div class="cnt-form-row">
+              <input type="text" id="descuento" name="descuento" class="cnt-input" placeholder=" " />
+              <label for="descuento" class="cnt-label">Código de Descuento</label>
+          </div>
+
+          <div class="cnt-form-row">
+              <textarea id="mensaje" name="mensaje" rows="1" required class="cnt-textarea" placeholder=" " minlength="10"></textarea>
+              <label for="mensaje" class="cnt-label">Tu Mensaje</label>
+              <span class="cnt-error-message"></span>
+          </div>
+
+          <div class="cnt-form-row cnt-privacy-check">
+              <input type="checkbox" id="privacidad" name="privacidad" required class="cnt-checkbox" />
+              <label for="privacidad" class="cnt-checkbox-label">Acepto la <a href="politica-privacidad.html" target="_blank" class="cnt-privacy-link">Política de Privacidad</a> *</label>
+              <span class="cnt-error-message"></span>
+          </div>
+          
           <button type="submit" class="cnt-submit-button" id="submitBtn">Enviar Mensaje</button>
         </form>
       </div>
@@ -467,7 +507,14 @@
   </section>
 
   <!-- MODAL DE ÉXITO DEL FORMULARIO -->
-  <div class="cnt-success-modal" id="successModal"><div class="cnt-modal-content"><div class="cnt-modal-success-icon"><i class="fas fa-check-circle"></i></div><h3>¡Mensaje Enviado!</h3><p>Gracias por contactarnos. Te responderemos pronto.</p><button class="cnt-modal-close-btn" id="closeSuccessModal">Entendido</button></div></div>
+  <div class="cnt-success-modal" id="successModal">
+    <div class="cnt-modal-content">
+      <div class="cnt-modal-success-icon"><i class="fas fa-check-circle"></i></div>
+      <h3>¡Mensaje Enviado!</h3>
+      <p>Gracias por contactarnos. Te responderemos pronto.</p>
+      <button class="cnt-modal-close-btn" id="closeSuccessModal">Entendido</button>
+    </div>
+  </div>
 
   <!-- ELEMENTOS DE LA RULETA -->
   <aside id="wheel-panel">
@@ -485,14 +532,7 @@
       <div id="time-remaining"></div>
     </div>
   </aside>
-
   <div id="prize-message"><div class="prize-container"></div></div>
-
-  <div id="popup-notification">
-    <div class="notification-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg></div>
-    <div class="notification-content"><div class="notification-title">¡Prueba tu suerte!</div><div class="notification-message">Gira la ruleta y gana descuentos exclusivos ahora mismo.</div><button class="notification-button">Abrir Ruleta</button></div>
-    <div class="notification-close">✕</div>
-  </div>
 
 
 
@@ -657,54 +697,66 @@
     </div>
     <div class="footer-content container">
         <div class="footer-main">
+            
+            <!-- Columna de la Marca -->
             <div class="footer-col brand-col">
-                <div class="footer-logo"><h2>LYXIA</h2><span class="logo-accent"></span></div>
+                <!-- CAMBIA ESTO: Ruta a tu logo -->
+                <img src="assets/LOGO3.png" alt="Logo de LYXIA" class="nexa-logo-img2"/>
                 <p class="footer-desc">Potenciamos negocios con Inteligencia Artificial a medida.</p>
-                <div class="social-icons">
-                  <!-- CAMBIA ESTO: pon tus enlaces reales en el href="#" -->
-                  <a href="#" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                  <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
+                <!-- CAMBIA ESTO: Enlace a tu perfil de LinkedIn -->
+                <a href="https://linkedin.com/company/tu-empresa" target="_blank" rel="noopener noreferrer" class="professional-social-icon" aria-label="LinkedIn de LYXIA"><i class="fab fa-linkedin-in"></i></a>
             </div>
+            
+            <!-- Columna de Navegación -->
             <div class="footer-col links-col">
                 <h4>Navegación</h4>
                 <ul class="footer-links">
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#servicios">Soluciones</a></li>
-                    <li><a href="#about">Quiénes Somos</a></li>
-                    <li><a href="#metodologia">Proceso</a></li>
-                    <li><a href="#preguntas-frecuentes">FAQ</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+                    <!-- Si es una web de una sola página, estos enlaces #id son correctos. -->
+                    <!-- Si es multi-página, cámbialos a "index.html#servicios", etc. -->
+                    <li><a href="/#inicio">Inicio</a></li>
+                    <li><a href="/#servicios">Soluciones</a></li>
+                    <li><a href="/#about">Quiénes Somos</a></li>
+                    <li><a href="/#proceso">Proceso</a></li>
                 </ul>
             </div>
+            
+            <!-- Columna Legal con enlaces a las nuevas páginas -->
+            <div class="footer-col legal-col">
+                <h4>Legal</h4>
+                <ul class="footer-links">
+                    <li><a href="politica-privacidad.html">Política de Privacidad</a></li>
+                    <li><a href="terminos-condiciones.html">Términos y Condiciones</a></li>
+                    <li><a href="politica-cookies.html">Política de Cookies</a></li>
+                </ul>
+            </div>
+            
+            <!-- Columna de Contacto -->
             <div class="footer-col contact-col">
                 <h4>Contacto</h4>
                 <ul class="contact-info">
-                    <li><div class="contact-icon"><i class="fas fa-envelope"></i></div><div class="contact-text"><a href="mailto:contacto@lyxia.com"><!-- CAMBIA ESTO -->contacto@lyxia.com</a></div></li>
-                    <li><div class="contact-icon"><i class="fas fa-phone-alt"></i></div><div class="contact-text"><a href="tel:+34600000000"><!-- CAMBIA ESTO -->+34 600 000 000</a></div></li>
-                    <li><div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div><div class="contact-text"><!-- CAMBIA ESTO -->Avenida Innovación 42, TecnoCiudad</div></li>
+                    <li>
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <!-- CAMBIA ESTO: Tu correo -->
+                        <div class="contact-text"><a href="mailto:contacto@lyxia.com">contacto.lyxia@gmail.com</a></div>
+                    </li>
+                    <li>
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                         <!-- CAMBIA ESTO: Tu ubicación -->
+                        <div class="contact-text">Valencia, España</div>
+                    </li>
                 </ul>
             </div>
-            <div class="footer-col newsletter-col">
-                <h4>Newsletter</h4>
-                <p>Recibe consejos de IA y automatización para tu negocio.</p>
-                <form id="newsletter-form" class="newsletter-form">
-                    <div class="form-group"><input type="email" placeholder="Tu email" required><button type="submit" aria-label="Suscribirse"><i class="fas fa-paper-plane"></i></button></div>
-                </form>
-                <div id="newsletter-message" class="newsletter-message"></div>
-            </div>
+
         </div>
+        
+        
+
     </div>
+    
     <div class="footer-bottom">
-        <div class="container">
-            <!-- CAMBIA ESTO: pon el año actual -->
-            <p>© 2024 LYXIA. Todos los derechos reservados.</p>
-            <div class="footer-legal">
-                <!-- CAMBIA ESTO: pon tus enlaces reales -->
-                <a href="/politica-privacidad">Política de Privacidad</a><span class="separator">|</span>
-                <a href="/terminos-condiciones">Términos y Condiciones</a><span class="separator">|</span>
-                <a href="/politica-cookies">Cookies</a>
-            </div>
+        <div class="container footer-bottom-content">
+            <!-- El año se actualiza con JS -->
+            <p>© <span id="current-year"></span> LYXIA. Todos los derechos reservados.</p>
         </div>
     </div>
     <button id="back-to-top" aria-label="Volver arriba"><i class="fas fa-chevron-up"></i></button>
