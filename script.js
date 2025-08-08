@@ -670,94 +670,105 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- NOVEDAD: Función que genera el HTML del correo ---
     // Esta función toma los datos del formulario y devuelve el string HTML completo.
-    const createBeautifulEmailHTML = (nombre, email, asunto, mensaje) => {
-        const descuento = "BIENVENIDO15"; // Puedes generar esto dinámicamente si quieres
-        
-        // Usamos plantillas literales (backticks ``) para insertar el HTML fácilmente.
-        return `
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Contacto desde LYXIA</title>
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-                * { margin: 0; padding: 0; box-sizing: border-box; }
-                body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f7fa; padding: 20px; }
-                .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); }
-                .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; }
-                .welcome-icon { background: rgba(255, 255, 255, 0.2); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.3); }
-                .welcome-icon svg { width: 40px; height: 40px; stroke: white; stroke-width: 2; fill: none; }
-                .header h1 { color: white; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
-                .header p { color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 300; }
-                .content { padding: 40px 30px; }
-                .greeting { font-size: 20px; font-weight: 600; color: #2d3748; margin-bottom: 20px; }
-                .message-box { background: #f7fafc; border-left: 4px solid #667eea; padding: 25px; margin: 25px 0; border-radius: 0 12px 12px 0; position: relative; }
-                .message-box::before { content: '"'; font-size: 60px; color: #667eea; position: absolute; top: -10px; left: 10px; opacity: 0.2; font-family: serif; }
-                .message-content { font-style: italic; color: #4a5568; line-height: 1.7; position: relative; z-index: 1; }
-                .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
-                .feature { text-align: center; padding: 20px; background: #f8f9ff; border-radius: 12px; border: 1px solid #e2e8f0; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-                .feature:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(102, 126, 234, 0.1); }
-                .feature-icon { width: 50px; height: 50px; margin: 0 auto 15px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-                .feature-icon svg { width: 24px; height: 24px; stroke: white; stroke-width: 2; fill: none; }
-                .feature h3 { font-size: 14px; font-weight: 600; color: #2d3748; margin-bottom: 8px; }
-                .feature p { font-size: 12px; color: #718096; line-height: 1.4; }
-                .footer { background: #2d3748; color: #cbd5e0; padding: 30px; text-align: center; }
-                .footer p { margin-bottom: 15px; font-size: 14px; }
-                .footer a { color: #667eea; text-decoration: none; }
-            </style>
-        </head>
-        <body>
-            <div class="email-container">
-                <div class="header">
-                    <div class="welcome-icon">
-                        <svg viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/></svg>
-                    </div>
-                    <h1>Nuevo Contacto Recibido</h1>
-                    <p>Has recibido un nuevo mensaje desde tu web.</p>
-                </div>
-                <div class="content">
-                    <div class="greeting">
-                        Hola, equipo de LYXIA 🚀
-                    </div>
-                    <p>Un nuevo cliente potencial os ha contactado. Aquí están los detalles del mensaje sobre <strong>"${asunto}"</strong>:</p>
-                    
-                    <div class="message-box">
-                        <div class="message-content">
-                            <strong>Mensaje del usuario:</strong><br>
-                            "${mensaje}"
-                        </div>
-                    </div>
-                    
-                    <div class="features">
-                        <div class="feature">
-                            <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
-                            <h3>Email del Cliente</h3>
-                            <p>${email}</p>
-                        </div>
-                        <div class="feature">
-                            <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                            <h3>Nombre</h3>
-                            <p>${nombre}</p>
-                        </div>
-                    </div>
-                    
-                    <p style="margin-top: 30px; font-size: 14px; text-align: center; color: #718096;">
-                        Recuerda responder lo antes posible para ofrecer el mejor servicio.
-                    </p>
-                </div>
-                <div class="footer">
-                    <p>Este es un correo automático generado desde el formulario de contacto de <strong>www.lyxia.com</strong>.</p>
-                    <p style="margin-top: 25px; font-size: 12px; opacity: 0.7;">
-                        © ${new Date().getFullYear()} LYXIA. Todos los derechos reservados.
-                    </p>
-                </div>
+    // Modificado para que mensaje y descuento sean opcionales
+const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento = '') => {
+    const mensajeHTML = mensaje && mensaje.trim() !== ''
+        ? `
+        <div class="message-box">
+            <div class="message-content">
+                <strong>Mensaje del usuario:</strong><br>
+                "${mensaje}"
             </div>
-        </body>
-        </html>
-        `;
-    };
+        </div>
+        `
+        : '';
+
+    const descuentoHTML = descuento && descuento.trim() !== ''
+        ? `
+        <div class="feature">
+            <div class="feature-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zm0 7l10 5-10 5-10-5 10-5z"></path>
+                </svg>
+            </div>
+            <h3>Código de Descuento</h3>
+            <p>${descuento}</p>
+        </div>
+        `
+        : '';
+
+    return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Contacto desde LYXIA</title>
+        <style>
+            /* tus estilos originales aquí */
+            .welcome-icon img {
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                object-fit: cover;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                background: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(10px);
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
+            <div class="header">
+                <div class="welcome-icon">
+                    <img src="assets/LOGO.png" alt="Icono de Bienvenida">
+                </div>
+                <h1>Nuevo Contacto Recibido</h1>
+                <p>Has recibido un nuevo mensaje desde tu web.</p>
+            </div>
+            <div class="content">
+                <div class="greeting">
+                    Hola, equipo de LYXIA 🚀
+                </div>
+                <p>Un nuevo cliente potencial os ha contactado. Aquí están los detalles sobre <strong>"${asunto}"</strong>:</p>
+                
+                ${mensajeHTML}
+                
+                <div class="features">
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                        </div>
+                        <h3>Email del Cliente</h3>
+                        <p>${email}</p>
+                    </div>
+                    <div class="feature">
+                        <div class="feature-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                        </div>
+                        <h3>Nombre</h3>
+                        <p>${nombre}</p>
+                    </div>
+                    ${descuentoHTML}
+                </div>
+                
+                <p style="margin-top: 30px; font-size: 14px; text-align: center; color: #718096;">
+                    Recuerda responder lo antes posible para ofrecer el mejor servicio.
+                </p>
+            </div>
+            <div class="footer">
+                <p>Este es un correo automático generado desde el formulario de contacto de <strong>www.lyxia.com</strong>.</p>
+                <p style="margin-top: 25px; font-size: 12px; opacity: 0.7;">
+                    © ${new Date().getFullYear()} LYXIA. Todos los derechos reservados.
+                </p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+};
+
+
 
     // --- SECCIÓN MODIFICADA DEL EVENTO SUBMIT ---
     form.addEventListener("submit", (event) => {
