@@ -694,86 +694,582 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return `
     <!DOCTYPE html>
-    <html lang="es">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Contacto desde LYXIA</title>
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-            * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f7fa; padding: 20px; }
-            .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); }
-            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; }
-            .welcome-icon { background: rgba(255, 255, 255, 0.2); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.3); }
-            .header h1 { color: white; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
-            .header p { color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 300; }
-            .content { padding: 40px 30px; }
-            .greeting { font-size: 20px; font-weight: 600; color: #2d3748; margin-bottom: 20px; }
-            .message-box { background: #f7fafc; border-left: 4px solid #667eea; padding: 25px; margin: 25px 0; border-radius: 0 12px 12px 0; position: relative; }
-            .message-box::before { content: '"'; font-size: 60px; color: #667eea; position: absolute; top: -10px; left: 10px; opacity: 0.2; font-family: serif; }
-            .message-content { font-style: italic; color: #4a5568; line-height: 1.7; position: relative; z-index: 1; }
-            /* Estilo específico para la caja de descuento */
-            .discount-box { border-left-color: #38a169; }
-            .discount-box::before { content: '🎁'; color: #38a169; top: -15px; }
-            .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
-            .feature { text-align: center; padding: 20px; background: #f8f9ff; border-radius: 12px; border: 1px solid #e2e8f0; transition: transform 0.3s ease, box-shadow 0.3s ease; }
-            .feature:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(102, 126, 234, 0.1); }
-            .feature-icon { width: 50px; height: 50px; margin: 0 auto 15px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-            .feature-icon svg { width: 24px; height: 24px; stroke: white; stroke-width: 2; fill: none; }
-            .feature h3 { font-size: 14px; font-weight: 600; color: #2d3748; margin-bottom: 8px; }
-            .feature p { font-size: 12px; color: #718096; line-height: 1.4; }
-            .footer { background: #2d3748; color: #cbd5e0; padding: 30px; text-align: center; }
-            .footer p { margin-bottom: 15px; font-size: 14px; }
-            .footer a { color: #667eea; text-decoration: none; }
-        </style>
-    </head>
-    <body>
-        <div class="email-container">
-            <div class="header">
-                <div class="welcome-icon">
-                    <!-- CORRECCIÓN AQUÍ -->
-                    <img src="https://URL_PUBLICA_DE_TU_LOGO/LOGO.png" alt="Logo de LYXIA" style="width: 50px; height: auto;">
-                </div>
-                <h1>Nuevo Contacto Recibido</h1>
-                <p>Has recibido un nuevo mensaje desde tu web.</p>
-            </div>
-            <div class="content">
-                <div class="greeting">
-                    Hola, equipo de LYXIA 🚀
-                </div>
-                <p>Un nuevo cliente potencial os ha contactado. Aquí están los detalles del mensaje sobre <strong>"${asunto}"</strong>:</p>
-                
-                ${mensajeHTML}
-                
-                ${descuentoHTML}
-                
-                <div class="features">
-                    <div class="feature">
-                        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
-                        <h3>Email del Cliente</h3>
-                        <p>${email}</p>
-                    </div>
-                    <div class="feature">
-                        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-                        <h3>Nombre</h3>
-                        <p>${nombre}</p>
-                    </div>
-                </div>
-                
-                <p style="margin-top: 30px; font-size: 14px; text-align: center; color: #718096;">
-                    Recuerda responder lo antes posible para ofrecer el mejor servicio.
-                </p>
-            </div>
-            <div class="footer">
-                <p>Este es un correo automático generado desde el formulario de contacto de <strong>www.lyxia.com</strong>.</p>
-                <p style="margin-top: 25px; font-size: 12px; opacity: 0.7;">
-                    © ${new Date().getFullYear()} LYXIA. Todos los derechos reservados.
-                </p>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gracias por contactar con LYXIA</title>
+    <style>
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            background-color: #f8fafc;
+            margin: 0;
+            padding: 20px 0;
+        }
+        
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Header con gradiente */
+        .email-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .email-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .logo-section {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: brightness(0) invert(1);
+        }
+        
+        .header-title {
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header-subtitle {
+            color: rgba(255,255,255,0.9);
+            font-size: 16px;
+            font-weight: 300;
+        }
+        
+        /* Contenido principal */
+        .email-body {
+            padding: 40px 30px;
+        }
+        
+        .greeting {
+            font-size: 20px;
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .message {
+            color: #4a5568;
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .highlight-title {
+            color: #2d3748;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .highlight-text {
+            color: #4a5568;
+            font-size: 15px;
+        }
+        
+        /* Sección de próximos pasos */
+        .next-steps {
+            background: #ffffff;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+        
+        .steps-title {
+            color: #2d3748;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .steps-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-size: 12px;
+        }
+        
+        .steps-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            color: #4a5568;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        /* Botón CTA */
+        .cta-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        
+        /* Información de contacto */
+        .contact-info {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 25px 0;
+        }
+        
+        .contact-title {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: #4a5568;
+        }
+        
+        .contact-icon {
+            color: #667eea;
+            margin-right: 10px;
+            width: 16px;
+        }
+        
+        .contact-link {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        .email-footer {
+            background: #2d3748;
+            color: #a0aec0;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .social-links {
+            margin: 15px 0;
+        }
+        
+        .social-link {
+            display: inline-block;
+            color: #a0aec0;
+            margin: 0 10px;
+            font-size: 18px;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .social-link:hover {
+            color: #667eea;
+        }
+        
+        .unsubscribe {
+            font-size: 12px;
+            margin-top: 15px;
+        }
+        
+        .unsubscribe a {
+            color: #a0aec0;
+            text-decoration: none;
+        }
+        
+        /* Sección de características */
+        .features-section {
+            margin: 30px 0;
+        }
+        
+        .features-title {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .features-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            background: #ffffff;
+            border: 2px solid #f7fafc;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .feature-card:hover {
+            border-color: #e2e8f0;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+        
+        .feature-icon-wrapper {
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+        
+        .feature-content {
+            flex-grow: 1;
+        }
+        
+        .feature-title {
+            color: #2d3748;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .feature-text {
+            color: #4a5568;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0 10px;
+            }
+            
+            .email-header,
+            .email-body {
+                padding: 25px 20px;
+            }
+            
+            .header-title {
+                font-size: 24px;
+            }
+            
+            .greeting {
+                font-size: 18px;
+            }
+            
+            .features-grid {
+                gap: 15px;
+            }
+            
+            .feature-card {
+                padding: 15px;
+            }
+            
+            .feature-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 20px;
+            }
+            
+            .feature-icon-wrapper {
+                margin-right: 12px;
+            }
+            
+            .feature-title {
+                font-size: 15px;
+            }
+            
+            .feature-text {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="email-header">
+            <div class="logo-section">
+                <!-- Reemplaza con la URL real de tu logo -->
+                <img src="assets/LOGO.png" alt="Logo LYXIA" class="logo">
+                <h1 class="header-title">¡Gracias por contactarnos!</h1>
+                <p class="header-subtitle">Tu mensaje ha sido recibido correctamente</p>
             </div>
         </div>
-    </body>
-    </html>
+        
+        <!-- Cuerpo del email -->
+        <div class="email-body">
+            <p class="greeting">¡Hola {{NOMBRE}}!</p>
+            
+            <p class="message">
+                Queremos agradecerte por ponerte en contacto con <strong>LYXIA</strong>. Tu interés en nuestras soluciones de Inteligencia Artificial nos motiva a seguir innovando y ayudando a negocios como el tuyo a alcanzar su máximo potencial.
+            </p>
+            
+            <div class="highlight-box">
+                <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: {{ASUNTO}}</h3>
+                {{#if MENSAJE}}
+                <p class="highlight-text">
+                    <strong>Tu mensaje:</strong><br>
+                    "{{MENSAJE}}"
+                </p>
+                {{/if}}
+                {{#if DESCUENTO}}
+                <p class="highlight-text">
+                    <strong>🎟️ Código de descuento aplicado:</strong> <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">{{DESCUENTO}}</span>
+                </p>
+                {{/if}}
+            </div>
+            
+            <div class="next-steps">
+                <h3 class="steps-title">
+                    <span class="steps-icon">⚡</span>
+                    ¿Qué viene ahora?
+                </h3>
+                <ul class="steps-list">
+                    <li class="step-item">
+                        <span class="step-number">1</span>
+                        <span>Analizaremos tu consulta en detalle para ofrecerte la mejor solución</span>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-number">2</span>
+                        <span>Te responderemos en menos de 24 horas con un plan de acción personalizado</span>
+                    </li>
+                    <li class="step-item">
+                        <span class="step-number">3</span>
+                        <span>Agendaremos una consulta gratuita para conocer mejor tus necesidades</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <p class="message">
+                Mientras tanto, te invitamos a explorar nuestras <strong>historias de éxito</strong> y descubrir cómo hemos ayudado a otros emprendedores como tú a transformar sus negocios con IA.
+            </p>
+            
+            <!-- Características principales de LYXIA -->
+            <div class="features-section">
+                <h3 class="features-title">¿Por qué elegir LYXIA?</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <div class="feature-icon">⚡</div>
+                        </div>
+                        <div class="feature-content">
+                            <h4 class="feature-title">Respuesta Rápida</h4>
+                            <p class="feature-text">Te respondemos en menos de 24 horas y comenzamos tu proyecto sin demoras</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <div class="feature-icon">🎯</div>
+                        </div>
+                        <div class="feature-content">
+                            <h4 class="feature-title">Solución Personalizada</h4>
+                            <p class="feature-text">Cada proyecto es único. Diseñamos la solución perfecta para tu negocio específico</p>
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon-wrapper">
+                            <div class="feature-icon">✨</div>
+                        </div>
+                        <div class="feature-content">
+                            <h4 class="feature-title">Calidad Garantizada</h4>
+                            <p class="feature-text">Soporte continuo y garantía de calidad en todos nuestros desarrollos</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <a href="https://www.lyxia.es/#servicios" class="cta-button">
+                    Ver Nuestras Soluciones ✨
+                </a>
+            </div>
+            
+            <div class="contact-info">
+                <h3 class="contact-title">¿Necesitas contactarnos directamente?</h3>
+                <div class="contact-item">
+                    <span class="contact-icon">📧</span>
+                    <a href="mailto:contacto.lyxia@gmail.com" class="contact-link">contacto.lyxia@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">🌐</span>
+                    <a href="https://www.lyxia.es" class="contact-link">www.lyxia.es</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon">📍</span>
+                    <span>Valencia, España</span>
+                </div>
+            </div>
+            
+            <p class="message">
+                Estamos emocionados de ser parte de tu viaje hacia la transformación digital. 
+                <strong>Tu éxito es nuestra misión</strong>.
+            </p>
+            
+            <p class="message">
+                Un saludo cordial,<br>
+                <strong>El equipo de LYXIA</strong> 🚀
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="email-footer">
+            <p class="footer-text">
+                © 2025 LYXIA - Soluciones de IA para potenciar tu negocio
+            </p>
+            
+            <div class="social-links">
+                <a href="#" class="social-link" aria-label="LinkedIn">💼</a>
+                <a href="#" class="social-link" aria-label="Instagram">📸</a>
+                <a href="#" class="social-link" aria-label="Twitter">🐦</a>
+            </div>
+            
+            <p class="unsubscribe">
+                Si no deseas recibir más correos como este, puedes 
+                <a href="#">darte de baja aquí</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
     `;
 };
 
