@@ -706,7 +706,6 @@ document.addEventListener('DOMContentLoaded', () => {
             .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); }
             .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; }
             .welcome-icon { background: rgba(255, 255, 255, 0.2); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.3); }
-            .welcome-icon svg { width: 40px; height: 40px; stroke: white; stroke-width: 2; fill: none; }
             .header h1 { color: white; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
             .header p { color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 300; }
             .content { padding: 40px 30px; }
@@ -733,7 +732,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="email-container">
             <div class="header">
                 <div class="welcome-icon">
-                    <svg viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/></svg>
+                    <!-- CORRECCIÓN AQUÍ -->
+                    <img src="assets/LOGO.png" alt="Logo de LYXIA" style="width: 50px; height: auto;">
                 </div>
                 <h1>Nuevo Contacto Recibido</h1>
                 <p>Has recibido un nuevo mensaje desde tu web.</p>
