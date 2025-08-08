@@ -1723,9 +1723,9 @@ body {
     .cnt-header { text-align: center; margin-bottom: 50px; }
     .cnt-title { font-size: clamp(2rem, 6vw, 2.5rem); color: var(--color-text-dark); font-weight: 700; }
     .cnt-subtitle { font-size: 1rem; color: var(--color-text-light); max-width: 600px; margin: 15px auto 0; }
-    .cnt-flex-wrapper { display: flex; flex-direction: column; gap: 30px; margin-top: 40px; }
+    .cnt-flex-wrapper { display: flex; flex-direction: column; gap: 30px; margin-top: 40px; align-items: stretch;}
     .cnt-info-side, .cnt-form-card { flex: 1; min-width: 0; background: var(--color-text-white); border-radius: var(--radius-lg); padding: clamp(20px, 4vw, 40px); box-shadow: var(--shadow-md); }
-    .cnt-info-side { display: flex; flex-direction: column; }
+    .cnt-info-side { display: flex; flex-direction: column; justify-content: space-around;}
     .cnt-info-welcome { display: flex; align-items: center; margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--color-border); }
     .cnt-welcome-icon { margin-right: 15px; font-size: 1.8rem; color: var(--color-primary); }
     .cnt-welcome-text h3 { font-size: 1.1rem; color: var(--color-text-dark); margin: 0 0 5px; }
@@ -1777,7 +1777,6 @@ body {
     .cnt-form-card.shake { animation: shake-form 0.5s cubic-bezier(.36,.07,.19,.97); }
     @keyframes shake-form { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-3px); } 40%, 60% { transform: translateX(3px); } }
     @media (min-width: 768px) { .cnt-flex-wrapper { flex-direction: row; align-items: stretch; gap: 40px; } .cnt-form-title { text-align: left; } }
-    
 /*================================================================
   10. FOOTER
 =================================================================*/
