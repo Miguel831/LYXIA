@@ -674,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Bloque condicional para el mensaje del usuario.
     // Solo se mostrará si el parámetro 'mensaje' no está vacío.
-    const mensajeHTML = mensaje ? `
+    const mensajeHTML = mensaje && mensaje.trim() ? `
     <div class="message-box">
         <div class="message-content">
             <strong>Mensaje del usuario:</strong><br>
@@ -682,9 +682,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
     </div>` : '';
 
-    // Bloque condicional para el código de descuento.
-    // Solo se mostrará si el parámetro 'descuento' no está vacío.
-    const descuentoHTML = descuento ? `
+    const descuentoHTML = descuento && descuento.trim() ? `
     <div class="message-box discount-box">
         <div class="message-content">
             <strong>¡Código de descuento especial activado!</strong><br>
@@ -815,6 +813,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         /* Sección de próximos pasos */
+
+        .contact-icon,
+    .steps-icon,
+    .step-number,
+    .feature-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+        
         .next-steps {
             background: #ffffff;
             border: 2px solid #e2e8f0;
@@ -926,10 +934,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         .contact-icon {
-            color: #667eea;
-            margin-right: 10px;
-            width: 16px;
-        }
+          width: 20px;
+          height: 20px;
+          font-size: 16px;
+          margin-right: 10px;
+          color: #667eea;
+      }
         
         .contact-link {
             color: #667eea;
@@ -1138,7 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="email-header">
             <div class="logo-section">
                 <!-- Reemplaza con la URL real de tu logo -->
-                <img src="assets/LOGO.png" alt="Logo LYXIA" class="logo">
+                <img src="https://lyxia.es/assets/LOGO.png" alt="Logo LYXIA" class="logo">
                 <h1 class="header-title">¡Gracias por contactarnos!</h1>
                 <p class="header-subtitle">Tu mensaje ha sido recibido correctamente</p>
             </div>
@@ -1154,17 +1164,16 @@ document.addEventListener('DOMContentLoaded', () => {
             
             <div class="highlight-box">
                 <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: ${asunto}</h3>
-                ${mensaje ? `
+                ${mensaje && mensaje.trim() ? `
                 <p class="highlight-text">
                     <strong>Tu mensaje:</strong><br>
                     "${mensaje}"
-                </p>
-                ` : ''}
-                ${descuento ? `
+                </p>` : ''}
+                ${descuento && descuento.trim() ? `
                 <p class="highlight-text">
-                    <strong>🎟️ Código de descuento aplicado:</strong> <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${descuento}</span>
-                </p>
-                ` : ''}
+                    <strong>🎟️ Código de descuento aplicado:</strong> 
+                    <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${descuento}</span>
+                </p>` : ''}
             </div>
             
             <div class="next-steps">
