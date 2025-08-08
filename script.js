@@ -848,6 +848,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .steps-list {
             list-style: none;
             padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .step-item {
@@ -855,6 +858,9 @@ document.addEventListener('DOMContentLoaded', () => {
             align-items: flex-start;
             margin-bottom: 12px;
             color: #4a5568;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .step-number {
@@ -1044,6 +1050,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .feature-icon-wrapper {
             margin-right: 15px;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .feature-icon {
@@ -1256,11 +1265,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 © 2025 LYXIA - Soluciones de IA para potenciar tu negocio
             </p>
             
-            <div class="social-links">
-                <a href="#" class="social-link" aria-label="LinkedIn">💼</a>
-                <a href="#" class="social-link" aria-label="Instagram">📸</a>
-                <a href="#" class="social-link" aria-label="Twitter">🐦</a>
-            </div>
             
             <p class="unsubscribe">
                 Si no deseas recibir más correos como este, puedes 
