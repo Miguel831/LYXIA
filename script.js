@@ -670,33 +670,58 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- NOVEDAD: Función que genera el HTML del correo ---
     // Esta función toma los datos del formulario y devuelve el string HTML completo.
-    // Modificado para que mensaje y descuento sean opcionales
-const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento = '') => {
-    const mensajeHTML = mensaje && mensaje.trim() !== ''
-        ? `
+    const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, logoUrl = null, descuento = null) => {
+    
+    // Función auxiliar para verificar si un campo está vacío o es undefined/null
+    const isEmpty = (field) => !field || field.trim() === '';
+    logoUrl = "assets/LOGO.png"
+    
+    // Generar el contenido del icono/logo de bienvenida
+    const getWelcomeIconContent = () => {
+        if (logoUrl && logoUrl.trim() !== '') {
+            return `<img src="${logoUrl}" alt="Logo" style="width: 50px; height: 50px; object-fit: contain; border-radius: 50%;">`;
+        } else {
+            return `<svg viewBox="0 0 24 24"><path d="M12 2L13.09 8.26L22 9L13.09 9.74L12 16L10.91 9.74L2 9L10.91 8.26L12 2Z"/></svg>`;
+        }
+    };
+    
+    // Generar el bloque del mensaje solo si no está vacío
+    const getMessageBlock = () => {
+        if (isEmpty(mensaje)) {
+            return '';
+        }
+        return `
         <div class="message-box">
             <div class="message-content">
                 <strong>Mensaje del usuario:</strong><br>
                 "${mensaje}"
             </div>
-        </div>
-        `
-        : '';
-
-    const descuentoHTML = descuento && descuento.trim() !== ''
-        ? `
-        <div class="feature">
-            <div class="feature-icon">
-                <svg viewBox="0 0 24 24">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zm0 7l10 5-10 5-10-5 10-5z"></path>
-                </svg>
+        </div>`;
+    };
+    
+    
+    // Generar el bloque de descuento solo si existe
+    const getDiscountBlock = () => {
+        if (isEmpty(descuento)) {
+            return '';
+        }
+        return `
+        <div style="background: linear-gradient(135deg, #48bb78 0%, #38a169 100%); margin: 25px 0; padding: 20px; border-radius: 12px; text-align: center; color: white;">
+            <h3 style="margin: 0 0 10px 0; font-size: 18px; font-weight: 600;">🎉 Código de Descuento</h3>
+            <div style="background: rgba(255, 255, 255, 0.2); padding: 10px; border-radius: 8px; font-size: 16px; font-weight: 700; letter-spacing: 2px; border: 2px dashed rgba(255, 255, 255, 0.5);">
+                ${descuento}
             </div>
-            <h3>Código de Descuento</h3>
-            <p>${descuento}</p>
-        </div>
-        `
-        : '';
-
+            <p style="margin: 10px 0 0 0; font-size: 14px; opacity: 0.9;">¡Úsalo en tu próxima compra!</p>
+        </div>`;
+    };
+    const getIntroText = () => {
+        if (isEmpty(asunto)) {
+            return `Un nuevo cliente potencial os ha contactado. Aquí están los detalles:`;
+        }
+        return `Un nuevo cliente potencial os ha contactado. Aquí están los detalles del mensaje sobre <strong>"${asunto}"</strong>:`;
+    };
+    
+    // Usamos plantillas literales (backticks ``) para insertar el HTML fácilmente.
     return `
     <!DOCTYPE html>
     <html lang="es">
@@ -705,23 +730,39 @@ const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento = ''
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Contacto desde LYXIA</title>
         <style>
-            /* tus estilos originales aquí */
-            .welcome-icon img {
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                object-fit: cover;
-                border: 2px solid rgba(255, 255, 255, 0.3);
-                background: rgba(255, 255, 255, 0.2);
-                backdrop-filter: blur(10px);
-            }
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Inter', Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f7fa; padding: 20px; }
+            .email-container { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1); }
+            .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center; }
+            .welcome-icon { background: rgba(255, 255, 255, 0.2); width: 80px; height: 80px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; backdrop-filter: blur(10px); border: 2px solid rgba(255, 255, 255, 0.3); overflow: hidden; }
+            .welcome-icon svg { width: 40px; height: 40px; stroke: white; stroke-width: 2; fill: none; }
+            .welcome-icon img { width: 50px; height: 50px; object-fit: contain; border-radius: 50%; }
+            .header h1 { color: white; font-size: 28px; font-weight: 700; margin-bottom: 10px; }
+            .header p { color: rgba(255, 255, 255, 0.9); font-size: 16px; font-weight: 300; }
+            .content { padding: 40px 30px; }
+            .greeting { font-size: 20px; font-weight: 600; color: #2d3748; margin-bottom: 20px; }
+            .message-box { background: #f7fafc; border-left: 4px solid #667eea; padding: 25px; margin: 25px 0; border-radius: 0 12px 12px 0; position: relative; }
+            .message-box::before { content: '"'; font-size: 60px; color: #667eea; position: absolute; top: -10px; left: 10px; opacity: 0.2; font-family: serif; }
+            .message-content { font-style: italic; color: #4a5568; line-height: 1.7; position: relative; z-index: 1; }
+            .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 20px; margin: 30px 0; }
+            .feature { text-align: center; padding: 20px; background: #f8f9ff; border-radius: 12px; border: 1px solid #e2e8f0; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+            .feature:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(102, 126, 234, 0.1); }
+            .feature-icon { width: 50px; height: 50px; margin: 0 auto 15px; background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+            .feature-icon svg { width: 24px; height: 24px; stroke: white; stroke-width: 2; fill: none; }
+            .feature h3 { font-size: 14px; font-weight: 600; color: #2d3748; margin-bottom: 8px; }
+            .feature p { font-size: 12px; color: #718096; line-height: 1.4; word-break: break-all; }
+            .empty-field { font-style: italic; opacity: 0.6; }
+            .footer { background: #2d3748; color: #cbd5e0; padding: 30px; text-align: center; }
+            .footer p { margin-bottom: 15px; font-size: 14px; }
+            .footer a { color: #667eea; text-decoration: none; }
         </style>
     </head>
     <body>
         <div class="email-container">
             <div class="header">
                 <div class="welcome-icon">
-                    <img src="assets/LOGO.png" alt="Icono de Bienvenida">
+                    ${getWelcomeIconContent()}
                 </div>
                 <h1>Nuevo Contacto Recibido</h1>
                 <p>Has recibido un nuevo mensaje desde tu web.</p>
@@ -730,26 +771,29 @@ const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento = ''
                 <div class="greeting">
                     Hola, equipo de LYXIA 🚀
                 </div>
-                <p>Un nuevo cliente potencial os ha contactado. Aquí están los detalles sobre <strong>"${asunto}"</strong>:</p>
+                <p>${getIntroText()}</p>
                 
-                ${mensajeHTML}
+                ${getMessageBlock()}
+                
+                ${getDiscountBlock()}
                 
                 <div class="features">
                     <div class="feature">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-                        </div>
+                        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></div>
                         <h3>Email del Cliente</h3>
-                        <p>${email}</p>
+                        <p${isEmpty(email) ? ' class="empty-field"' : ''}>${isEmpty(email) ? 'No proporcionado' : email}</p>
                     </div>
                     <div class="feature">
-                        <div class="feature-icon">
-                            <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                        </div>
+                        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
                         <h3>Nombre</h3>
-                        <p>${nombre}</p>
+                        <p${isEmpty(nombre) ? ' class="empty-field"' : ''}>${isEmpty(nombre) ? 'No proporcionado' : nombre}</p>
                     </div>
-                    ${descuentoHTML}
+                    ${isEmpty(asunto) ? '' : `
+                    <div class="feature">
+                        <div class="feature-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14,2 14,8 20,8"></polyline></svg></div>
+                        <h3>Asunto</h3>
+                        <p>${asunto}</p>
+                    </div>`}
                 </div>
                 
                 <p style="margin-top: 30px; font-size: 14px; text-align: center; color: #718096;">
@@ -767,8 +811,6 @@ const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento = ''
     </html>
     `;
 };
-
-
 
     // --- SECCIÓN MODIFICADA DEL EVENTO SUBMIT ---
     form.addEventListener("submit", (event) => {
