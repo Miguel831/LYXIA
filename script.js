@@ -1137,25 +1137,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         <!-- Cuerpo del email -->
         <div class="email-body">
-            <p class="greeting">¡Hola {{NOMBRE}}!</p>
+            <p class="greeting">¡Hola ${nombre}!</p>
             
             <p class="message">
                 Queremos agradecerte por ponerte en contacto con <strong>LYXIA</strong>. Tu interés en nuestras soluciones de Inteligencia Artificial nos motiva a seguir innovando y ayudando a negocios como el tuyo a alcanzar su máximo potencial.
             </p>
             
             <div class="highlight-box">
-                <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: {{ASUNTO}}</h3>
-                {{#if MENSAJE}}
+                <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: ${asunto}</h3>
+                ${mensaje ? `
                 <p class="highlight-text">
                     <strong>Tu mensaje:</strong><br>
-                    "{{MENSAJE}}"
+                    "${mensaje}"
                 </p>
-                {{/if}}
-                {{#if DESCUENTO}}
+                ` : ''}
+                ${descuento ? `
                 <p class="highlight-text">
-                    <strong>🎟️ Código de descuento aplicado:</strong> <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">{{DESCUENTO}}</span>
+                    <strong>🎟️ Código de descuento aplicado:</strong> <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${descuento}</span>
                 </p>
-                {{/if}}
+                ` : ''}
             </div>
             
             <div class="next-steps">
