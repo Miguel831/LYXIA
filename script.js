@@ -733,7 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="header">
                 <div class="welcome-icon">
                     <!-- CORRECCIÓN AQUÍ -->
-                    <img src="assets/LOGO.png" alt="Logo de LYXIA" style="width: 50px; height: auto;">
+                    <img src="https://URL_PUBLICA_DE_TU_LOGO/LOGO.png" alt="Logo de LYXIA" style="width: 50px; height: auto;">
                 </div>
                 <h1>Nuevo Contacto Recibido</h1>
                 <p>Has recibido un nuevo mensaje desde tu web.</p>
