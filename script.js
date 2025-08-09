@@ -672,24 +672,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Esta función toma los datos del formulario y devuelve el string HTML completo.
     const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento) => {
     
-    // Bloque condicional para el mensaje del usuario.
-    // Solo se mostrará si el parámetro 'mensaje' no está vacío.
-    const mensajeHTML = mensaje && mensaje.trim() ? `
-    <div class="message-box">
-        <div class="message-content">
-            <strong>Mensaje del usuario:</strong><br>
-            "${mensaje}"
-        </div>
-    </div>` : '';
-
-    const descuentoHTML = descuento && descuento.trim() ? `
-    <div class="message-box discount-box">
-        <div class="message-content">
-            <strong>¡Código de descuento especial activado!</strong><br>
-            El cliente ${nombre} puede usar el código <strong>${descuento}</strong>.
-        </div>
-    </div>` : '';
-
+    let highlightBoxHTML = '';
+    if ((mensaje && mensaje.trim()) || (descuento && descuento.trim())) {
+        highlightBoxHTML = `
+            <div class="highlight-box">
+                <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: ${asunto}</h3>
+                ${mensaje && mensaje.trim() ? `
+                <p class="highlight-text">
+                    <strong>Tu mensaje:</strong><br>
+                    "${mensaje}"
+                </p>` : ''}
+                ${descuento && descuento.trim() ? `
+                <p class="highlight-text">
+                    <strong>🎟️ Código de descuento aplicado:</strong> 
+                    <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${descuento}</span>
+                </p>` : ''}
+            </div>
+        `;
+    }
     return `
     <!DOCTYPE html>
 <html lang="es">
@@ -857,8 +857,9 @@ document.addEventListener('DOMContentLoaded', () => {
             list-style: none;
             padding: 0;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column; /* ✅ Esto fuerza la verticalidad */
+            align-items: flex-start; /* Para alinearlo a la izquierda */
+            gap: 12px; /* Separación entre pasos */
         }
         
         .step-item {
@@ -1162,19 +1163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 Queremos agradecerte por ponerte en contacto con <strong>LYXIA</strong>. Tu interés en nuestras soluciones de Inteligencia Artificial nos motiva a seguir innovando y ayudando a negocios como el tuyo a alcanzar su máximo potencial.
             </p>
             
-            <div class="highlight-box">
-                <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: ${asunto}</h3>
-                ${mensaje && mensaje.trim() ? `
-                <p class="highlight-text">
-                    <strong>Tu mensaje:</strong><br>
-                    "${mensaje}"
-                </p>` : ''}
-                ${descuento && descuento.trim() ? `
-                <p class="highlight-text">
-                    <strong>🎟️ Código de descuento aplicado:</strong> 
-                    <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${descuento}</span>
-                </p>` : ''}
-            </div>
+            ${highlightBoxHTML}
             
             <div class="next-steps">
                 <h3 class="steps-title">
