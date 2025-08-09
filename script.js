@@ -1367,44 +1367,93 @@ document.addEventListener('DOMContentLoaded', function() {
 // 10. SECCIÓN DE ACCIÓN (CTA) - VERSIÓN CORREGIDA
 //================================================================
 document.addEventListener('DOMContentLoaded', function() {
-  // Ahora encontrará la sección porque el ID está en el HTML
-  const ctaSection = document.getElementById('accion');
-  if (!ctaSection) return;
+      // Animación de entrada suave
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
 
-  // Cargar Lottie para la animación
-  const lottieContainer = document.getElementById('lottie-animation-cta');
-  // Esta comprobación es vital. Asegúrate de tener la librería Lottie cargada.
-  if (typeof lottie !== 'undefined' && lottieContainer) {
-    lottie.loadAnimation({
-      container: lottieContainer,
-      renderer: 'svg',
-      loop: true,
-      autoplay: true,
-      // PASO 4: Verifica que esta ruta es correcta desde tu archivo HTML.
-      // Abre la consola del navegador (F12) y mira en la pestaña "Network" si hay un error 404.
-      path: 'assets/lottie3.json' 
-    });
-  }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
 
-  // Animación de entrada para los elementos de la sección
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
+      document.querySelectorAll('.cta-title, .cta-description, .cta-benefits, .cta-action-area').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(el);
+      });
+
+      // Efecto ripple para el botón
+      const primaryBtn = document.querySelector('.btn-primary');
+      if (primaryBtn) {
+        primaryBtn.addEventListener('click', function(e) {
+          const ripple = document.createElement('span');
+          const rect = this.getBoundingClientRect();
+          const size = Math.max(rect.width, rect.height);
+          const x = e.clientX - rect.left - size / 2;
+          const y = e.clientY - rect.top - size / 2;
+          
+          ripple.style.width = ripple.style.height = size + 'px';
+          ripple.style.left = x + 'px';
+          ripple.style.top = y + 'px';
+          ripple.style.position = 'absolute';
+          ripple.style.borderRadius = '50%';
+          ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+          ripple.style.transform = 'scale(0)';
+          ripple.style.animation = 'ripple 0.6s linear';
+          ripple.style.pointerEvents = 'none';
+          
+          this.appendChild(ripple);
+          
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
       }
-    });
-  }, { threshold: 0.1 });
 
-  // PASO 2: Quitamos '.lottie-container' de la lista de elementos a animar.
-  // De esta forma, la animación no se ocultará con opacity: 0 y será visible desde el principio.
-  const elementsToAnimate = ctaSection.querySelectorAll('.cta-title, .cta-description, .benefit-item, .cta-action-area');
-  
-  elementsToAnimate.forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-    observer.observe(el);
-  });
-});
+      // Inicializar Lottie
+      if (typeof lottie !== 'undefined') {
+        const lottieContainer = document.getElementById('lottie-animation2');
+        lottieContainer.innerHTML = ''; // Limpiar placeholder
+        
+        lottie.loadAnimation({
+          container: lottieContainer,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          // 4. RUTA DEL LOTTIE ACTUALIZADA
+          path: "assets/lottie1.json"
+        });
+      }
+
+      // Smooth scroll para enlaces internos
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+
+    const rippleStyle = document.createElement('style');
+    rippleStyle.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(rippleStyle);
