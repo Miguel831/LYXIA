@@ -982,7 +982,7 @@ body {
   .servicio-card-front, .servicio-card-back { padding: 30px 20px; }
   .servicio-card-back-content { max-height: calc(100% - 140px); font-size: 0.8rem;}
   .servicio-card-back-header h3 { font-size: 1.3rem;}
-  .servicio-card-back-content li {font-size: 0.95rem; margin-top: 12px;}
+  .servicio-card-back-content li {font-size: 0.92rem; margin-top: 8px;}
   .servicio-card-back-content h4 {font-size: 0.95rem;}
   .servicio-card-inner {transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
 }

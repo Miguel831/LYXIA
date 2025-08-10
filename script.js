@@ -464,6 +464,15 @@ document.addEventListener('DOMContentLoaded', function() {
 //================================================================
 // 8. CONTACTO Y RULETA
 //================================================================
+document.addEventListener("DOMContentLoaded", function () {
+    const wheelPanel = document.getElementById("wheel-panel");
+    if (wheelPanel) {
+      wheelPanel.style.display = "block";
+      wheelPanel.style.visibility = "visible";
+      wheelPanel.style.opacity = "1";
+    }
+  });
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // --- LÓGICA DE LA RULETA AVANZADA (SIN CAMBIOS) ---
@@ -672,604 +681,536 @@ document.addEventListener('DOMContentLoaded', () => {
     // Esta función toma los datos del formulario y devuelve el string HTML completo.
     const createBeautifulEmailHTML = (nombre, email, asunto, mensaje, descuento) => {
     
-    let highlightBoxHTML = '';
-    if ((mensaje && mensaje.trim()) || (descuento && descuento.trim())) {
-        highlightBoxHTML = `
-            <div class="highlight-box">
-                <h3 class="highlight-title">📧 Hemos recibido tu consulta sobre: ${asunto}</h3>
-                ${mensaje && mensaje.trim() ? `
-                <p class="highlight-text">
-                    <strong>Tu mensaje:</strong><br>
-                    "${mensaje}"
-                </p>` : ''}
-                ${descuento && descuento.trim() ? `
-                <p class="highlight-text">
-                    <strong>🎟️ Código de descuento aplicado:</strong> 
-                    <span style="background: #667eea; color: white; padding: 3px 8px; border-radius: 4px; font-weight: 600;">${descuento}</span>
-                </p>` : ''}
-            </div>
+    let mensajeHTML = '';
+    if (mensaje && mensaje.trim()) {
+        mensajeHTML = `
+        <tr>
+            <td style="padding-top: 15px;">
+                <p style="color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 600; margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                    Tu mensaje
+                </p>
+                <div style="background-color: rgba(255,255,255,0.1); border-radius: 6px; padding: 15px; border-left: 3px solid rgba(255,255,255,0.4);">
+                    <p style="color: #ffffff; font-size: 15px; line-height: 1.5; margin: 0; font-style: italic;">
+                        "${mensaje}"
+                    </p>
+                </div>
+            </td>
+        </tr>
         `;
     }
+
+    let descuentoHTML = '';
+    if (descuento && descuento.trim()) {
+        descuentoHTML = `
+        <!-- Código promocional destacado -->
+        <div style="text-align: center; background-color: rgba(255,255,255,0.15); border-radius: 8px; padding: 20px; border: 1px dashed rgba(255,255,255,0.3);">
+            <p style="color: rgba(255,255,255,0.9); font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">
+                🎁 Tu código de descuento especial
+            </p>
+            <div style="background-color: #ffffff; color: #3b82f6; padding: 12px 24px; border-radius: 25px; display: inline-block; font-weight: 700; font-size: 18px; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+                ${descuento}
+            </div>
+        </div>
+        `;
+    }
+
     return `
     <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gracias por contactar con LYXIA</title>
-    <style>
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            background-color: #f8fafc;
-            margin: 0;
-            padding: 20px 0;
-        }
-        
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Header con gradiente */
-        .email-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .email-header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
-        
-        .logo-section {
-            position: relative;
-            z-index: 2;
-        }
-        
-        .logo {
-            max-width: 120px;
-            height: auto;
-            margin-bottom: 20px;
-            filter: brightness(0) invert(1);
-        }
-        
-        .header-title {
-            color: #ffffff;
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .header-subtitle {
-            color: rgba(255,255,255,0.9);
-            font-size: 16px;
-            font-weight: 300;
-        }
-        
-        /* Contenido principal */
-        .email-body {
-            padding: 40px 30px;
-        }
-        
-        .greeting {
-            font-size: 20px;
-            color: #2d3748;
-            margin-bottom: 20px;
-            font-weight: 600;
-        }
-        
-        .message {
-            color: #4a5568;
-            font-size: 16px;
-            line-height: 1.7;
-            margin-bottom: 25px;
-        }
-        
-        .highlight-box {
-            background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-            border-left: 4px solid #667eea;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-        }
-        
-        .highlight-title {
-            color: #2d3748;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        
-        .highlight-text {
-            color: #4a5568;
-            font-size: 15px;
-        }
-        
-        /* Sección de próximos pasos */
-
-        .contact-icon,
-    .steps-icon,
-    .step-number,
-    .feature-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-        
-        .next-steps {
-            background: #ffffff;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 25px;
-            margin: 25px 0;
-        }
-        
-        .steps-title {
-            color: #2d3748;
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .steps-icon {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 10px;
-            font-size: 12px;
-        }
-        
-        .steps-list {
-            list-style: none;
-            padding: 0;
-            display: flex;
-            flex-direction: column; /* ✅ Esto fuerza la verticalidad */
-            align-items: flex-start; /* Para alinearlo a la izquierda */
-            gap: 12px; /* Separación entre pasos */
-        }
-        
-        .step-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            color: #4a5568;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .step-number {
-            background: #667eea;
-            color: white;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-        
-        /* Botón CTA */
-        .cta-section {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .cta-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            text-decoration: none;
-            padding: 15px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-        
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-        
-        /* Información de contacto */
-        .contact-info {
-            background: #f7fafc;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 25px 0;
-        }
-        
-        .contact-title {
-            color: #2d3748;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            color: #4a5568;
-        }
-        
-        .contact-icon {
-          width: 20px;
-          height: 20px;
-          font-size: 16px;
-          margin-right: 10px;
-          color: #667eea;
-      }
-        
-        .contact-link {
-            color: #667eea;
-            text-decoration: none;
-        }
-        
-        .contact-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Footer */
-        .email-footer {
-            background: #2d3748;
-            color: #a0aec0;
-            padding: 25px 30px;
-            text-align: center;
-        }
-        
-        .footer-text {
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-        
-        .social-links {
-            margin: 15px 0;
-        }
-        
-        .social-link {
-            display: inline-block;
-            color: #a0aec0;
-            margin: 0 10px;
-            font-size: 18px;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .social-link:hover {
-            color: #667eea;
-        }
-        
-        .unsubscribe {
-            font-size: 12px;
-            margin-top: 15px;
-        }
-        
-        .unsubscribe a {
-            color: #a0aec0;
-            text-decoration: none;
-        }
-        
-        /* Sección de características */
-        .features-section {
-            margin: 30px 0;
-        }
-        
-        .features-title {
-            color: #2d3748;
-            font-size: 20px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 25px;
-            position: relative;
-        }
-        
-        .features-title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 2px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        .feature-card {
-            display: flex;
-            align-items: flex-start;
-            padding: 20px;
-            background: #ffffff;
-            border: 2px solid #f7fafc;
-            border-radius: 12px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-        
-        .feature-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .feature-card:hover {
-            border-color: #e2e8f0;
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
-        }
-        
-        .feature-icon-wrapper {
-            margin-right: 15px;
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .feature-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
-        }
-        
-        .feature-content {
-            flex-grow: 1;
-        }
-        
-        .feature-title {
-            color: #2d3748;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .feature-text {
-            color: #4a5568;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        
-        /* Responsive */
-        @media (max-width: 600px) {
-            .email-container {
-                margin: 0 10px;
-            }
-            
-            .email-header,
-            .email-body {
-                padding: 25px 20px;
-            }
-            
-            .header-title {
-                font-size: 24px;
-            }
-            
-            .greeting {
-                font-size: 18px;
-            }
-            
-            .features-grid {
-                gap: 15px;
-            }
-            
-            .feature-card {
-                padding: 15px;
-            }
-            
-            .feature-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 20px;
-            }
-            
-            .feature-icon-wrapper {
-                margin-right: 12px;
-            }
-            
-            .feature-title {
-                font-size: 15px;
-            }
-            
-            .feature-text {
-                font-size: 13px;
-            }
-        }
-    </style>
+    <title>Bienvenido a LYXIA - Tu socio en IA</title>
+    <!--[if gte mso 9]>
+    <xml>
+        <o:OfficeDocumentSettings>
+            <o:AllowPNG/>
+            <o:PixelsPerInch>96</o:PixelsPerInch>
+        </o:OfficeDocumentSettings>
+    </xml>
+    <![endif]-->
 </head>
-<body>
-    <div class="email-container">
-        <!-- Header -->
-        <div class="email-header">
-            <div class="logo-section">
-                <!-- Reemplaza con la URL real de tu logo -->
-                <img src="https://lyxia.es/assets/LOGO.png" alt="Logo LYXIA" class="logo">
-                <h1 class="header-title">¡Gracias por contactarnos!</h1>
-                <p class="header-subtitle">Tu mensaje ha sido recibido correctamente</p>
-            </div>
-        </div>
-        
-        <!-- Cuerpo del email -->
-        <div class="email-body">
-            <p class="greeting">¡Hola ${nombre}!</p>
-            
-            <p class="message">
-                Queremos agradecerte por ponerte en contacto con <strong>LYXIA</strong>. Tu interés en nuestras soluciones de Inteligencia Artificial nos motiva a seguir innovando y ayudando a negocios como el tuyo a alcanzar su máximo potencial.
-            </p>
-            
-            ${highlightBoxHTML}
-            
-            <div class="next-steps">
-                <h3 class="steps-title">
-                    <span class="steps-icon">⚡</span>
-                    ¿Qué viene ahora?
-                </h3>
-                <ul class="steps-list">
-                    <li class="step-item">
-                        <span class="step-number">1</span>
-                        <span>Analizaremos tu consulta en detalle para ofrecerte la mejor solución</span>
-                    </li>
-                    <li class="step-item">
-                        <span class="step-number">2</span>
-                        <span>Te responderemos en menos de 24 horas con un plan de acción personalizado</span>
-                    </li>
-                    <li class="step-item">
-                        <span class="step-number">3</span>
-                        <span>Agendaremos una consulta gratuita para conocer mejor tus necesidades</span>
-                    </li>
-                </ul>
-            </div>
-            
-            <p class="message">
-                Mientras tanto, te invitamos a explorar nuestras <strong>historias de éxito</strong> y descubrir cómo hemos ayudado a otros emprendedores como tú a transformar sus negocios con IA.
-            </p>
-            
-            <!-- Características principales de LYXIA -->
-            <div class="features-section">
-                <h3 class="features-title">¿Por qué elegir LYXIA?</h3>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
-                            <div class="feature-icon">⚡</div>
-                        </div>
-                        <div class="feature-content">
-                            <h4 class="feature-title">Respuesta Rápida</h4>
-                            <p class="feature-text">Te respondemos en menos de 24 horas y comenzamos tu proyecto sin demoras</p>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
-                            <div class="feature-icon">🎯</div>
-                        </div>
-                        <div class="feature-content">
-                            <h4 class="feature-title">Solución Personalizada</h4>
-                            <p class="feature-text">Cada proyecto es único. Diseñamos la solución perfecta para tu negocio específico</p>
-                        </div>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon-wrapper">
-                            <div class="feature-icon">✨</div>
-                        </div>
-                        <div class="feature-content">
-                            <h4 class="feature-title">Calidad Garantizada</h4>
-                            <p class="feature-text">Soporte continuo y garantía de calidad en todos nuestros desarrollos</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="cta-section">
-                <a href="https://www.lyxia.es/#servicios" class="cta-button">
-                    Ver Nuestras Soluciones ✨
-                </a>
-            </div>
-            
-            <div class="contact-info">
-                <h3 class="contact-title">¿Necesitas contactarnos directamente?</h3>
-                <div class="contact-item">
-                    <span class="contact-icon">📧</span>
-                    <a href="mailto:contacto.lyxia@gmail.com" class="contact-link">contacto.lyxia@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon">🌐</span>
-                    <a href="https://www.lyxia.es" class="contact-link">www.lyxia.es</a>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon">📍</span>
-                    <span>Valencia, España</span>
-                </div>
-            </div>
-            
-            <p class="message">
-                Estamos emocionados de ser parte de tu viaje hacia la transformación digital. 
-                <strong>Tu éxito es nuestra misión</strong>.
-            </p>
-            
-            <p class="message">
-                Un saludo cordial,<br>
-                <strong>El equipo de LYXIA</strong> 🚀
-            </p>
-        </div>
-        
-        <!-- Footer -->
-        <div class="email-footer">
-            <p class="footer-text">
-                © 2025 LYXIA - Soluciones de IA para potenciar tu negocio
-            </p>
-            
-            
-            <p class="unsubscribe">
-                Si no deseas recibir más correos como este, puedes 
-                <a href="#">darte de baja aquí</a>
-            </p>
-        </div>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; background-color: #f8fafc; color: #1e293b;">
+    <!-- Preheader -->
+    <div style="display: none; max-height: 0; overflow: hidden; font-size: 1px; line-height: 1px; color: transparent;">
+        ¡Gracias por confiar en LYXIA! Tu consulta ha sido recibida y nuestro equipo ya está trabajando en tu proyecto de IA.
     </div>
+
+    <!-- Contenedor principal -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f8fafc; min-height: 100vh;">
+        <tr>
+            <td align="center" style="padding: 40px 15px;">
+                <!-- Email container -->
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 1px solid #e2e8f0;">
+                    
+                    <!-- Header moderno pero accesible -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%); padding: 50px 40px; text-align: center; position: relative;">
+                            <!-- Patrón sutil -->
+                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 25% 25%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(255,255,255,0.1) 0%, transparent 50%); opacity: 0.4;"></div>
+                            
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td align="center" style="position: relative; z-index: 2;">
+                                        <!-- Logo con marco elegante -->
+                                        <div style="background-color: rgba(255,255,255,0.95); padding: 18px; border-radius: 8px; display: inline-block; margin-bottom: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                            <img src="https://lyxia.es/assets/LOGO.png" alt="LYXIA" width="110" style="display: block; max-width: 110px; height: auto;">
+                                        </div>
+                                        
+                                        <!-- Título amigable pero profesional -->
+                                        <h1 style="color: #ffffff; font-size: 30px; font-weight: 600; margin: 0 0 12px 0; text-align: center; letter-spacing: -0.5px; line-height: 1.2;">
+                                            ¡Bienvenido a LYXIA! 👋
+                                        </h1>
+                                        
+                                        <!-- Subtítulo con personalidad -->
+                                        <p style="color: rgba(255,255,255,0.9); font-size: 17px; margin: 0 0 8px 0; text-align: center; font-weight: 400;">
+                                            Tu consulta de IA ha sido recibida con éxito
+                                        </p>
+                                        
+                                        <!-- Badge de estado -->
+                                        <div style="background-color: rgba(255,255,255,0.15); color: #ffffff; padding: 8px 16px; border-radius: 20px; display: inline-block; font-size: 13px; font-weight: 600; margin-top: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                                            🚀 PROCESANDO TU SOLICITUD
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Cuerpo principal -->
+                    <tr>
+                        <td style="padding: 50px 40px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <!-- Saludo personalizado -->
+                                <tr>
+                                    <td style="padding-bottom: 35px;">
+                                        <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border-radius: 10px; padding: 28px; border-left: 4px solid #3b82f6;">
+                                            <h2 style="color: #1e293b; font-size: 22px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.3;">
+                                                Hola <span style="color: #3b82f6;">NOMBRE</span>, ¡es genial tenerte aquí! ✨
+                                            </h2>
+                                            <p style="color: #475569; font-size: 16px; line-height: 1.6; margin: 0; font-weight: 400;">
+                                                Gracias por contactar con <strong>LYXIA</strong>. Tu interés en nuestras soluciones de Inteligencia Artificial nos emociona, y ya estamos preparando la mejor propuesta para tu proyecto.
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Información de consulta moderna -->
+                                <tr>
+                                    <td style="padding-bottom: 40px;">
+                                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); border-radius: 12px; padding: 35px; color: #ffffff; position: relative; overflow: hidden;">
+                                            <!-- Efecto de fondo -->
+                                            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background-image: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
+                                            
+                                            <div style="position: relative; z-index: 2;">
+                                                <!-- Header de sección -->
+                                                <div style="text-align: center; margin-bottom: 25px;">
+                                                    <h3 style="color: #ffffff; font-size: 20px; font-weight: 600; margin: 0 0 8px 0;">
+                                                        📋 Resumen de tu consulta
+                                                    </h3>
+                                                    <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 0;">
+                                                        Información registrada en nuestro sistema
+                                                    </p>
+                                                </div>
+                                                
+                                                <!-- Detalles organizados -->
+                                                <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 24px; margin-bottom: 20px; backdrop-filter: blur(10px);">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                        <tr>
+                                                            <td style="padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2);">
+                                                                <p style="color: rgba(255,255,255,0.8); font-size: 13px; font-weight: 600; margin: 0 0 5px 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                                    Tema de consulta
+                                                                </p>
+                                                                <p style="color: #ffffff; font-size: 17px; font-weight: 600; margin: 0;">
+                                                                    🎯 ASUNTO
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                        ${mensajeHTML}
+                                                    </table>
+                                                </div>
+                                                
+                                                <!-- Código promocional destacado -->
+                                                ${descuentoHTML}
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Proceso con estilo intermedio -->
+                                <tr>
+                                    <td style="padding-bottom: 40px;">
+                                        <div style="text-align: center; margin-bottom: 35px;">
+                                            <h3 style="color: #1e293b; font-size: 24px; font-weight: 600; margin: 0 0 12px 0;">
+                                                ¿Qué sigue ahora? 🚀
+                                            </h3>
+                                            <p style="color: #64748b; font-size: 15px; margin: 0; font-weight: 400;">
+                                                Nuestro proceso optimizado para resultados excepcionales
+                                            </p>
+                                            <div style="width: 70px; height: 3px; background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); margin: 15px auto 0; border-radius: 2px;"></div>
+                                        </div>
+                                        
+                                        <!-- Timeline moderna -->
+                                        <div style="background-color: #f8fafc; border-radius: 12px; padding: 35px 30px; border: 1px solid #e2e8f0;">
+                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                <!-- Paso 1 -->
+                                                <tr>
+                                                    <td style="padding-bottom: 28px;">
+                                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td width="55" style="vertical-align: top; padding-right: 20px;">
+                                                                    <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; position: relative; box-shadow: 0 2px 8px rgba(59,130,246,0.3);">
+                                                                        1
+                                                                        <!-- Línea conectora -->
+                                                                        <div style="position: absolute; top: 42px; left: 50%; transform: translateX(-50%); width: 2px; height: 28px; background: linear-gradient(to bottom, #3b82f6, #e2e8f0);"></div>
+                                                                    </div>
+                                                                </td>
+                                                                <td style="vertical-align: top;">
+                                                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 3px solid #3b82f6;">
+                                                                        <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">
+                                                                            🧠 Análisis inteligente de tu proyecto
+                                                                        </h4>
+                                                                        <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0 0 12px 0;">
+                                                                            Nuestro equipo analiza tu consulta y diseña una estrategia personalizada con IA
+                                                                        </p>
+                                                                        <div style="background-color: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; display: inline-block;">
+                                                                            ⚡ EN PROCESO
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <!-- Paso 2 -->
+                                                <tr>
+                                                    <td style="padding-bottom: 28px;">
+                                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td width="55" style="vertical-align: top; padding-right: 20px;">
+                                                                    <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; position: relative; box-shadow: 0 2px 8px rgba(99,102,241,0.3);">
+                                                                        2
+                                                                        <div style="position: absolute; top: 42px; left: 50%; transform: translateX(-50%); width: 2px; height: 28px; background: linear-gradient(to bottom, #8b5cf6, #e2e8f0);"></div>
+                                                                    </div>
+                                                                </td>
+                                                                <td style="vertical-align: top;">
+                                                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 3px solid #6366f1;">
+                                                                        <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">
+                                                                            💡 Te enviamos tu propuesta personalizada
+                                                                        </h4>
+                                                                        <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0 0 12px 0;">
+                                                                            Plan detallado con solución específica, timeline y presupuesto adaptado a tu negocio
+                                                                        </p>
+                                                                        <div style="background-color: #fef3c7; color: #92400e; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; display: inline-block;">
+                                                                            ⏱️ MÁXIMO 24H
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <!-- Paso 3 -->
+                                                <tr>
+                                                    <td>
+                                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                            <tr>
+                                                                <td width="55" style="vertical-align: top; padding-right: 20px;">
+                                                                    <div style="width: 42px; height: 42px; background: linear-gradient(135deg, #8b5cf6 0%, #d946ef 100%); color: #ffffff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; box-shadow: 0 2px 8px rgba(139,92,246,0.3);">
+                                                                        3
+                                                                    </div>
+                                                                </td>
+                                                                <td style="vertical-align: top;">
+                                                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); border-left: 3px solid #8b5cf6;">
+                                                                        <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">
+                                                                            🚀 Reunión virtual gratuita
+                                                                        </h4>
+                                                                        <p style="color: #64748b; font-size: 14px; line-height: 1.5; margin: 0 0 12px 0;">
+                                                                            Conversamos sobre tu proyecto, resolvemos dudas y alineamos objetivos
+                                                                        </p>
+                                                                        <div style="background-color: #ddd6fe; color: #6b21a8; padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 600; display: inline-block;">
+                                                                            📅 A COORDINAR
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Ventajas equilibradas -->
+                                <tr>
+                                    <td style="padding-bottom: 40px;">
+                                        <div style="text-align: center; margin-bottom: 35px;">
+                                            <h3 style="color: #1e293b; font-size: 22px; font-weight: 600; margin: 0 0 12px 0;">
+                                                ¿Por qué elegir LYXIA? 🌟
+                                            </h3>
+                                            <p style="color: #64748b; font-size: 15px; margin: 0; font-weight: 400;">
+                                                Lo que nos hace diferentes en el mundo de la IA
+                                            </p>
+                                            <div style="width: 60px; height: 3px; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); margin: 15px auto 0; border-radius: 2px;"></div>
+                                        </div>
+                                        
+                                        <!-- Grid de beneficios balanceados -->
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                            <tr>
+                                                <td width="50%" style="padding-right: 12px; vertical-align: top;">
+                                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                                        <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                                                            <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(59,130,246,0.25);">⚡</div>
+                                                            <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">IA de Última Generación</h4>
+                                                            <p style="color: #64748b; font-size: 13px; line-height: 1.4; margin: 0;">GPT-4, Claude y tecnologías custom para tu sector específico</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td width="50%" style="padding-left: 12px; vertical-align: top;">
+                                                    <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                                        <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                                                            <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">📈</div>
+                                                            <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">Resultados Comprobados</h4>
+                                                            <p style="color: #64748b; font-size: 13px; line-height: 1.4; margin: 0;">+280% de mejora promedio en eficiencia operacional</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style="padding-top: 20px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                        <tr>
+                                                            <td width="50%" style="padding-right: 12px; vertical-align: top;">
+                                                                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                                                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                                                                        <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(245,158,11,0.25);">🛡️</div>
+                                                                        <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">Seguridad Garantizada</h4>
+                                                                        <p style="color: #64748b; font-size: 13px; line-height: 1.4; margin: 0;">Máxima protección de datos y cumplimiento GDPR total</p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td width="50%" style="padding-left: 12px; vertical-align: top;">
+                                                                <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                                                                    <div style="display: table-cell; vertical-align: middle; text-align: center;">
+                                                                        <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(139,92,246,0.25);">💎</div>
+                                                                        <h4 style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 8px 0;">Soporte Premium</h4>
+                                                                        <p style="color: #64748b; font-size: 13px; line-height: 1.4; margin: 0;">Equipo dedicado 24/7 y acompañamiento continuo</p>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <!-- CTA atractivo pero profesional -->
+                                <tr>
+                                    <td style="text-align: center; padding: 35px 0;">
+                                        <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 35px; border: 1px solid #e2e8f0; position: relative; overflow: hidden;">
+                                            <!-- Efecto decorativo -->
+                                            <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; opacity: 0.1;"></div>
+                                            <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #6366f1, #d946ef); border-radius: 50%; opacity: 0.08;"></div>
+                                            
+                                            <div style="position: relative; z-index: 2;">
+                                                <h3 style="color: #1e293b; font-size: 20px; font-weight: 600; margin: 0 0 12px 0;">
+                                                    ¿Listo para transformar tu negocio? 🚀
+                                                </h3>
+                                                <p style="color: #64748b; font-size: 15px; margin: 0 0 25px 0; max-width: 420px; margin-left: auto; margin-right: auto; line-height: 1.5;">
+                                                    Descubre nuestro portafolio completo de soluciones IA y casos de éxito reales
+                                                </p>
+                                                
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
+                                                    <tr>
+                                                        <td style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); border-radius: 25px; box-shadow: 0 4px 15px rgba(59,130,246,0.4);">
+                                                            <a href="https://www.lyxia.es/#servicios" style="display: inline-block; padding: 16px 32px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 15px; letter-spacing: 0.3px; transition: all 0.3s ease;">
+                                                                🌟 Explorar Soluciones IA
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Información de contacto moderna -->
+                                <tr>
+                                    <td style="padding-bottom: 40px;">
+                                        <div style="background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: #ffffff; border-radius: 12px; padding: 35px; position: relative; overflow: hidden;">
+                                            <!-- Patrón decorativo -->
+                                            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background-image: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.05) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%); opacity: 0.6;"></div>
+                                            
+                                            <div style="position: relative; z-index: 2;">
+                                                <div style="text-align: center; margin-bottom: 28px;">
+                                                    <h3 style="color: #ffffff; font-size: 18px; font-weight: 600; margin: 0 0 8px 0;">
+                                                        ¿Tienes alguna pregunta? 💬
+                                                    </h3>
+                                                    <p style="color: rgba(255,255,255,0.8); font-size: 14px; margin: 0;">
+                                                        Nuestro equipo está aquí para ayudarte en cada paso
+                                                    </p>
+                                                </div>
+                                                
+                                                <!-- Grid de contactos balanceado -->
+                                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                    <tr>
+                                                        <td width="33%" style="text-align: center; vertical-align: top; padding: 12px;">
+                                                            <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; height: 75px; display: table; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
+                                                                <div style="display: table-cell; vertical-align: middle;">
+                                                                    <div style="color: #60a5fa; font-size: 20px; margin-bottom: 6px;">📧</div>
+                                                                    <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px 0; font-weight: 600;">EMAIL</p>
+                                                                    <a href="mailto:info.lyxia@gmail.com" style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 500;">info.lyxia@gmail.com</a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td width="33%" style="text-align: center; vertical-align: top; padding: 12px;">
+                                                            <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; height: 75px; display: table; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
+                                                                <div style="display: table-cell; vertical-align: middle;">
+                                                                    <div style="color: #34d399; font-size: 20px; margin-bottom: 6px;">🌐</div>
+                                                                    <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px 0; font-weight: 600;">WEB</p>
+                                                                    <a href="https://www.lyxia.es" style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 500;">www.lyxia.es</a>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td width="33%" style="text-align: center; vertical-align: top; padding: 12px;">
+                                                            <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; height: 75px; display: table; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
+                                                                <div style="display: table-cell; vertical-align: middle;">
+                                                                    <div style="color: #f472b6; font-size: 20px; margin-bottom: 6px;">📍</div>
+                                                                    <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px 0; font-weight: 600;">UBICACIÓN</p>
+                                                                    <p style="color: #ffffff; font-size: 12px; margin: 0; font-weight: 500;">Valencia, España</p>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Mensaje de cierre equilibrado -->
+                                <tr>
+                                    <td style="text-align: center; padding-top: 30px; border-top: 1px solid #e2e8f0;">
+                                        <p style="color: #475569; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                            En <strong>LYXIA</strong>, combinamos innovación tecnológica con un enfoque humano. 
+                                            <strong>Tu éxito es nuestra pasión</strong>. 🎯
+                                        </p>
+                                        
+                                        <!-- Firma moderna -->
+                                        <div style="background-color: #f8fafc; border-radius: 10px; padding: 24px; margin-top: 25px; border-left: 3px solid #3b82f6;">
+                                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                                <tr>
+                                                    <td width="70" style="vertical-align: top; padding-right: 18px;">
+                                                        <!-- Avatar del equipo -->
+                                                        <div style="width: 55px; height: 55px; background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 20px; font-weight: 700; box-shadow: 0 2px 8px rgba(59,130,246,0.3);">
+                                                            L
+                                                        </div>
+                                                    </td>
+                                                    <td style="text-align: left;">
+                                                        <p style="color: #1e293b; font-size: 16px; font-weight: 600; margin: 0 0 4px 0;">
+                                                            Equipo LYXIA 👥
+                                                        </p>
+                                                        <p style="color: #64748b; font-size: 14px; margin: 0 0 8px 0;">
+                                                            Especialistas en IA & Transformación Digital
+                                                        </p>
+                                                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); color: #ffffff; padding: 4px 12px; border-radius: 12px; display: inline-block; font-size: 11px; font-weight: 600;">
+                                                            🤖 Powered by AI
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <!-- Footer corporativo equilibrado -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #1e293b 0%, #2d3748 100%); color: #cbd5e0; padding: 40px 35px; text-align: center;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <!-- Branding section -->
+                                <tr>
+                                    <td style="padding-bottom: 25px; border-bottom: 1px solid rgba(203,213,224,0.2);">
+                                        <div style="background-color: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px;">
+                                            <img src="https://lyxia.es/assets/LOGO.png" alt="LYXIA" width="50" style="display: block; max-width: 50px; height: auto; opacity: 0.9;">
+                                        </div>
+                                        <p style="color: #e2e8f0; font-size: 15px; font-weight: 600; margin: 0 0 6px 0;">
+                                            LYXIA
+                                        </p>
+                                        <p style="color: #9ca3af; font-size: 13px; margin: 0; font-style: italic;">
+                                            Transformando empresas con Inteligencia Artificial
+                                        </p>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Links útiles -->
+                                <tr>
+                                    <td style="padding: 25px 0;">
+                                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 auto;">
+                                            <tr>
+                                                <td style="padding: 0 18px;">
+                                                    <a href="https://www.lyxia.es/#servicios" style="color: #cbd5e0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s ease;">Servicios</a>
+                                                </td>
+                                                <td style="padding: 0 18px; border-left: 1px solid rgba(203,213,224,0.3);">
+                                                    <a href="https://www.lyxia.es/#casos-exito" style="color: #cbd5e0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s ease;">Casos de Éxito</a>
+                                                </td>
+                                                <td style="padding: 0 18px; border-left: 1px solid rgba(203,213,224,0.3);">
+                                                    <a href="https://www.lyxia.es/#contacto" style="color: #cbd5e0; text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.3s ease;">Contacto</a>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Footer info y compliance -->
+                                <tr>
+                                    <td style="border-top: 1px solid rgba(203,213,224,0.2); padding-top: 25px;">
+                                        <p style="font-size: 14px; margin: 0 0 15px 0; color: #9ca3af; font-weight: 500;">
+                                            © 2025 LYXIA • Innovación en Inteligencia Artificial
+                                        </p>
+                                        
+                                        <!-- Badges de confianza -->
+                                        <div style="margin: 15px 0 20px 0;">
+                                            <span style="background-color: rgba(59,130,246,0.2); color: #60a5fa; padding: 6px 12px; border-radius: 15px; font-size: 11px; margin: 0 6px; border: 1px solid rgba(59,130,246,0.3); display: inline-block;">
+                                                🔒 GDPR Compliant
+                                            </span>
+                                            <span style="background-color: rgba(16,185,129,0.2); color: #34d399; padding: 6px 12px; border-radius: 15px; font-size: 11px; margin: 0 6px; border: 1px solid rgba(16,185,129,0.3); display: inline-block;">
+                                                🛡️ Seguridad Enterprise
+                                            </span>
+                                        </div>
+                                        
+                                        <!-- Unsubscribe amigable -->
+                                        <p style="font-size: 12px; margin: 15px 0 0 0; color: #6b7280; line-height: 1.4;">
+                                            Si prefieres no recibir más emails sobre nuestras innovaciones, puedes 
+                                            <a href="#" style="color: #9ca3af; text-decoration: underline;">actualizar tus preferencias aquí</a>
+                                        </p>
+                                        
+                                        <!-- Info legal -->
+                                        <div style="margin-top: 20px; padding: 15px; background-color: rgba(0,0,0,0.1); border-radius: 6px;">
+                                            <p style="font-size: 11px; margin: 0; color: #6b7280; line-height: 1.3;">
+                                                LYXIA AI Solutions • Valencia, España<br>
+                                                Empresa de innovación tecnológica especializada en IA
+                                            </p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Pixel de seguimiento (invisible) -->
+    <img src="https://analytics.lyxia.es/email-open?campaign=welcome&user=NOMBRE&timestamp=2025" width="1" height="1" style="display: none;" alt="">
 </body>
 </html>
     `;
@@ -1290,11 +1231,12 @@ document.addEventListener('DOMContentLoaded', () => {
       submitBtn.textContent = 'Enviando...';
 
       // 1. Generamos el HTML del correo llamando a nuestra nueva función
-      const emailHTML = createBeautifulEmailHTML(
+      const emailHTML = createBeautifulEmailHTML( 
           inputs.nombre.value.trim(),
           inputs.email.value.trim(),
           inputs.asunto.value,
-          inputs.mensaje.value.trim()
+          inputs.mensaje.value.trim(),
+          inputs.privacidad.value.trim()
       );
 
       // 2. Creamos el objeto de parámetros. Solo necesitamos enviar el HTML.
