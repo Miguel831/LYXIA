@@ -331,12 +331,8 @@ window.addEventListener('load', function() {
     
     stepsContainer.addEventListener('touchstart', startDrag, { passive: true }); // passive:true para mejor rendimiento si no prevenimos default
     stepsContainer.addEventListener('touchend', endDrag);
-    stepsContainer.addEventListener('touchmove', (e) => {
-        if(isDown) { // Solo prevenir el comportamiento por defecto si estamos arrastrando
-            e.preventDefault();
-            moveDrag(e);
-        }
-    }, { passive: false });
+    stepsContainer.addEventListener('touchmove', moveDrag, { passive: true });
+
 
 
     const observer = new IntersectionObserver(entries => {
@@ -786,7 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <td style="padding-bottom: 35px;">
                                         <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border-radius: 10px; padding: 28px; border-left: 4px solid #3b82f6;">
                                             <h2 style="color: #1e293b; font-size: 22px; font-weight: 600; margin: 0 0 16px 0; line-height: 1.3;">
-                                                Hola <span style="color: #3b82f6;">NOMBRE</span>, ¡es genial tenerte aquí! ✨
+                                                Hola <span style="color: #3b82f6;">${nombre}</span>, ¡es genial tenerte aquí! ✨
                                             </h2>
                                             <p style="color: #475569; font-size: 16px; line-height: 1.6; margin: 0; font-weight: 400;">
                                                 Gracias por contactar con <strong>LYXIA</strong>. Tu interés en nuestras soluciones de Inteligencia Artificial nos emociona, y ya estamos preparando la mejor propuesta para tu proyecto.
@@ -822,7 +818,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                                     Tema de consulta
                                                                 </p>
                                                                 <p style="color: #ffffff; font-size: 17px; font-weight: 600; margin: 0;">
-                                                                    🎯 ASUNTO
+                                                                    🎯 ${asunto}
                                                                 </p>
                                                             </td>
                                                         </tr>
@@ -960,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <!-- Grid de beneficios balanceados -->
                                         <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                             <tr>
-                                                <td width="50%" style="padding-right: 12px; vertical-align: top;">
+                                                <td width="50%" style="padding-left: 12px; padding-right: 15px; vertical-align: top;">
                                                     <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                                                         <div style="display: table-cell; vertical-align: middle; text-align: center;">
                                                             <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(59,130,246,0.25);">⚡</div>
@@ -969,7 +965,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td width="50%" style="padding-left: 12px; vertical-align: top;">
+                                                <td width="50%" style="padding-left: 6px; padding-right: 30px; vertical-align: top;">
                                                     <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                                                         <div style="display: table-cell; vertical-align: middle; text-align: center;">
                                                             <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">📈</div>
@@ -983,7 +979,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 <td colspan="2" style="padding-top: 20px;">
                                                     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                                                         <tr>
-                                                            <td width="50%" style="padding-right: 12px; vertical-align: top;">
+                                                            <td width="50%" style="padding-left: 12px; padding-right: 12px; vertical-align: top;">
                                                                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                                                                     <div style="display: table-cell; vertical-align: middle; text-align: center;">
                                                                         <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(245,158,11,0.25);">🛡️</div>
@@ -992,7 +988,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                                                     </div>
                                                                 </div>
                                                             </td>
-                                                            <td width="50%" style="padding-left: 12px; vertical-align: top;">
+                                                            <td width="50%" style="padding-left: 6px; padding-right: 30px; vertical-align: top;">
                                                                 <div style="background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 26px 20px; height: 150px; display: table; width: 100%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
                                                                     <div style="display: table-cell; vertical-align: middle; text-align: center;">
                                                                         <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); border-radius: 12px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; color: #ffffff; font-size: 22px; box-shadow: 0 4px 12px rgba(139,92,246,0.25);">💎</div>
@@ -1058,36 +1054,49 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 
                                                 <!-- Grid de contactos balanceado -->
                                                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                                    <tr>
-                                                        <td width="33%" style="text-align: center; vertical-align: top; padding: 12px;">
-                                                            <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; height: 75px; display: table; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
-                                                                <div style="display: table-cell; vertical-align: middle;">
-                                                                    <div style="color: #60a5fa; font-size: 20px; margin-bottom: 6px;">📧</div>
-                                                                    <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px 0; font-weight: 600;">EMAIL</p>
-                                                                    <a href="mailto:info.lyxia@gmail.com" style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 500;">info.lyxia@gmail.com</a>
-                                                                </div>
-                                                            </div>
+                                                <tr>
+                                                    <!-- EMAIL -->
+                                                    <td width="33%" valign="top" style="padding: 12px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" height="100%">
+                                                        <tr>
+                                                        <td height="100%" style="background-color: rgba(255,255,255,0.1); border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); text-align: center; padding: 18px;">
+                                                            <div style="font-size: 20px; margin-bottom: 6px; color: #60a5fa;">📧</div>
+                                                            <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px; font-weight: 600;">EMAIL</p>
+                                                            <a href="mailto:info.lyxia@gmail.com" style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 500;">info.lyxia@gmail.com</a>
                                                         </td>
-                                                        <td width="33%" style="text-align: center; vertical-align: top; padding: 12px;">
-                                                            <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; height: 75px; display: table; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
-                                                                <div style="display: table-cell; vertical-align: middle;">
-                                                                    <div style="color: #34d399; font-size: 20px; margin-bottom: 6px;">🌐</div>
-                                                                    <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px 0; font-weight: 600;">WEB</p>
-                                                                    <a href="https://www.lyxia.es" style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 500;">www.lyxia.es</a>
-                                                                </div>
-                                                            </div>
+                                                        </tr>
+                                                    </table>
+                                                    </td>
+
+                                                    <!-- WEB -->
+                                                    <td width="33%" valign="top" style="padding: 12px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" height="100%">
+                                                        <tr>
+                                                        <td height="100%" style="background-color: rgba(255,255,255,0.1); border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); text-align: center; padding: 18px;">
+                                                            <div style="font-size: 20px; margin-bottom: 6px; color: #34d399;">🌐</div>
+                                                            <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px; font-weight: 600;">WEB</p>
+                                                            <a href="https://www.lyxia.es" style="color: #ffffff; text-decoration: none; font-size: 12px; font-weight: 500;">www.lyxia.es</a>
                                                         </td>
-                                                        <td width="33%" style="text-align: center; vertical-align: top; padding: 12px;">
-                                                            <div style="background-color: rgba(255,255,255,0.1); border-radius: 8px; padding: 18px; height: 75px; display: table; width: 100%; border: 1px solid rgba(255,255,255,0.15);">
-                                                                <div style="display: table-cell; vertical-align: middle;">
-                                                                    <div style="color: #f472b6; font-size: 20px; margin-bottom: 6px;">📍</div>
-                                                                    <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px 0; font-weight: 600;">UBICACIÓN</p>
-                                                                    <p style="color: #ffffff; font-size: 12px; margin: 0; font-weight: 500;">Valencia, España</p>
-                                                                </div>
-                                                            </div>
+                                                        </tr>
+                                                    </table>
+                                                    </td>
+
+                                                    <!-- UBICACIÓN -->
+                                                    <td width="33%" valign="top" style="padding: 12px;">
+                                                    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" height="100%">
+                                                        <tr>
+                                                        <td height="100%" style="background-color: rgba(255,255,255,0.1); border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); text-align: center; padding: 18px;">
+                                                            <div style="font-size: 20px; margin-bottom: 6px; color: #f472b6;">📍</div>
+                                                            <p style="color: rgba(255,255,255,0.9); font-size: 12px; margin: 0 0 2px; font-weight: 600;">UBICACIÓN</p>
+                                                            <p style="color: #ffffff; font-size: 12px; margin: 0; font-weight: 500;">Valencia, ES</p>
                                                         </td>
-                                                    </tr>
+                                                        </tr>
+                                                    </table>
+                                                    </td>
+                                                </tr>
                                                 </table>
+
+
                                             </div>
                                         </div>
                                     </td>
@@ -1139,7 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <tr>
                                     <td style="padding-bottom: 25px; border-bottom: 1px solid rgba(203,213,224,0.2);">
                                         <div style="background-color: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px;">
-                                            <img src="https://lyxia.es/assets/LOGO.png" alt="LYXIA" width="50" style="display: block; max-width: 50px; height: auto; opacity: 0.9;">
+                                            <img src="https://lyxia.es/assets/LOGO3.png" alt="LYXIA" width="150" style="display: block; max-width: 250px; height: auto; opacity: 0.9;">
                                         </div>
                                         <p style="color: #e2e8f0; font-size: 15px; font-weight: 600; margin: 0 0 6px 0;">
                                             LYXIA

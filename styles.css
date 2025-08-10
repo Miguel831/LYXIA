@@ -1185,6 +1185,10 @@ body {
 /*================================================================
   6. METODOLOGIA
 =================================================================*/
+#procesoSteps {
+    touch-action: pan-y pinch-zoom; /* Permite desplazamiento vertical y zoom */
+}
+
 .metodologia-section {
   max-width: 1200px;
   margin: 0 auto;
