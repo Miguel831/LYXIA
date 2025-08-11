@@ -470,10 +470,11 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 document.addEventListener('DOMContentLoaded', () => {
+  const prizes = [ { label: '5% OFF', color: '#4361ee', codePrefix: 'TECH5' }, { label: '10% OFF', color: '#3a0ca3', codePrefix: 'TECH10' }, { label: '15% OFF', color: '#7209b7', codePrefix: 'TECH15' }, { label: '20% OFF', color: '#f72585', codePrefix: 'TECH20' }, { label: 'ENVÍO FREE', color: '#4cc9f0', codePrefix: 'FREEDEL' }, { label: 'REGALO!', color: '#560bad', codePrefix: 'SURPRISE' } ];
+
 
   // --- LÓGICA DE LA RULETA AVANZADA (SIN CAMBIOS) ---
   const initAdvancedRoulette = () => {
-    const prizes = [ { label: '5% OFF', color: '#4361ee', codePrefix: 'TECH5' }, { label: '10% OFF', color: '#3a0ca3', codePrefix: 'TECH10' }, { label: '15% OFF', color: '#7209b7', codePrefix: 'TECH15' }, { label: '20% OFF', color: '#f72585', codePrefix: 'TECH20' }, { label: 'ENVÍO FREE', color: '#4cc9f0', codePrefix: 'FREEDEL' }, { label: 'REGALO!', color: '#560bad', codePrefix: 'SURPRISE' } ];
     const svgChevronLeft = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>';
     const svgChevronRight = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>';
     const canvas = document.getElementById('wheel');
@@ -655,16 +656,22 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const validatePremio = () => {
-      const codigo = inputs.codigo.value.trim(); // Aquí asumo que tienes un input llamado "codigo"
+      const codigo = inputs.descuento.value.trim();
+
+      // Si está vacío, consideramos válido
+      if (codigo === '') {
+        hideError(inputs.descuento);
+        return true;
+      }
 
       const esValido = prizes.some(prize => codigo.startsWith(prize.codePrefix));
       
       if (!esValido) {
-        showError(inputs.codigo, 'El código introducido no es válido.');
+        showError(inputs.descuento, 'El código introducido no es válido.');
         return false;
       }
 
-      hideError(inputs.codigo);
+      hideError(inputs.descuento);
       return true;
     };
 
@@ -680,7 +687,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const isAsuntoValid = validateAsunto();
       const isDescuento = validatePremio();
       const isPrivacidadValid = validatePrivacidad();
-      return isNombreValid && isEmailValid && isAsuntoValid && validatePremio && isPrivacidadValid;
+      return isNombreValid && isEmailValid && isAsuntoValid && isDescuento && isPrivacidadValid;
     };
 
     Object.values(inputs).forEach(input => {
@@ -1447,9 +1454,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Mostrar banner al cargar la página
         window.addEventListener('load', function() {
             setTimeout(() => {
-                //if (!localStorage.getItem('cookieConsent')) {
+                if (!localStorage.getItem('cookieConsent')) {
                     showCookieBanner();
-                //}
+                }
             }, 1000);
         });
 

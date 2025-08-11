@@ -1788,7 +1788,7 @@ body {
     .cnt-form-card.shake { animation: shake-form 0.5s cubic-bezier(.36,.07,.19,.97); }
     @keyframes shake-form { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-3px); } 40%, 60% { transform: translateX(3px); } }
     @media (min-width: 768px) { .cnt-flex-wrapper { flex-direction: row; align-items: stretch; gap: 40px; } .cnt-form-title { text-align: left; } }
-    @media (max-width: 450px) { #wheel-panel {right: calc(-100% + 25px);} #panel-toggle {width: 25px; height: 30; left: -25px;}}
+    @media (max-width: 450px) { #wheel-panel {right: calc(-100% + 42px);} #panel-toggle {width: 25px; height: 30; left: -25px;}}
 /*================================================================
   10. FOOTER
 =================================================================*/
