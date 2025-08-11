@@ -1758,7 +1758,7 @@ body {
     .cnt-label { position: absolute; top: 16px; left: 8px; color: var(--color-text-light); pointer-events: none; transition: all 0.25s ease; z-index: 1; }
     .cnt-input:focus + .cnt-label, .cnt-input:not(:placeholder-shown) + .cnt-label, .cnt-textarea:focus + .cnt-label, .cnt-textarea:not(:placeholder-shown) + .cnt-label, .cnt-select:valid + .cnt-label { top: -2px; font-size: 0.75rem; color: var(--color-primary); background: var(--color-text-white); padding: 0 4px; }
     .cnt-input, .cnt-textarea { placeholder: " "; }
-    .cnt-textarea { resize: none; overflow-y: hidden; }
+    .cnt-textarea { resize: none; overflow-y: hidden; field-sizing: content;}
     .cnt-select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-size: 20px; }
     
     /* ESTILOS DE VALIDACIÓN DE ERRORES */
@@ -1788,7 +1788,7 @@ body {
     .cnt-form-card.shake { animation: shake-form 0.5s cubic-bezier(.36,.07,.19,.97); }
     @keyframes shake-form { 10%, 90% { transform: translateX(-1px); } 20%, 80% { transform: translateX(2px); } 30%, 50%, 70% { transform: translateX(-3px); } 40%, 60% { transform: translateX(3px); } }
     @media (min-width: 768px) { .cnt-flex-wrapper { flex-direction: row; align-items: stretch; gap: 40px; } .cnt-form-title { text-align: left; } }
-    @media (max-width: 450px) { #wheel-panel {right: calc(-100% + 25px);} #panel-toggle {width: 20; height: 30; left: -40px;}}
+    @media (max-width: 450px) { #wheel-panel {right: calc(-100% + 25px);} #panel-toggle {width: 25px; height: 30; left: -25px;}}
 /*================================================================
   10. FOOTER
 =================================================================*/

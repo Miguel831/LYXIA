@@ -796,7 +796,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <td style="padding-bottom: 40px;">
                                         <div style="background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%); border-radius: 12px; padding: 35px; color: #ffffff; position: relative; overflow: hidden;">
                                             <!-- Efecto de fondo -->
-                                            <div style="position: absolute; top: 0; right: 0; width: 100px; height: 100px; background-image: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
+                                            <div style="position: absolute; top: 0; right: 0; width: 100px; background-image: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
                                             
                                             <div style="position: relative; z-index: 2;">
                                                 <!-- Header de sección -->
@@ -1010,8 +1010,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     <td style="text-align: center; padding: 35px 0;">
                                         <div style="background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); border-radius: 12px; padding: 35px; border: 1px solid #e2e8f0; position: relative; overflow: hidden;">
                                             <!-- Efecto decorativo -->
-                                            <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: linear-gradient(135deg, #3b82f6, #8b5cf6); border-radius: 50%; opacity: 0.1;"></div>
-                                            <div style="position: absolute; bottom: -30px; left: -30px; width: 100px; height: 100px; background: linear-gradient(135deg, #6366f1, #d946ef); border-radius: 50%; opacity: 0.08;"></div>
                                             
                                             <div style="position: relative; z-index: 2;">
                                                 <h3 style="color: #1e293b; font-size: 20px; font-weight: 600; margin: 0 0 12px 0;">
@@ -1150,9 +1148,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                         <div style="background-color: rgba(255,255,255,0.05); padding: 12px; border-radius: 8px; display: inline-block; margin-bottom: 15px;">
                                             <img src="https://lyxia.es/assets/LOGO3.png" alt="LYXIA" width="150" style="display: block; max-width: 250px; height: auto; opacity: 0.9;">
                                         </div>
-                                        <p style="color: #e2e8f0; font-size: 15px; font-weight: 600; margin: 0 0 6px 0;">
-                                            LYXIA
-                                        </p>
+                                        
                                         <p style="color: #9ca3af; font-size: 13px; margin: 0; font-style: italic;">
                                             Transformando empresas con Inteligencia Artificial
                                         </p>
