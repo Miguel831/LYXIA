@@ -771,6 +771,111 @@
 
 
 
+<!-- COOKIES -->
+
+<div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-content">
+            <div class="cookie-text">
+                <h3>🍪 Uso de Cookies</h3>
+                <p>
+                    Utilizamos cookies propias y de terceros para mejorar nuestros servicios y mostrar publicidad personalizada. 
+                    Al continuar navegando, consideramos que acepta su uso. 
+                    <a href="politica-cookies.html" onclick="showPrivacyPolicy()">Más información</a> | 
+                    <a href="#" onclick="showCookieSettings()">Configurar cookies</a>
+                </p>
+            </div>
+            <div class="cookie-buttons">
+                <button class="btn btn-reject" onclick="rejectCookies()">Rechazar</button>
+                <button class="btn btn-settings" onclick="showCookieSettings()">Configurar</button>
+                <button class="btn btn-accept" onclick="acceptAllCookies()">Aceptar todas</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Configuración de Cookies -->
+    <div id="cookieModal" class="cookie-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Configuración de Cookies</h3>
+            </div>
+            <div class="modal-body">
+                <div class="cookie-category">
+                    <div class="category-header" onclick="toggleCategory('necessary')">
+                        <div class="category-title">🔧 Cookies Necesarias</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="necessary" checked disabled>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div id="necessary-content" class="category-content">
+                        <div class="category-description">
+                            Estas cookies son esenciales para el funcionamiento del sitio web y no pueden ser desactivadas. 
+                            Generalmente se establecen como respuesta a acciones realizadas por usted que equivalen a una 
+                            solicitud de servicios, como establecer sus preferencias de privacidad, iniciar sesión o rellenar formularios.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cookie-category">
+                    <div class="category-header" onclick="toggleCategory('analytics')">
+                        <div class="category-title">📊 Cookies Analíticas</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="analytics">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div id="analytics-content" class="category-content">
+                        <div class="category-description">
+                            Estas cookies nos permiten conocer el uso que hace de nuestro sitio web, de forma anónima. 
+                            Nos ayudan a entender cómo interactúan los visitantes con las páginas web mediante la recopilación 
+                            y el suministro de información de manera anónima.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cookie-category">
+                    <div class="category-header" onclick="toggleCategory('marketing')">
+                        <div class="category-title">🎯 Cookies de Marketing</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="marketing">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div id="marketing-content" class="category-content">
+                        <div class="category-description">
+                            Estas cookies pueden estar en todo el sitio web, colocadas por nuestros socios publicitarios. 
+                            Pueden ser utilizadas por esas empresas para crear un perfil de sus intereses y mostrarle 
+                            anuncios relevantes en otros sitios.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cookie-category">
+                    <div class="category-header" onclick="toggleCategory('personalization')">
+                        <div class="category-title">⚙️ Cookies de Personalización</div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="personalization">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div id="personalization-content" class="category-content">
+                        <div class="category-description">
+                            Estas cookies permiten que el sitio web proporcione una funcionalidad y personalización mejoradas. 
+                            Pueden ser establecidas por nosotros o por proveedores externos cuyos servicios hemos agregado a nuestras páginas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-reject" onclick="savePreferences(); closeCookieModal();">Guardar preferencias</button>
+                <button class="btn btn-accept" onclick="acceptAllCookies()">Aceptar todas</button>
+            </div>
+        </div>
+    </div>
+
+
+
+
 <!-- FOOTER -->
 <footer class="footer">
     <div class="footer-curve">
