@@ -594,6 +594,7 @@ document.addEventListener('DOMContentLoaded', () => {
       email: form.querySelector('#email'),
       asunto: form.querySelector('#asunto'),
       mensaje: form.querySelector('#mensaje'),
+      descuento: form.querySelector('#descuento'), 
       privacidad: form.querySelector('#privacidad')
     };
     const submitBtn = form.querySelector('#submitBtn');
@@ -653,12 +654,33 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
     };
 
+    const validatePremio = () => {
+      const codigo = inputs.codigo.value.trim(); // Aquí asumo que tienes un input llamado "codigo"
+
+      const esValido = prizes.some(prize => codigo.startsWith(prize.codePrefix));
+      
+      if (!esValido) {
+        showError(inputs.codigo, 'El código introducido no es válido.');
+        return false;
+      }
+
+      hideError(inputs.codigo);
+      return true;
+    };
+
+
+    function obtenerDescuentoDesdeCodigo(code) {
+      const premio = prizes.find(prize => code.startsWith(prize.codePrefix));
+      return premio ? premio.label : null;
+    }
+
     const validateForm = () => {
       const isNombreValid = validateNombre();
       const isEmailValid = validateEmail();
       const isAsuntoValid = validateAsunto();
+      const isDescuento = validatePremio();
       const isPrivacidadValid = validatePrivacidad();
-      return isNombreValid && isEmailValid && isAsuntoValid && isPrivacidadValid;
+      return isNombreValid && isEmailValid && isAsuntoValid && validatePremio && isPrivacidadValid;
     };
 
     Object.values(inputs).forEach(input => {
@@ -668,6 +690,7 @@ document.addEventListener('DOMContentLoaded', () => {
           case 'nombre': validateNombre(); break;
           case 'email': validateEmail(); break;
           case 'asunto': validateAsunto(); break;
+          case 'descuento': validatePremio(); break;
           case 'privacidad': validatePrivacidad(); break;
         }
       });
@@ -704,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 🎁 Tu código de descuento especial
             </p>
             <div style="background-color: #ffffff; color: #3b82f6; padding: 12px 24px; border-radius: 25px; display: inline-block; font-weight: 700; font-size: 18px; letter-spacing: 1px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-                ${descuento}
+                ${obtenerDescuentoDesdeCodigo(descuento)}
             </div>
         </div>
         `;
@@ -1241,7 +1264,7 @@ document.addEventListener('DOMContentLoaded', () => {
           inputs.email.value.trim(),
           inputs.asunto.value,
           inputs.mensaje.value.trim(),
-          inputs.privacidad.value.trim()
+          inputs.descuento.value.trim()
       );
 
       // 2. Creamos el objeto de parámetros. Solo necesitamos enviar el HTML.
