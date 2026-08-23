@@ -1453,6 +1453,7 @@ export default function Home() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [faqTopic, setFaqTopic] = useState("all");
   const [expandedFaqId, setExpandedFaqId] = useState<number | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const filteredFAQs = useMemo(() => {
     return FAQ_DATA.filter(item => faqTopic === "all" || item.topic === faqTopic);
@@ -1507,9 +1508,9 @@ export default function Home() {
     return () => { window.cancelAnimationFrame(frame); window.removeEventListener("scroll", updateTarget); window.removeEventListener("resize", updateTarget); };
   }, []);
   return <main>
-    <header className={`site-header ${displayProgress > 97 ? "site-header-solid" : ""}`}>
+    <header className={`site-header ${displayProgress > 97 ? "site-header-solid" : ""} ${isMobileMenuOpen ? "site-header-expanded" : ""}`}>
       <div className="header-left">
-        <a className="brand brand-icon" href="#inicio" aria-label="LYXIA, inicio">
+        <a className="brand brand-icon" href="#inicio" aria-label="LYXIA, inicio" onClick={() => setIsMobileMenuOpen(false)}>
           <img src={logoIcono} alt="" aria-hidden="true" />
         </a>
         <nav className="header-nav" aria-label="Navegación principal">
@@ -1523,7 +1524,26 @@ export default function Home() {
       </div>
       <div className="header-right">
         <a href="#contacto" className="header-cta" onClick={(e) => { e.preventDefault(); setIsContactModalOpen(true); }}>Hablemos <span>↗</span></a>
+        <button
+          type="button"
+          className={`hamburger-btn ${isMobileMenuOpen ? "active" : ""}`}
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label="Abrir menú de navegación"
+          aria-expanded={isMobileMenuOpen}
+        >
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+        </button>
       </div>
+      {isMobileMenuOpen && (
+        <div className="mobile-nav-panel">
+          <a href="#vision" onClick={() => setIsMobileMenuOpen(false)}>Quiénes somos</a>
+          <a href="#capacidades" onClick={() => setIsMobileMenuOpen(false)}>Capacidades</a>
+          <a href="#preguntas-frecuentes" onClick={() => setIsMobileMenuOpen(false)}>FAQ</a>
+          <a href="#contacto" className="mobile-nav-cta" onClick={(e) => { e.preventDefault(); setIsMobileMenuOpen(false); setIsContactModalOpen(true); }}>Hablemos ↗</a>
+        </div>
+      )}
     </header>
     <section id="inicio" ref={journeyRef} className="journey" aria-label="Viaje inmersivo del cerebro al mundo y la expansión de la inteligencia"><div className="journey-sticky"><NeuralCanvas progress={progress} /><div className="journey-vignette journey-vignette-left" style={{ opacity: 1 - worldVisibility }} /><div className="journey-vignette journey-vignette-right" style={{ opacity: worldVisibility }} />
       <div className="chapter chapter-first" style={firstChapterStyle}><span className="eyebrow"><span /> Inteligencia aplicada · Valencia</span><h1>La inteligencia<br />que mueve<br /><span className="text-gradient">tu empresa.</span></h1><p>Convertimos procesos complejos en sistemas que piensan, aprenden y evolucionan contigo.</p><a className="inline-link" href="#vision">Descubre cómo <span>↗</span></a></div>
