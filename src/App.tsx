@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, useMemo, type CSSProperties } from "react";
 import logoIcono from "../assets/logo_icono_lila.png";
 import logoVertical from "../assets/logo_vertical_lila_blanco.png";
 
@@ -304,18 +304,19 @@ const BRAIN_REFERENCE_MAP =
   "AAAAABggICAgGAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" +
   "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
 const CONTINENTS: Array<Array<[number, number]>> = [
-  [[-168,68],[-145,72],[-126,62],[-123,48],[-115,32],[-105,24],[-96,17],[-86,20],[-81,26],[-80,34],[-74,42],[-62,49],[-57,54],[-63,61],[-80,70],[-98,76],[-120,72],[-145,60]],
-  [[-81,12],[-74,10],[-64,10],[-53,5],[-44,-3],[-35,-7],[-37,-16],[-42,-23],[-49,-30],[-55,-36],[-61,-43],[-67,-55],[-73,-51],[-75,-40],[-72,-27],[-76,-14],[-81,-4]],
-  [[-10,36],[-6,43],[2,44],[8,48],[13,54],[9,57],[17,61],[24,69],[31,70],[40,62],[47,57],[40,49],[31,46],[26,39],[17,41],[10,37],[2,36]],
-  [[-17,34],[-8,36],[8,37],[21,33],[31,31],[34,24],[43,13],[51,11],[44,0],[40,-11],[35,-22],[28,-34],[18,-35],[11,-27],[8,-5],[2,5],[-8,5],[-16,14]],
-  [[28,41],[39,42],[47,49],[57,54],[69,61],[88,68],[110,72],[135,67],[160,60],[175,52],[161,48],[146,44],[136,35],[125,39],[117,24],[110,19],[105,9],[99,4],[97,19],[90,22],[84,9],[77,7],[72,20],[62,25],[54,28],[47,32],[38,35]],
-  [[112,-13],[127,-12],[140,-12],[151,-22],[153,-33],[144,-39],[132,-34],[119,-35],[113,-26]],
-  [[-73,60],[-58,61],[-44,66],[-29,74],[-21,82],[-46,83],[-63,77]],
-  [[-8,50],[1,51],[2,58],[-4,59],[-8,55]],
+  [[-168, 68], [-145, 72], [-126, 62], [-123, 48], [-115, 32], [-105, 24], [-96, 17], [-86, 20], [-81, 26], [-80, 34], [-74, 42], [-62, 49], [-57, 54], [-63, 61], [-80, 70], [-98, 76], [-120, 72], [-145, 60]],
+  [[-81, 12], [-74, 10], [-64, 10], [-53, 5], [-44, -3], [-35, -7], [-37, -16], [-42, -23], [-49, -30], [-55, -36], [-61, -43], [-67, -55], [-73, -51], [-75, -40], [-72, -27], [-76, -14], [-81, -4]],
+  [[-10, 36], [-6, 43], [2, 44], [8, 48], [13, 54], [9, 57], [17, 61], [24, 69], [31, 70], [40, 62], [47, 57], [40, 49], [31, 46], [26, 39], [17, 41], [10, 37], [2, 36]],
+  [[-17, 34], [-8, 36], [8, 37], [21, 33], [31, 31], [34, 24], [43, 13], [51, 11], [44, 0], [40, -11], [35, -22], [28, -34], [18, -35], [11, -27], [8, -5], [2, 5], [-8, 5], [-16, 14]],
+  [[28, 41], [39, 42], [47, 49], [57, 54], [69, 61], [88, 68], [110, 72], [135, 67], [160, 60], [175, 52], [161, 48], [146, 44], [136, 35], [125, 39], [117, 24], [110, 19], [105, 9], [99, 4], [97, 19], [90, 22], [84, 9], [77, 7], [72, 20], [62, 25], [54, 28], [47, 32], [38, 35]],
+  [[112, -13], [127, -12], [140, -12], [151, -22], [153, -33], [144, -39], [132, -34], [119, -35], [113, -26]],
+  [[-73, 60], [-58, 61], [-44, 66], [-29, 74], [-21, 82], [-46, 83], [-63, 77]],
+  [[-8, 50], [1, 51], [2, 58], [-4, 59], [-8, 55]],
 ];
 
 function clamp(value: number, min = 0, max = 1) { return Math.min(max, Math.max(min, value)); }
 function smoothstep(min: number, max: number, value: number) { const t = clamp((value - min) / (max - min)); return t * t * (3 - 2 * t); }
+function linearstep(min: number, max: number, value: number) { return clamp((value - min) / (max - min)); }
 function isLand(longitude: number, latitude: number) {
   return CONTINENTS.some((polygon) => {
     let inside = false;
@@ -471,14 +472,14 @@ function NeuralCanvas({ progress }: { progress: React.RefObject<number> }) {
     const move = (event: PointerEvent) => { pointerX = (event.clientX / width - .5) * 2; pointerY = (event.clientY / height - .5) * 2; };
     const render = (now: number) => {
       const time = reducedMotion.matches ? 0 : now * .00032;
-      const position = progress.current, globeMix = smoothstep(.18, .46, position), interior = smoothstep(.63, .9, position), mobile = width < 760;
+      const position = progress.current, globeMix = linearstep(0, .5, position), interior = linearstep(.5, 1, position), mobile = width < 760;
       const globeVisibility = globeMix * (1 - interior), dissolve = Math.sin(Math.PI * globeMix) * (1 - interior);
       smoothX += (pointerX - smoothX) * .032; smoothY += (pointerY - smoothY) * .032;
       context.fillStyle = "#07070b"; context.fillRect(0, 0, width, height);
       const baseScale = Math.min(width * (mobile ? .445 : .33), height * (mobile ? .455 : .42));
       const desktopRightCenter = Math.min(width * .72, width - baseScale * 1.08 - 8);
       const desktopLeftCenter = Math.max(width * .28, baseScale * 1.08 + 8);
-      const worldShift = smoothstep(.17, .36, position);
+      const worldShift = linearstep(.17, .36, position);
       const worldCenter = desktopRightCenter + (desktopLeftCenter - desktopRightCenter) * worldShift;
       const centerX = mobile ? width * .51 : worldCenter + (width * .52 - worldCenter) * interior;
       const centerY = height * (mobile ? .43 : .505);
@@ -628,6 +629,481 @@ function NeuralCanvas({ progress }: { progress: React.RefObject<number> }) {
   return <canvas ref={canvasRef} className="neural-canvas" aria-hidden="true" />;
 }
 
+function DnaHelixVisual() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+
+    type FlowStrand = {
+      lane: number;
+      phase: number;
+      wobble: number;
+      depth: number;
+      accent: boolean;
+      color: string;
+      alpha: number;
+      size: number;
+      speed: number;
+    };
+
+    let seed = 271828;
+    const random = () => {
+      seed = (seed * 16807) % 2147483647;
+      return (seed - 1) / 2147483646;
+    };
+
+    // La referencia no es una hélice: es un haz de "datos" que se estrecha
+    // alrededor del núcleo y vuelve a abrirse. Cada hebra tiene profundidad,
+    // fase y velocidad distintas para evitar un patrón mecánico.
+    const palette = ["#a487ff", "#8c75c7", "#c5b8ea", "#75d9bd", "#e5bd73"];
+    const strands: FlowStrand[] = Array.from({ length: 108 }, (_, index) => {
+      const lane = index / 107 * 2.24 - 1.12;
+      const accent = index === 9 || index === 29 || index === 53 || index === 79 || index === 101;
+      return {
+        lane,
+        phase: random() * TAU,
+        wobble: .55 + random() * 1.15,
+        depth: .55 + random() * .9,
+        accent,
+        color: accent
+          ? (index === 9 || index === 79 ? "#75d9bd" : index === 29 || index === 101 ? "#e5bd73" : "#e1d7ff")
+          : palette[Math.floor(random() * 3)],
+        alpha: accent ? .72 : .16 + random() * .27,
+        size: accent ? 1.2 : .52 + random() * .54,
+        speed: .35 + random() * .65,
+      };
+    });
+
+    const dust = Array.from({ length: 140 }, () => ({
+      x: 24 + random() * 472,
+      y: 20 + random() * 472,
+      size: random() < .84 ? .7 : 1.25,
+      alpha: .035 + random() * .12,
+      phase: random() * TAU,
+      color: random() < .72 ? "#a487ff" : random() < .58 ? "#75d9bd" : "#e5bd73",
+    }));
+
+    const signals = Array.from({ length: 28 }, (_, index) => ({
+      lane: -1.08 + random() * 2.16,
+      offset: index / 28,
+      speed: .018 + random() * .018,
+      size: 1.1 + random() * 1.25,
+      color: index % 3 === 0 ? "#75d9bd" : index % 3 === 1 ? "#e5bd73" : "#cbb8ff",
+      phase: random() * TAU,
+    }));
+
+    let width = 1;
+    let height = 1;
+    let ratio = 1;
+    let frame = 0;
+    let startTime = 0;
+    let progress = 0;
+    let started = false;
+    let visible = false;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const particleNoise = (value: number) => {
+      const noise = Math.sin(value * 12.9898 + 78.233) * 43758.5453;
+      return noise - Math.floor(noise);
+    };
+
+    const centerAt = (t: number) => {
+      // Curva diagonal con una S muy suave, equivalente al gesto de la referencia.
+      const x =
+        4 +
+        518 * t +
+        Math.sin((t - .08) * Math.PI * 1.45) * 24 -
+        Math.sin(t * Math.PI * 3.1) * 7;
+
+      const y =
+        522 -
+        506 * t +
+        Math.sin((t + .14) * Math.PI * 1.7) * 30 +
+        Math.sin(t * Math.PI * 2.8) * 8;
+
+      return { x, y };
+    };
+
+    const ribbonWidth = (t: number) => {
+      // Estrecho en el centro, abierto en ambas salidas.
+      const waist = Math.abs(t - .52) * 2;
+      const base = 28 + Math.pow(waist, 1.08) * 122;
+      const lobes = 20 * Math.sin(t * Math.PI * 3.15 + .55) ** 2;
+      return base + lobes;
+    };
+
+    const strandPoint = (t: number, lane: number, phase: number, wobble: number, time: number) => {
+      const p = centerAt(t);
+      const before = centerAt(Math.max(0, t - .0025));
+      const after = centerAt(Math.min(1, t + .0025));
+      const tx = after.x - before.x;
+      const ty = after.y - before.y;
+      const len = Math.max(.0001, Math.hypot(tx, ty));
+      const nx = -ty / len;
+      const ny = tx / len;
+
+      const widthHere = ribbonWidth(t);
+      const wave =
+        Math.sin(t * TAU * 2.05 + phase + (reducedMotion ? 0 : time * .00013 * wobble)) *
+        (5 + 10 * Math.abs(lane));
+      const layered = lane * widthHere + wave;
+      const perspective = 1 + Math.sin(t * TAU * 1.82 + phase) * .055;
+
+      return {
+        x: p.x + nx * layered * perspective,
+        y: p.y + ny * layered * perspective,
+      };
+    };
+
+    const drawGlowDot = (x: number, y: number, radius: number, color: string, alpha: number) => {
+      const gradient = context.createRadialGradient(x, y, 0, x, y, radius * 5.5);
+      gradient.addColorStop(0, color);
+      gradient.addColorStop(.16, `${color}c8`);
+      gradient.addColorStop(.48, `${color}32`);
+      gradient.addColorStop(1, `${color}00`);
+      context.globalAlpha = alpha;
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(x, y, radius * 5.5, 0, TAU);
+      context.fill();
+
+      context.globalAlpha = Math.min(1, alpha * 1.45);
+      context.fillStyle = color;
+      context.beginPath();
+      context.arc(x, y, radius, 0, TAU);
+      context.fill();
+    };
+
+    const drawEnergyStar = (x: number, y: number, size: number, color: string, alpha: number) => {
+      drawGlowDot(x, y, size, color, alpha);
+      context.globalAlpha = alpha * .5;
+      context.fillStyle = color;
+      context.fillRect(x - size * 7, y - .35, size * 14, .7);
+      context.fillRect(x - .35, y - size * 4.5, .7, size * 9);
+      context.globalAlpha = alpha * .22;
+      context.fillRect(x - size * 11, y - .2, size * 22, .4);
+    };
+
+    const draw = (value: number, time = 0) => {
+      progress = value;
+
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      context.clearRect(0, 0, width, height);
+
+      const scale = Math.min(width / 520, height / 520);
+      const offsetX = (width - 520 * scale) / 2;
+      const offsetY = (height - 520 * scale) / 2;
+
+      context.save();
+      context.translate(offsetX, offsetY);
+      context.scale(scale, scale);
+
+      const entrance = smoothstep(0, .82, value);
+      const sceneOpacity = .42 + entrance * .58;
+      const breathe = reducedMotion ? 0 : Math.sin(time * .00048) * 1.4;
+
+      // Halo ambiental extremadamente tenue. No crea una "nube": sólo separa
+      // el haz del negro como en la referencia.
+      const aura = context.createRadialGradient(292, 268, 28, 292, 268, 252);
+      aura.addColorStop(0, `rgba(111,77,180,${.032 + entrance * .025})`);
+      aura.addColorStop(.52, `rgba(63,43,105,${.018 + entrance * .012})`);
+      aura.addColorStop(1, "rgba(24,15,41,0)");
+      context.fillStyle = aura;
+      context.fillRect(0, 0, 520, 520);
+
+      // Dos halos profundos dan volumen a los lóbulos sin crear un fondo sólido.
+      const lobePulse = reducedMotion ? 1 : .88 + Math.sin(time * .00062) * .12;
+      for (const lobe of [
+        { t: .24, color: "rgba(117,217,189,.055)" },
+        { t: .78, color: "rgba(164,135,255,.075)" },
+      ]) {
+        const point = centerAt(lobe.t);
+        const glow = context.createRadialGradient(point.x, point.y, 10, point.x, point.y, 138 * lobePulse);
+        glow.addColorStop(0, lobe.color);
+        glow.addColorStop(1, "rgba(7,7,11,0)");
+        context.globalAlpha = entrance;
+        context.fillStyle = glow;
+        context.beginPath();
+        context.arc(point.x, point.y, 138 * lobePulse, 0, TAU);
+        context.fill();
+      }
+
+      for (const particle of dust) {
+        const pulse = reducedMotion ? 1 : .62 + Math.sin(time * .0011 + particle.phase) * .33;
+        context.globalAlpha = particle.alpha * pulse * entrance;
+        context.fillStyle = particle.color;
+        context.fillRect(particle.x, particle.y, particle.size, particle.size);
+      }
+
+      // Hebras de puntos. El barrido de entrada hace que la red se "construya"
+      // desde abajo-izquierda hacia arriba-derecha.
+      context.globalCompositeOperation = "lighter";
+      for (let strandIndex = 0; strandIndex < strands.length; strandIndex += 1) {
+        const strand = strands[strandIndex];
+        const samples = width < 480 ? 122 : 154;
+
+        for (let i = 0; i < samples; i += 1) {
+          const t = i / (samples - 1);
+          const particleId = strandIndex * 173 + i;
+          const delay = t * .52 + particleNoise(particleId + 7) * .14;
+          const assemble = smoothstep(delay, delay + .28, value);
+
+          const p = strandPoint(t, strand.lane, strand.phase, strand.wobble, time);
+          const depthPulse = .74 + Math.sin(t * TAU * 1.65 + strand.phase) * .26;
+          const shimmer = reducedMotion
+            ? .92
+            : .72 + Math.sin(time * .0016 * strand.speed + i * .23 + strand.phase) * .24;
+
+          // Pequeño empuje por puntero para dar profundidad sin deformar el diseño.
+          const dx = p.x - 272;
+          const dy = p.y - 266;
+          const parallax = strand.depth * .65;
+
+          const targetX = p.x + pointerX * parallax * (Math.abs(dx) / 320);
+          const targetY = p.y + pointerY * parallax * (Math.abs(dy) / 320);
+          const originX = 24 + particleNoise(particleId + 31) * 472;
+          const originY = 20 + particleNoise(particleId + 79) * 472;
+          const travelArc = Math.sin(assemble * Math.PI);
+          const x = originX + (targetX - originX) * assemble + (particleNoise(particleId + 113) - .5) * travelArc * 46;
+          const y = originY + (targetY - originY) * assemble + (particleNoise(particleId + 149) - .5) * travelArc * 34;
+
+          const waistBoost = 1 - Math.min(1, Math.abs(t - .53) * 2);
+          const assemblyVisibility = .16 + assemble * .84;
+          const alpha =
+            strand.alpha *
+            depthPulse *
+            shimmer *
+            assemblyVisibility *
+            sceneOpacity *
+            (.84 + waistBoost * .42);
+
+          const size = strand.size * (.78 + strand.depth * .18) * (1 + waistBoost * .08);
+
+          context.globalAlpha = alpha;
+          context.fillStyle = strand.color;
+
+          // Alternar punto / micro-cuadrado imita el tramado tecnológico de la referencia.
+          if ((strandIndex + i) % 7 === 0) {
+            context.fillRect(x - size * .55, y - size * .55, size * 1.1, size * 1.1);
+          } else {
+            context.beginPath();
+            context.arc(x, y, size * .48, 0, TAU);
+            context.fill();
+          }
+
+          if (strand.accent && assemble > .58 && i % 24 === strandIndex % 6) {
+            drawGlowDot(x, y, size * .48, strand.color, alpha * .34 * assemble);
+          }
+        }
+      }
+
+      // Un frente luminoso recorre la figura mientras ordena las partículas.
+      const buildHead = clamp((value - .035) / .79);
+      const buildEnergy = Math.sin(clamp((value - .02) / .94) * Math.PI);
+      if (buildEnergy > .015 && value < .97) {
+        const head = centerAt(buildHead);
+        const before = centerAt(Math.max(0, buildHead - .004));
+        const after = centerAt(Math.min(1, buildHead + .004));
+        const tangentX = after.x - before.x;
+        const tangentY = after.y - before.y;
+        const tangentLength = Math.max(.001, Math.hypot(tangentX, tangentY));
+        const normalX = -tangentY / tangentLength;
+        const normalY = tangentX / tangentLength;
+        const frontWidth = ribbonWidth(buildHead) * 1.06;
+        const frontGradient = context.createLinearGradient(
+          head.x - normalX * frontWidth,
+          head.y - normalY * frontWidth,
+          head.x + normalX * frontWidth,
+          head.y + normalY * frontWidth,
+        );
+        frontGradient.addColorStop(0, "rgba(164,135,255,0)");
+        frontGradient.addColorStop(.28, "rgba(117,217,189,.36)");
+        frontGradient.addColorStop(.5, "rgba(244,238,255,.9)");
+        frontGradient.addColorStop(.72, "rgba(229,189,115,.36)");
+        frontGradient.addColorStop(1, "rgba(164,135,255,0)");
+        context.globalAlpha = buildEnergy * .7;
+        context.strokeStyle = frontGradient;
+        context.lineWidth = 1;
+        context.shadowColor = "#bda3ff";
+        context.shadowBlur = 15;
+        context.beginPath();
+        context.moveTo(head.x - normalX * frontWidth, head.y - normalY * frontWidth);
+        context.lineTo(head.x + normalX * frontWidth, head.y + normalY * frontWidth);
+        context.stroke();
+        context.shadowBlur = 0;
+        drawEnergyStar(head.x, head.y, 2.7, "#eee7ff", buildEnergy * .82);
+      }
+
+      // Puentes punteados entre los extremos convierten el haz en una malla
+      // tridimensional y ocupan los huecos sin crear superficies sólidas.
+      for (let bridge = 0; bridge < 28; bridge += 1) {
+        const t = (bridge + .5) / 28;
+        const phase = bridge * .71 + .35;
+        const from = strandPoint(t, -.98, phase, .8, time);
+        const to = strandPoint(t, .98, phase + .18, .8, time);
+        const bridgeReveal = smoothstep(.54 + t * .22, Math.min(1, .76 + t * .22), value);
+        const bridgeColor = bridge % 5 === 0 ? "#75d9bd" : bridge % 5 === 2 ? "#e5bd73" : "#a487ff";
+
+        for (let point = 1; point < 26; point += 1) {
+          const mix = point / 26;
+          const x = from.x + (to.x - from.x) * mix;
+          const y = from.y + (to.y - from.y) * mix;
+          const centerGlow = 1 - Math.abs(mix - .5) * 1.5;
+          context.globalAlpha = (.055 + centerGlow * .09) * bridgeReveal * entrance;
+          context.fillStyle = bridgeColor;
+          const pixelSize = .42 + centerGlow * .28;
+          context.fillRect(x - pixelSize / 2, y - pixelSize / 2, pixelSize, pixelSize);
+        }
+      }
+
+      // Señales luminosas recorriendo el flujo.
+      const signalReveal = smoothstep(.72, 1, value);
+      for (const signal of signals) {
+        const t = reducedMotion
+          ? signal.offset
+          : (signal.offset + time * signal.speed * .001) % 1;
+
+        const p = strandPoint(t, signal.lane, signal.phase, 1, time);
+        const pulse = reducedMotion ? 1 : .72 + Math.sin(time * .004 + signal.phase) * .28;
+
+        // Estela corta: aporta dirección sin convertir las señales en líneas continuas.
+        if (!reducedMotion) {
+          for (let trail = 4; trail >= 1; trail -= 1) {
+            const trailT = (t - trail * .006 + 1) % 1;
+            const trailPoint = strandPoint(trailT, signal.lane, signal.phase, 1, time);
+            const trailAlpha = signalReveal * (5 - trail) * .045;
+            context.globalAlpha = trailAlpha;
+            context.fillStyle = signal.color;
+            const trailSize = signal.size * (1 - trail * .13);
+            context.fillRect(trailPoint.x - trailSize / 2, trailPoint.y - trailSize / 2, trailSize, trailSize);
+          }
+        }
+        drawGlowDot(p.x, p.y, signal.size * pulse, signal.color, .72 * signalReveal);
+      }
+
+      // Impulsos alrededor del cuello central: el flujo se concentra aquí
+      // sin necesidad de un núcleo gráfico superpuesto.
+      const hub = centerAt(.53);
+      const orbital = [
+        { a: -2.46, c: "#75d9bd" },
+        { a: -1.02, c: "#e5bd73" },
+        { a: 2.34, c: "#8fb8ff" },
+        { a: .72, c: "#c6a9ff" },
+      ];
+      orbital.forEach((pulse, index) => {
+        const phase = reducedMotion ? .62 : (time * .00013 + index * .21) % 1;
+        const r = 36 + phase * 28;
+        const x = hub.x + Math.cos(pulse.a) * r;
+        const y = hub.y + Math.sin(pulse.a) * r;
+        drawGlowDot(x, y, 1.15 + (1 - phase) * .55, pulse.c, (.46 - phase * .22) * signalReveal);
+      });
+
+      // Brillo del cuello central: muy localizado para conservar contraste.
+      const coreAura = context.createRadialGradient(274, 266, 3, 274, 266, 58 + breathe);
+      coreAura.addColorStop(0, "rgba(164,135,255,.12)");
+      coreAura.addColorStop(.32, "rgba(164,135,255,.045)");
+      coreAura.addColorStop(1, "rgba(164,135,255,0)");
+      context.globalAlpha = signalReveal;
+      context.fillStyle = coreAura;
+      context.beginPath();
+      context.arc(274, 266, 60 + breathe, 0, TAU);
+      context.fill();
+
+      // Una onda de choque muy breve sella la construcción de la malla.
+      const completion = linearstep(.78, 1, value);
+      const shockAlpha = Math.sin(completion * Math.PI) * .5;
+      if (shockAlpha > .01) {
+        const shockRadius = 22 + completion * 105;
+        context.globalAlpha = shockAlpha;
+        context.strokeStyle = "rgba(198,169,255,.72)";
+        context.lineWidth = .8;
+        context.beginPath();
+        context.ellipse(hub.x, hub.y, shockRadius * 1.25, shockRadius * .58, -.76, 0, TAU);
+        context.stroke();
+      }
+
+      const finalPulse = reducedMotion ? .82 : .68 + Math.sin(time * .00125) * .16;
+      drawEnergyStar(hub.x, hub.y, 1.6, "#cdb8ff", signalReveal * finalPulse * .42);
+
+      context.globalAlpha = 1;
+      context.globalCompositeOperation = "source-over";
+      context.restore();
+    };
+
+    const resize = () => {
+      const bounds = canvas.getBoundingClientRect();
+      ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = Math.max(1, bounds.width);
+      height = Math.max(1, bounds.height);
+      canvas.width = Math.round(width * ratio);
+      canvas.height = Math.round(height * ratio);
+      draw(progress, performance.now());
+    };
+
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = canvas.getBoundingClientRect();
+      const nx = ((event.clientX - rect.left) / Math.max(1, rect.width) - .5) * 2;
+      const ny = ((event.clientY - rect.top) / Math.max(1, rect.height) - .5) * 2;
+      pointerX += (nx * 3.5 - pointerX) * .2;
+      pointerY += (ny * 3.5 - pointerY) * .2;
+    };
+
+    const animate = (time: number) => {
+      const intro = clamp((time - startTime) / 3100);
+      draw(intro, time);
+      if (visible) frame = window.requestAnimationFrame(animate);
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      window.cancelAnimationFrame(frame);
+
+      if (!visible) return;
+
+      if (reducedMotion) {
+        draw(1);
+        return;
+      }
+
+      if (!started) {
+        started = true;
+        startTime = performance.now();
+      }
+
+      frame = window.requestAnimationFrame(animate);
+    }, { threshold: .22 });
+
+    const resizeObserver = new ResizeObserver(resize);
+    resizeObserver.observe(canvas);
+    observer.observe(canvas);
+    canvas.addEventListener("pointermove", onPointerMove, { passive: true });
+    resize();
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+      observer.disconnect();
+      canvas.removeEventListener("pointermove", onPointerMove);
+    };
+  }, []);
+
+  return (
+    <div
+      className="dna-helix-visual"
+      role="img"
+      aria-label="Flujo tecnológico tridimensional formado por miles de partículas entrelazadas"
+    >
+      <canvas ref={canvasRef} aria-hidden="true" />
+    </div>
+  );
+}
+
 type MethodParticle = {
   target: number;
   origin: number;
@@ -762,13 +1238,250 @@ function MethodParticleTrack() {
   return <div className="method-track" aria-hidden="true"><canvas ref={canvasRef} /></div>;
 }
 
+interface ServiceData {
+  id: string;
+  index: string;
+  title: string;
+  overline: string;
+  description: string;
+  longDescription: string;
+  features: string[];
+  tags: string[];
+  colorClass: string;
+  icon: React.ReactNode;
+}
+
+const SERVICES_DATA: ServiceData[] = [
+  {
+    id: "ia",
+    index: "01 / 03",
+    title: "Inteligencia artificial",
+    overline: "SISTEMAS QUE APRENDEN",
+    description: "Integración de sistemas, creación de IA a medida, registro de actividad y análisis de Big Data.",
+    longDescription: "Diseñamos e integramos soluciones cognitivas avanzadas que permiten a tu negocio automatizar la toma de decisiones complejas, automatizar procesos intelectuales y extraer valor de fuentes masivas de datos.",
+    features: [
+      "Integración de sistemas inteligentes (APIs, LLMs, modelos abiertos)",
+      "Creación de modelos de Inteligencia Artificial entrenados a medida",
+      "Registro de actividad inteligente y auditoría de decisiones automáticas",
+      "Procesamiento y arquitectura de Big Data para análisis avanzado",
+      "Modelos predictivos aplicados a operaciones y comportamiento de usuario"
+    ],
+    tags: ["Machine learning", "IA a medida", "Big Data", "Integración"],
+    colorClass: "violet",
+    icon: (
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="5" r="2.25" />
+        <circle cx="6" cy="17" r="2.25" />
+        <circle cx="18" cy="17" r="2.25" />
+        <path d="M10.9 7 7.1 15M13.1 7l3.8 8M8.3 17h7.4" />
+      </svg>
+    )
+  },
+  {
+    id: "auto",
+    index: "02 / 03",
+    title: "Automatización de procesos",
+    overline: "MENOS FRICCIÓN",
+    description: "Informes automáticos, volcado inteligente de datos y optimización de operaciones empresariales.",
+    longDescription: "Eliminamos las tareas repetitivas y propensas a errores humanos mediante flujos de trabajo inteligentes y automatizados que conectan tus herramientas y operan de forma autónoma las 24 horas del día.",
+    features: [
+      "Generación y envío automatizado de informes interactivos y PDFs",
+      "Sincronización y volcado automático de datos entre múltiples plataformas",
+      "Optimización de flujos operativos y reducción de tiempos de respuesta",
+      "Integración fluida de sistemas heredados con APIs modernas",
+      "Alertas proactivas y control automático de excepciones"
+    ],
+    tags: ["Workflows", "Informes automáticos", "Optimización", "Integraciones"],
+    colorClass: "gold",
+    icon: (
+      <svg viewBox="0 0 24 24">
+        <path d="M7.2 7.7A6.5 6.5 0 0 1 18.5 12" />
+        <path d="m15.8 9.4 2.8 2.8 2.7-2.8M16.8 16.3A6.5 6.5 0 0 1 5.5 12" />
+        <path d="m8.2 14.6-2.8-2.8-2.7 2.8" />
+      </svg>
+    )
+  },
+  {
+    id: "software",
+    index: "03 / 03",
+    title: "Software a medida",
+    overline: "CREADO PARA TI",
+    description: "Desarrollo completo de aplicaciones web y móviles adaptadas a tu negocio.",
+    longDescription: "Construimos plataformas digitales robustas, escalables y visualmente impactantes diseñadas para ajustarse exactamente a la operativa y necesidades de tu empresa, garantizando la máxima autonomía.",
+    features: [
+      "Desarrollo de aplicaciones web progresivas de alto rendimiento (PWA)",
+      "Aplicaciones móviles nativas e híbridas de última generación",
+      "Arquitecturas de backend y base de datos robustas y seguras",
+      "Despliegues en la nube flexibles y escalables (AWS, GCP, Vercel)",
+      "Interfaces de usuario (UI/UX) premium con micro-animaciones fluidas"
+    ],
+    tags: ["Apps web y móviles", "APIs y Cloud", "Full stack", "UI/UX Premium"],
+    colorClass: "teal",
+    icon: (
+      <svg viewBox="0 0 24 24">
+        <rect x="3" y="4" width="18" height="16" rx="2.5" />
+        <path d="M3 8.5h18M8.5 13l-2 2 2 2M15.5 13l2 2-2 2M13 12l-2 6" />
+      </svg>
+    )
+  }
+];
+
+interface FAQItem {
+  id: number;
+  topic: string;
+  question: string;
+  iconName: "dollar" | "tasks" | "globe" | "chart" | "headset";
+  paragraphs: string[];
+  listItems?: string[];
+  quote?: {
+    text: string;
+    author: string;
+  };
+}
+
+const FAQ_DATA: FAQItem[] = [
+  {
+    id: 1,
+    topic: "precios",
+    question: "¿La Inteligencia Artificial es muy cara o complicada para mi negocio?",
+    iconName: "dollar",
+    paragraphs: [
+      "¡Para nada! Nuestra misión es hacer la IA accesible y sencilla para todos. Nos adaptamos a tu presupuesto y creamos soluciones que no requieren conocimientos técnicos por tu parte.",
+      "Nos encargamos de toda la complejidad para que tú solo disfrutes de los beneficios: más tiempo y más eficiencia."
+    ]
+  },
+  {
+    id: 2,
+    topic: "integracion",
+    question: "¿En qué tareas concretas me puede ayudar la automatización?",
+    iconName: "tasks",
+    paragraphs: [
+      "Imagina no tener que volver a gestionar citas manualmente, responder las mismas preguntas en WhatsApp una y otra vez, o actualizar tu inventario a mano. Automatizamos tareas como:",
+      "Básicamente, liberamos horas de tu semana para que te dediques a hacer crecer tu negocio."
+    ],
+    listItems: [
+      "Atención al cliente con chatbots 24/7.",
+      "Gestión automática de tu agenda y citas.",
+      "Envío de correos de seguimiento o recordatorios.",
+      "Procesamiento de pedidos y facturas."
+    ]
+  },
+  {
+    id: 3,
+    topic: "general",
+    question: "Ya uso redes sociales, ¿realmente necesito una página web?",
+    iconName: "globe",
+    paragraphs: [
+      "Las redes sociales son geniales para interactuar, pero una página web es tu propia casa digital. Es el único lugar donde tienes el control total, proyectas una imagen 100% profesional y generas mucha más confianza.",
+      "Además, una web te permite implementar herramientas de venta y análisis mucho más potentes. Piensa en ella como tu mejor vendedor, trabajando para ti 24 horas al día, 7 días a la semana."
+    ]
+  },
+  {
+    id: 4,
+    topic: "general",
+    question: "¿Cuánto tiempo tardaré en ver los resultados?",
+    iconName: "chart",
+    paragraphs: [
+      "El impacto varía según la solución, pero muchos de nuestros clientes notan los beneficios desde la primera semana. El ahorro de tiempo con tareas automatizadas es inmediato.",
+      "El aumento de clientes a través de una nueva web puede tomar algunas semanas mientras los buscadores la indexan, pero desde el primer día tendrás una herramienta profesional para dirigir a tus clientes. Te guiaremos en todo momento para maximizar el retorno de tu inversión lo antes posible."
+    ]
+  },
+  {
+    id: 5,
+    topic: "soporte",
+    question: "¿Qué pasa si algo no funciona o necesito ayuda después del lanzamiento?",
+    iconName: "headset",
+    paragraphs: [
+      "Nuestra relación no termina con la entrega del proyecto. Consideramos a nuestros clientes como socios a largo plazo.",
+      "Ofrecemos soporte continuo para resolver cualquier duda o incidencia. Tu tranquilidad es nuestra máxima prioridad, y estamos a solo un mensaje o una llamada de distancia para ayudarte en lo que necesites."
+    ],
+    quote: {
+      text: "No solo construimos una solución, construimos una relación de confianza. Estamos aquí para asegurar tu éxito continuo.",
+      author: "El equipo de LYXIA"
+    }
+  }
+];
+
+const renderFaqIcon = (iconName: string) => {
+  switch (iconName) {
+    case "dollar":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+      );
+    case "tasks":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+          <polyline points="9 11 12 14 22 4"></polyline>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+        </svg>
+      );
+    case "globe":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+        </svg>
+      );
+    case "chart":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>
+      );
+    case "headset":
+      return (
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"></path>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path>
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
+
 export default function Home() {
   const progress = useRef(0), journeyRef = useRef<HTMLElement>(null);
   const [displayProgress, setDisplayProgress] = useState(0);
+  const [selectedService, setSelectedService] = useState<ServiceData | null>(null);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [faqTopic, setFaqTopic] = useState("all");
+  const [expandedFaqId, setExpandedFaqId] = useState<number | null>(null);
+
+  const filteredFAQs = useMemo(() => {
+    return FAQ_DATA.filter(item => faqTopic === "all" || item.topic === faqTopic);
+  }, [faqTopic]);
+
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedService(null);
+        setIsContactModalOpen(false);
+      }
+    };
+    if (selectedService || isContactModalOpen) {
+      window.addEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
+  }, [selectedService, isContactModalOpen]);
+
   const opacity = (start: number, end: number) => clamp(Math.min((displayProgress - start) / 9, (end - displayProgress) / 9));
-  const firstExit = smoothstep(16, 30, displayProgress);
+  const firstExit = linearstep(16, 30, displayProgress);
   const worldVisibility = opacity(33, 72);
-  const worldEntry = smoothstep(33, 42, displayProgress);
+  const worldEntry = linearstep(33, 42, displayProgress);
   const firstChapterStyle = {
     opacity: 1 - firstExit,
     "--chapter-shift-x": `${-22 * firstExit}px`,
@@ -800,15 +1513,16 @@ export default function Home() {
           <img src={logoIcono} alt="" aria-hidden="true" />
         </a>
         <nav className="header-nav" aria-label="Navegación principal">
-          <a href="#vision">Visión</a>
+          <a href="#vision">Quiénes somos</a>
           <a href="#capacidades">Capacidades</a>
+          <a href="#preguntas-frecuentes">FAQ</a>
         </nav>
       </div>
       <div className="header-center">
         <span className="brand-text">LYXIA</span>
       </div>
       <div className="header-right">
-        <a href="#contacto" className="header-cta">Hablemos <span>↗</span></a>
+        <a href="#contacto" className="header-cta" onClick={(e) => { e.preventDefault(); setIsContactModalOpen(true); }}>Hablemos <span>↗</span></a>
       </div>
     </header>
     <section id="inicio" ref={journeyRef} className="journey" aria-label="Viaje inmersivo del cerebro al mundo y la expansión de la inteligencia"><div className="journey-sticky"><NeuralCanvas progress={progress} /><div className="journey-vignette journey-vignette-left" style={{ opacity: 1 - worldVisibility }} /><div className="journey-vignette journey-vignette-right" style={{ opacity: worldVisibility }} />
@@ -818,7 +1532,32 @@ export default function Home() {
       <div className="stage-navigation" aria-label="Etapas del recorrido">{[0, .49, .9].map((stage, index) => <button key={stage} type="button" aria-label={`Ir a la etapa ${index + 1}`} className={Math.abs(displayProgress / 100 - stage) < .22 ? "stage-active" : ""} onClick={() => jumpToStage(stage)} />)}</div>
       <div className="journey-bottom"><span className="scroll-prompt"><span /> Desliza para explorar</span><div className="progress-indicator"><span>{String(displayProgress).padStart(2, "0")}</span><i><b style={{ width: `${displayProgress}%` }} /></i><span>100</span></div><span className="system-status">SISTEMA ACTIVO <span /></span></div>
     </div></section>
-    <section id="vision" className="vision-section"><div className="section-kicker"><span>01</span> NUESTRA VISIÓN</div><h2>El futuro no se predice.<br /><span>Se construye.</span></h2><p>No implementamos tecnología porque esté de moda. Diseñamos sistemas inteligentes que resuelven problemas reales, liberan tiempo y descubren oportunidades que antes eran invisibles.</p><div className="vision-metrics"><div><strong>100%</strong><span>Soluciones a medida</span></div><div><strong>∞</strong><span>Capacidad de evolución</span></div><div><strong>01</strong><span>Objetivo: tu crecimiento</span></div></div></section>
+    <section id="vision" className="vision-section">
+      <div className="section-kicker"><span>01</span> QUIÉNES SOMOS</div>
+      <div className="vision-container">
+        <div className="vision-content">
+          <h2>El futuro no se predice.<br /><span>Se construye.</span></h2>
+
+          <p className="vision-intro">
+            <strong>LYXIA</strong> es una empresa tecnológica especializada en digitalización, automatización e inteligencia artificial. Diseñamos soluciones a medida que conectan software, datos, APIs y modelos de IA para transformar procesos empresariales en sistemas más rápidos, eficientes y escalables.
+          </p>
+
+          <p className="vision-text">
+            Nace de la experiencia desarrollando soluciones que combinan inteligencia artificial, ingeniería de software, automatización y sistemas inteligentes. Desde plataformas empresariales y APIs hasta modelos de redes neuronales y sistemas predictivos, nuestra experiencia técnica nos permite abordar todo el ciclo de una solución tecnológica.
+          </p>
+
+        </div>
+
+        <div className="vision-visual">
+          <DnaHelixVisual />
+        </div>
+      </div>
+      <div className="vision-metrics">
+        <div><strong>100%</strong><span>Soluciones a medida</span></div>
+        <div><strong>∞</strong><span>Capacidad de evolución</span></div>
+        <div><strong>01</strong><span>Objetivo: tu crecimiento</span></div>
+      </div>
+    </section>
     <section id="capacidades" className="capabilities-section">
       <div className="capabilities-aura" aria-hidden="true" />
       <div className="section-kicker"><span>02</span> LO QUE HACEMOS</div>
@@ -830,74 +1569,42 @@ export default function Home() {
         </div>
       </div>
       <div className="capability-grid">
-        <article className="capability-card capability-card-violet">
-          <div className="card-top">
-            <span className="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><circle cx="12" cy="5" r="2.25" /><circle cx="6" cy="17" r="2.25" /><circle cx="18" cy="17" r="2.25" /><path d="M10.9 7 7.1 15M13.1 7l3.8 8M8.3 17h7.4" /></svg>
-            </span>
-            <span className="card-index">01 / 04</span>
-          </div>
-          <div className="card-content">
-            <span className="card-overline">SISTEMAS QUE APRENDEN</span>
-            <h3>Inteligencia artificial</h3>
-            <p>Modelos predictivos y soluciones de IA entrenadas para entender tu negocio y potenciar cada decisión.</p>
-          </div>
-          <div className="card-footer">
-            <div className="card-tags"><span>Machine learning</span><span>Deep learning</span></div>
-            <span className="card-arrow" aria-hidden="true">↗</span>
-          </div>
-        </article>
-        <article className="capability-card capability-card-gold">
-          <div className="card-top">
-            <span className="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M7.2 7.7A6.5 6.5 0 0 1 18.5 12" /><path d="m15.8 9.4 2.8 2.8 2.7-2.8M16.8 16.3A6.5 6.5 0 0 1 5.5 12" /><path d="m8.2 14.6-2.8-2.8-2.7 2.8" /></svg>
-            </span>
-            <span className="card-index">02 / 04</span>
-          </div>
-          <div className="card-content">
-            <span className="card-overline">MENOS FRICCIÓN</span>
-            <h3>Automatización</h3>
-            <p>Transformamos horas de trabajo repetitivo en procesos ágiles, conectados y fiables.</p>
-          </div>
-          <div className="card-footer">
-            <div className="card-tags"><span>Workflows</span><span>Integraciones</span></div>
-            <span className="card-arrow" aria-hidden="true">↗</span>
-          </div>
-        </article>
-        <article className="capability-card capability-card-teal">
-          <div className="card-top">
-            <span className="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5" /><path d="M3 8.5h18M8.5 13l-2 2 2 2M15.5 13l2 2-2 2M13 12l-2 6" /></svg>
-            </span>
-            <span className="card-index">03 / 04</span>
-          </div>
-          <div className="card-content">
-            <span className="card-overline">CREADO PARA TI</span>
-            <h3>Software a medida</h3>
-            <p>Aplicaciones y plataformas que se adaptan a cómo funciona tu empresa, no al revés.</p>
-          </div>
-          <div className="card-footer">
-            <div className="card-tags"><span>Full stack</span><span>APIs</span><span>Cloud</span></div>
-            <span className="card-arrow" aria-hidden="true">↗</span>
-          </div>
-        </article>
-        <article className="capability-card capability-card-blue">
-          <div className="card-top">
-            <span className="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><path d="M5 19V9M12 19V5M19 19v-7" /><path d="m4 5 5 3 5-4 6 3" /><circle cx="4" cy="5" r="1.25" /><circle cx="9" cy="8" r="1.25" /><circle cx="14" cy="4" r="1.25" /><circle cx="20" cy="7" r="1.25" /></svg>
-            </span>
-            <span className="card-index">04 / 04</span>
-          </div>
-          <div className="card-content">
-            <span className="card-overline">CLARIDAD PARA AVANZAR</span>
-            <h3>Datos inteligentes</h3>
-            <p>Convertimos información dispersa en una visión clara, accionable y preparada para crecer.</p>
-          </div>
-          <div className="card-footer">
-            <div className="card-tags"><span>Data engineering</span><span>Analytics</span></div>
-            <span className="card-arrow" aria-hidden="true">↗</span>
-          </div>
-        </article>
+        {SERVICES_DATA.map((service) => (
+          <article
+            key={service.id}
+            className={`capability-card capability-card-${service.colorClass}`}
+            onClick={() => setSelectedService(service)}
+            style={{ cursor: "pointer" }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setSelectedService(service);
+              }
+            }}
+          >
+            <div className="card-top">
+              <span className="card-icon" aria-hidden="true">
+                {service.icon}
+              </span>
+              <span className="card-index">{service.index}</span>
+            </div>
+            <div className="card-content">
+              <span className="card-overline">{service.overline}</span>
+              <h3>{service.title}</h3>
+              <p>{service.description}</p>
+            </div>
+            <div className="card-footer">
+              <div className="card-tags">
+                {service.tags.slice(0, 2).map((tag, i) => (
+                  <span key={i}>{tag}</span>
+                ))}
+              </div>
+              <span className="card-arrow" aria-hidden="true">↗</span>
+            </div>
+          </article>
+        ))}
       </div>
     </section>
     <section id="metodo" className="method-section">
@@ -911,38 +1618,38 @@ export default function Home() {
       <div className="method-flow">
         <MethodParticleTrack />
         <div className="method-grid">
-        <article className="method-step">
-          <div className="method-step-marker"><strong>01</strong><span /></div>
-          <div className="method-step-content">
-            <span className="method-step-label">DESCUBRIR</span>
-            <h3>Comprender</h3>
-            <p>Mapeamos el proceso, las personas, las herramientas y los puntos de fricción.</p>
-          </div>
-        </article>
-        <article className="method-step">
-          <div className="method-step-marker"><strong>02</strong><span /></div>
-          <div className="method-step-content">
-            <span className="method-step-label">DEFINIR</span>
-            <h3>Diseñar</h3>
-            <p>Definimos la solución, las integraciones y los indicadores que medirán el resultado.</p>
-          </div>
-        </article>
-        <article className="method-step">
-          <div className="method-step-marker"><strong>03</strong><span /></div>
-          <div className="method-step-content">
-            <span className="method-step-label">CONSTRUIR</span>
-            <h3>Implementar</h3>
-            <p>Construimos, conectamos y desplegamos sin interrumpir la operativa existente.</p>
-          </div>
-        </article>
-        <article className="method-step">
-          <div className="method-step-marker"><strong>04</strong><span /></div>
-          <div className="method-step-content">
-            <span className="method-step-label">EVOLUCIONAR</span>
-            <h3>Optimizar</h3>
-            <p>Medimos el uso real y evolucionamos el sistema a medida que crece el negocio.</p>
-          </div>
-        </article>
+          <article className="method-step">
+            <div className="method-step-marker"><strong>01</strong><span /></div>
+            <div className="method-step-content">
+              <span className="method-step-label"><b className="step-num step-num-1">01</b> DESCUBRIR</span>
+              <h3>Comprender</h3>
+              <p>Mapeamos el proceso, las personas, las herramientas y los puntos de fricción.</p>
+            </div>
+          </article>
+          <article className="method-step">
+            <div className="method-step-marker"><strong>02</strong><span /></div>
+            <div className="method-step-content">
+              <span className="method-step-label"><b className="step-num step-num-2">02</b> DEFINIR</span>
+              <h3>Diseñar</h3>
+              <p>Definimos la solución, las integraciones y los indicadores que medirán el resultado.</p>
+            </div>
+          </article>
+          <article className="method-step">
+            <div className="method-step-marker"><strong>03</strong><span /></div>
+            <div className="method-step-content">
+              <span className="method-step-label"><b className="step-num step-num-3">03</b> CONSTRUIR</span>
+              <h3>Implementar</h3>
+              <p>Construimos, conectamos y desplegamos sin interrumpir la operativa existente.</p>
+            </div>
+          </article>
+          <article className="method-step">
+            <div className="method-step-marker"><strong>04</strong><span /></div>
+            <div className="method-step-content">
+              <span className="method-step-label"><b className="step-num step-num-4">04</b> EVOLUCIONAR</span>
+              <h3>Optimizar</h3>
+              <p>Medimos el uso real y evolucionamos el sistema a medida que crece el negocio.</p>
+            </div>
+          </article>
         </div>
       </div>
       <div className="method-principle">
@@ -955,57 +1662,241 @@ export default function Home() {
       <span className="section-kicker"><span>04</span> EMPECEMOS</span>
       <h2>Tu próximo avance<br />empieza con una <span>conversación.</span></h2>
       <p>Cuéntanos qué te gustaría transformar. Nosotros encontraremos la manera.</p>
+      <button type="button" className="contact-section-btn" onClick={() => setIsContactModalOpen(true)}>
+        Hablemos de tu proyecto <span>↗</span>
+      </button>
     </section>
-    <section className="contact-form-section" aria-labelledby="contact-form-title">
-      <div className="contact-form-aura" aria-hidden="true" />
-      <div className="contact-form-intro">
-        <div>
-          <span className="section-kicker"><span>05</span> TU PROYECTO</span>
-          <h3 id="contact-form-title">Hablemos de lo<br />que viene.</h3>
+    <section id="preguntas-frecuentes" className="faq-section">
+      <div className="faq-container">
+        <div className="faq-header">
+          <span className="section-kicker"><span>05</span> FAQ</span>
+          <h2>Resolvemos tus <span>Dudas</span></h2>
+          <p>Aquí tienes las respuestas a las preguntas más comunes. Si no encuentras la tuya, ¡contáctanos sin compromiso!</p>
         </div>
-        <p>Unas pocas líneas son suficientes para empezar. Cuéntanos el reto y te ayudaremos a convertirlo en una oportunidad real.</p>
+        <div className="faq-search">
+          <div className="faq-topics">
+            {[
+              { id: "all", label: "Todos" },
+              { id: "general", label: "General" },
+              { id: "precios", label: "Precios" },
+              { id: "integracion", label: "Soluciones" },
+              { id: "soporte", label: "Soporte" }
+            ].map(topic => (
+              <button
+                key={topic.id}
+                type="button"
+                className={`topic-btn ${faqTopic === topic.id ? "active" : ""}`}
+                onClick={() => setFaqTopic(topic.id)}
+              >
+                {topic.label}
+              </button>
+            ))}
+          </div>
+        </div>
+        <div className="faq-items">
+          {filteredFAQs.map((item) => {
+            const isActive = expandedFaqId === item.id;
+            return (
+              <div key={item.id} className={`faq-item ${isActive ? "active" : ""}`}>
+                <div
+                  className="faq-question"
+                  role="button"
+                  aria-expanded={isActive}
+                  onClick={() => setExpandedFaqId(isActive ? null : item.id)}
+                >
+                  <div className="question-icon">
+                    {renderFaqIcon(item.iconName)}
+                  </div>
+                  <div className="question-text">
+                    <h3>{item.question}</h3>
+                  </div>
+                  <div className="question-toggle">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="chevron-icon" width="16" height="16">
+                      <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                  </div>
+                </div>
+                {isActive && (
+                  <div className="faq-answer">
+                    {item.paragraphs.map((p, idx) => (
+                      <p key={idx} dangerouslySetInnerHTML={{ __html: p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                    ))}
+                    {item.listItems && (
+                      <ul>
+                        {item.listItems.map((li, idx) => (
+                          <li key={idx}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="check-icon" width="12" height="12" style={{ marginRight: '8px', color: '#73d2c3', display: 'inline-block', verticalAlign: 'middle' }}>
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            {li}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {item.quote && (
+                      <div className="answer-quote">
+                        <blockquote>"{item.quote.text}"</blockquote>
+                        <cite>{item.quote.author}</cite>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <div className="faq-footer">
+          <p>¿No encuentras la respuesta que buscas?</p>
+          <div className="footer-actions">
+            <button type="button" className="faq-contact-btn" onClick={() => setIsContactModalOpen(true)}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" style={{ marginRight: '8px', verticalAlign: 'middle' }}>
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+              Hablemos de tu caso <span>↗</span>
+            </button>
+          </div>
+        </div>
       </div>
-      <form className="contact-form" onSubmit={(event) => event.preventDefault()}>
-        <div className="contact-form-heading">
-          <span><i /> CANAL DIRECTO</span>
-          <strong>RESPUESTA PERSONALIZADA</strong>
-        </div>
-        <div className="form-row">
-          <label>
-            <span><b>01</b> Nombre</span>
-            <input type="text" name="name" placeholder="Tu nombre" autoComplete="name" required />
-          </label>
-          <label>
-            <span><b>02</b> Email</span>
-            <input type="email" name="email" placeholder="nombre@empresa.com" autoComplete="email" required />
-          </label>
-        </div>
-        <div className="form-row">
-          <label>
-            <span><b>03</b> Empresa <i>Opcional</i></span>
-            <input type="text" name="company" placeholder="Nombre de tu empresa" autoComplete="organization" />
-          </label>
-          <label>
-            <span><b>04</b> Área de interés</span>
-            <select name="interest" defaultValue="" required>
-              <option value="" disabled>Selecciona una opción</option>
-              <option value="automation">Automatización inteligente</option>
-              <option value="data">Datos y analítica</option>
-              <option value="ai">Inteligencia artificial</option>
-              <option value="custom">Solución a medida</option>
-            </select>
-          </label>
-        </div>
-        <label className="form-message">
-          <span><b>05</b> ¿Qué te gustaría transformar?</span>
-          <textarea name="message" rows={4} placeholder="Háblanos brevemente de tu proyecto, reto u objetivo..." required />
-        </label>
-        <div className="contact-form-footer">
-          <small>Demo visual · El envío estará disponible próximamente.</small>
-          <button type="submit">Enviar mensaje <span>↗</span></button>
-        </div>
-      </form>
     </section>
     <footer className="site-footer"><a className="brand brand-footer" href="#inicio" aria-label="LYXIA Technology, volver al inicio"><img src={logoVertical} alt="" aria-hidden="true" /></a><span>Inteligencia artificial con propósito.</span><span>VALENCIA · ESPAÑA</span></footer>
+
+    {selectedService && (
+      <div
+        className="service-modal-backdrop"
+        onClick={() => setSelectedService(null)}
+      >
+        <div
+          className={`service-modal-content service-modal-${selectedService.colorClass}`}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="service-modal-close"
+            onClick={() => setSelectedService(null)}
+            aria-label="Cerrar modal"
+          >
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          <div className="modal-header">
+            <span className="modal-index">{selectedService.index}</span>
+            <span className="modal-overline">{selectedService.overline}</span>
+            <h2>{selectedService.title}</h2>
+          </div>
+
+          <div className="modal-body">
+            <p className="modal-desc">{selectedService.longDescription}</p>
+
+            <div className="modal-features-section">
+              <h4>¿QUÉ INCLUYE ESTE SERVICIO?</h4>
+              <ul className="modal-features-list">
+                {selectedService.features.map((feature, i) => (
+                  <li key={i}>
+                    <span className="bullet-point" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <div className="modal-footer">
+            <div className="modal-tags">
+              {selectedService.tags.map((tag, i) => (
+                <span key={i}>{tag}</span>
+              ))}
+            </div>
+            <a
+              href="#contacto"
+              className="modal-cta"
+              onClick={(e) => {
+                e.preventDefault();
+                setSelectedService(null);
+                setTimeout(() => {
+                  setIsContactModalOpen(true);
+                }, 100);
+              }}
+            >
+              Hablemos de tu proyecto <span>↗</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {isContactModalOpen && (
+      <div
+        className="service-modal-backdrop"
+        onClick={() => setIsContactModalOpen(false)}
+      >
+        <div
+          className="service-modal-content service-modal-violet"
+          style={{ maxWidth: "800px" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            type="button"
+            className="service-modal-close"
+            onClick={() => setIsContactModalOpen(false)}
+            aria-label="Cerrar modal"
+          >
+            <svg viewBox="0 0 24 24" width="24" height="24">
+              <path d="M18 6 6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+
+          <div className="contact-form-intro" style={{ marginTop: "12px" }}>
+            <div>
+              <span className="section-kicker"><span>06</span> TU PROYECTO</span>
+              <h3 id="contact-form-title" style={{ fontSize: "clamp(32px, 4vw, 48px)", marginTop: 0 }}>Hablemos de lo<br />que viene.</h3>
+            </div>
+            <p>Unas pocas líneas son suficientes para empezar. Cuéntanos el reto y te ayudaremos a convertirlo en una oportunidad real.</p>
+          </div>
+          <form className="contact-form" style={{ marginTop: "32px" }} onSubmit={(event) => event.preventDefault()}>
+            <div className="contact-form-heading">
+              <span><i /> CANAL DIRECTO</span>
+              <strong>RESPUESTA PERSONALIZADA</strong>
+            </div>
+            <div className="form-row">
+              <label>
+                <span><b>01</b> Nombre</span>
+                <input type="text" name="name" placeholder="Tu nombre" autoComplete="name" required />
+              </label>
+              <label>
+                <span><b>02</b> Email</span>
+                <input type="email" name="email" placeholder="nombre@empresa.com" autoComplete="email" required />
+              </label>
+            </div>
+            <div className="form-row">
+              <label>
+                <span><b>03</b> Empresa <i>Opcional</i></span>
+                <input type="text" name="company" placeholder="Nombre de tu empresa" autoComplete="organization" />
+              </label>
+              <label>
+                <span><b>04</b> Área de interés</span>
+                <select name="interest" defaultValue="" required>
+                  <option value="" disabled>Selecciona una opción</option>
+                  <option value="automation">Automatización inteligente</option>
+                  <option value="data">Datos y analítica</option>
+                  <option value="ai">Inteligencia artificial</option>
+                  <option value="custom">Solución a medida</option>
+                </select>
+              </label>
+            </div>
+            <label className="form-message">
+              <span><b>05</b> ¿Qué te gustaría transformar?</span>
+              <textarea name="message" rows={4} placeholder="Háblanos brevemente de tu proyecto, reto u objetivo..." required />
+            </label>
+            <div className="contact-form-footer">
+              <small>Demo visual · El envío estará disponible próximamente.</small>
+              <button type="submit">Enviar mensaje <span>↗</span></button>
+            </div>
+          </form>
+        </div>
+      </div>
+    )}
   </main>;
 }
