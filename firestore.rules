@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // El formulario usa el SDK Admin dentro de Cloud Functions. El navegador
+    // no necesita acceso directo a las solicitudes ni a los límites de uso.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

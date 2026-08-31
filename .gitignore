@@ -1,2 +1,9 @@
 brandbook/
 presentation/
+.firebase/
+firebase-debug.log*
+functions/node_modules/
+functions/.env.*
+functions/.secret.local
+.env*
+!.env.example

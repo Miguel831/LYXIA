@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState, useMemo, type CSSProperties } from "react";
+import { useEffect, useRef, useState, useMemo, type CSSProperties, type FormEvent } from "react";
+import { httpsCallable } from "firebase/functions";
 import logoIcono from "../assets/logo_icono_lila.png";
 import logoVertical from "../assets/logo_vertical_lila_blanco.png";
+import visionImage from "../assets/imagen_quines_somos.png";
+import { firebaseFunctions } from "./firebase";
 
 type NeuralPoint = {
   x: number; y: number; z: number;
@@ -460,17 +463,27 @@ function NeuralCanvas({ progress }: { progress: React.RefObject<number> }) {
     const context = canvas.getContext("2d", { alpha: false });
     if (!context) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const points = createPoints(window.innerWidth < 760 ? 1900 : 3900), synapses = createSynapses(62);
+    const compactLayout = window.innerWidth < 760;
+    const points = createPoints(compactLayout ? 1500 : 3000), synapses = createSynapses(48);
+    const frameInterval = 1000 / (compactLayout ? 30 : 45);
     let width = 0, height = 0, frame = 0, pointerX = 0, pointerY = 0, smoothX = 0, smoothY = 0;
+    let visible = true, lastRenderedAt = 0;
     const resize = () => {
       width = window.innerWidth; height = window.innerHeight;
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.65);
+      const ratio = Math.min(window.devicePixelRatio || 1, compactLayout ? 1.2 : 1.4);
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
     };
     const move = (event: PointerEvent) => { pointerX = (event.clientX / width - .5) * 2; pointerY = (event.clientY / height - .5) * 2; };
     const render = (now: number) => {
+      frame = 0;
+      if (!visible || document.hidden) return;
+      if (now - lastRenderedAt < frameInterval) {
+        frame = window.requestAnimationFrame(render);
+        return;
+      }
+      lastRenderedAt = now;
       const time = reducedMotion.matches ? 0 : now * .00032;
       const position = progress.current, globeMix = linearstep(0, .5, position), interior = linearstep(.5, 1, position), mobile = width < 760;
       const globeVisibility = globeMix * (1 - interior), dissolve = Math.sin(Math.PI * globeMix) * (1 - interior);
@@ -620,11 +633,40 @@ function NeuralCanvas({ progress }: { progress: React.RefObject<number> }) {
         aura.addColorStop(0, synapse.color); aura.addColorStop(.13, `${synapse.color}aa`); aura.addColorStop(1, `${synapse.color}00`);
         context.globalAlpha = interior * clamp(depth * .46, .09, .72); context.fillStyle = aura; context.beginPath(); context.arc(x, y, radius * 5, 0, TAU); context.fill();
       }
-      context.globalAlpha = 1; frame = window.requestAnimationFrame(render);
+      context.globalAlpha = 1;
+      frame = window.requestAnimationFrame(render);
     };
-    resize(); frame = window.requestAnimationFrame(render);
+
+    const visibilityObserver = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (!visible) {
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (!frame && !document.hidden) {
+        frame = window.requestAnimationFrame(render);
+      }
+    });
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(frame);
+        frame = 0;
+      } else if (visible && !frame) {
+        frame = window.requestAnimationFrame(render);
+      }
+    };
+
+    resize();
+    visibilityObserver.observe(canvas);
+    frame = window.requestAnimationFrame(render);
     window.addEventListener("resize", resize, { passive: true }); window.addEventListener("pointermove", move, { passive: true });
-    return () => { window.cancelAnimationFrame(frame); window.removeEventListener("resize", resize); window.removeEventListener("pointermove", move); };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      visibilityObserver.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("pointermove", move);
+    };
   }, [progress]);
   return <canvas ref={canvasRef} className="neural-canvas" aria-hidden="true" />;
 }
@@ -659,10 +701,11 @@ function DnaHelixVisual() {
     // La referencia no es una hélice: es un haz de "datos" que se estrecha
     // alrededor del núcleo y vuelve a abrirse. Cada hebra tiene profundidad,
     // fase y velocidad distintas para evitar un patrón mecánico.
+    const compactLayout = window.innerWidth < 760;
     const palette = ["#a487ff", "#8c75c7", "#c5b8ea", "#75d9bd", "#e5bd73"];
-    const strands: FlowStrand[] = Array.from({ length: 108 }, (_, index) => {
-      const lane = index / 107 * 2.24 - 1.12;
-      const accent = index === 9 || index === 29 || index === 53 || index === 79 || index === 101;
+    const strands: FlowStrand[] = Array.from({ length: 78 }, (_, index) => {
+      const lane = index / 77 * 2.24 - 1.12;
+      const accent = index === 7 || index === 21 || index === 39 || index === 58 || index === 72;
       return {
         lane,
         phase: random() * TAU,
@@ -670,7 +713,7 @@ function DnaHelixVisual() {
         depth: .55 + random() * .9,
         accent,
         color: accent
-          ? (index === 9 || index === 79 ? "#75d9bd" : index === 29 || index === 101 ? "#e5bd73" : "#e1d7ff")
+          ? (index === 7 || index === 58 ? "#75d9bd" : index === 21 || index === 72 ? "#e5bd73" : "#e1d7ff")
           : palette[Math.floor(random() * 3)],
         alpha: accent ? .72 : .16 + random() * .27,
         size: accent ? 1.2 : .52 + random() * .54,
@@ -678,7 +721,7 @@ function DnaHelixVisual() {
       };
     });
 
-    const dust = Array.from({ length: 140 }, () => ({
+    const dust = Array.from({ length: 100 }, () => ({
       x: 24 + random() * 472,
       y: 20 + random() * 472,
       size: random() < .84 ? .7 : 1.25,
@@ -687,9 +730,9 @@ function DnaHelixVisual() {
       color: random() < .72 ? "#a487ff" : random() < .58 ? "#75d9bd" : "#e5bd73",
     }));
 
-    const signals = Array.from({ length: 28 }, (_, index) => ({
+    const signals = Array.from({ length: 20 }, (_, index) => ({
       lane: -1.08 + random() * 2.16,
-      offset: index / 28,
+      offset: index / 20,
       speed: .018 + random() * .018,
       size: 1.1 + random() * 1.25,
       color: index % 3 === 0 ? "#75d9bd" : index % 3 === 1 ? "#e5bd73" : "#cbb8ff",
@@ -706,6 +749,8 @@ function DnaHelixVisual() {
     let visible = false;
     let pointerX = 0;
     let pointerY = 0;
+    let lastRenderedAt = 0;
+    const frameInterval = 1000 / (compactLayout ? 30 : 40);
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const particleNoise = (value: number) => {
@@ -846,7 +891,7 @@ function DnaHelixVisual() {
       context.globalCompositeOperation = "lighter";
       for (let strandIndex = 0; strandIndex < strands.length; strandIndex += 1) {
         const strand = strands[strandIndex];
-        const samples = width < 480 ? 122 : 154;
+        const samples = width < 480 ? 86 : 112;
 
         for (let i = 0; i < samples; i += 1) {
           const t = i / (samples - 1);
@@ -1038,7 +1083,7 @@ function DnaHelixVisual() {
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      ratio = Math.min(window.devicePixelRatio || 1, 2);
+      ratio = Math.min(window.devicePixelRatio || 1, compactLayout ? 1.25 : 1.5);
       width = Math.max(1, bounds.width);
       height = Math.max(1, bounds.height);
       canvas.width = Math.round(width * ratio);
@@ -1055,6 +1100,11 @@ function DnaHelixVisual() {
     };
 
     const animate = (time: number) => {
+      if (time - lastRenderedAt < frameInterval) {
+        if (visible) frame = window.requestAnimationFrame(animate);
+        return;
+      }
+      lastRenderedAt = time;
       const intro = clamp((time - startTime) / 3100);
       draw(intro, time);
       if (visible) frame = window.requestAnimationFrame(animate);
@@ -1063,6 +1113,7 @@ function DnaHelixVisual() {
     const observer = new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       window.cancelAnimationFrame(frame);
+      frame = 0;
 
       if (!visible) return;
 
@@ -1402,6 +1453,35 @@ const FAQ_DATA: FAQItem[] = [
   }
 ];
 
+type ContactFormPayload = {
+  requestId: string;
+  name: string;
+  email: string;
+  company: string;
+  interest: string;
+  message: string;
+  website: string;
+};
+
+type ContactFormStatus = "idle" | "submitting" | "success" | "error";
+
+const sendContactRequest = httpsCallable<ContactFormPayload, { ok: boolean }>(
+  firebaseFunctions,
+  "submitContactRequest",
+);
+
+const createRequestId = () => {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+
+  const bytes = globalThis.crypto.getRandomValues(new Uint8Array(16));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+  const value = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+  return `${value.slice(0, 8)}-${value.slice(8, 12)}-${value.slice(12, 16)}-${value.slice(16, 20)}-${value.slice(20)}`;
+};
+
 const renderFaqIcon = (iconName: string) => {
   switch (iconName) {
     case "dollar":
@@ -1454,10 +1534,61 @@ export default function Home() {
   const [faqTopic, setFaqTopic] = useState("all");
   const [expandedFaqId, setExpandedFaqId] = useState<number | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [contactFormStatus, setContactFormStatus] = useState<ContactFormStatus>("idle");
+  const [contactFormFeedback, setContactFormFeedback] = useState(
+    "Tus datos se utilizarán únicamente para responder a tu solicitud.",
+  );
+  const contactRequestId = useRef(createRequestId());
 
   const filteredFAQs = useMemo(() => {
     return FAQ_DATA.filter(item => faqTopic === "all" || item.topic === faqTopic);
   }, [faqTopic]);
+
+  const handleContactSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (contactFormStatus === "submitting") return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const getValue = (name: string) => String(formData.get(name) ?? "");
+
+    setContactFormStatus("submitting");
+    setContactFormFeedback("Enviando tu solicitud de forma segura…");
+
+    try {
+      const response = await sendContactRequest({
+        requestId: contactRequestId.current,
+        name: getValue("name"),
+        email: getValue("email"),
+        company: getValue("company"),
+        interest: getValue("interest"),
+        message: getValue("message"),
+        website: getValue("website"),
+      });
+
+      if (!response.data.ok) throw new Error("La solicitud no se ha podido completar.");
+
+      form.reset();
+      contactRequestId.current = createRequestId();
+      setContactFormStatus("success");
+      setContactFormFeedback(
+        "Mensaje recibido. Te hemos enviado una confirmación y te responderemos lo antes posible.",
+      );
+    } catch (error) {
+      const code = typeof error === "object" && error && "code" in error
+        ? String(error.code)
+        : "";
+
+      setContactFormStatus("error");
+      if (code.includes("resource-exhausted")) {
+        setContactFormFeedback("Has enviado varias solicitudes. Espera unos minutos y vuelve a intentarlo.");
+      } else if (code.includes("aborted")) {
+        setContactFormFeedback("Tu solicitud ya se está procesando. Espera unos segundos antes de reintentar.");
+      } else {
+        setContactFormFeedback("No hemos podido enviar el mensaje. Conservamos los datos para que puedas reintentarlo.");
+      }
+    }
+  };
 
 
   useEffect(() => {
@@ -1478,6 +1609,14 @@ export default function Home() {
       document.body.style.overflow = "";
     };
   }, [selectedService, isContactModalOpen]);
+
+  useEffect(() => {
+    if (!isContactModalOpen) {
+      contactRequestId.current = createRequestId();
+      setContactFormStatus("idle");
+      setContactFormFeedback("Tus datos se utilizarán únicamente para responder a tu solicitud.");
+    }
+  }, [isContactModalOpen]);
 
   const opacity = (start: number, end: number) => clamp(Math.min((displayProgress - start) / 9, (end - displayProgress) / 9));
   const firstExit = linearstep(16, 30, displayProgress);
@@ -1501,11 +1640,47 @@ export default function Home() {
     window.scrollTo({ top: top + Math.max(0, journey.offsetHeight - window.innerHeight) * stage, behavior: "smooth" });
   };
   useEffect(() => {
-    let frame = 0, target = 0, lastDisplay = -1;
-    const updateTarget = () => { const section = journeyRef.current; if (!section) return; const bounds = section.getBoundingClientRect(); target = clamp(-bounds.top / Math.max(1, bounds.height - window.innerHeight)); };
-    const animate = () => { progress.current += (target - progress.current) * .075; const currentDisplay = Math.round(progress.current * 100); if (currentDisplay !== lastDisplay) { lastDisplay = currentDisplay; setDisplayProgress(currentDisplay); } frame = window.requestAnimationFrame(animate); };
-    updateTarget(); frame = window.requestAnimationFrame(animate); window.addEventListener("scroll", updateTarget, { passive: true }); window.addEventListener("resize", updateTarget, { passive: true });
-    return () => { window.cancelAnimationFrame(frame); window.removeEventListener("scroll", updateTarget); window.removeEventListener("resize", updateTarget); };
+    let frame = 0, target = 0, lastDisplay = -1, journeyTop = 0, scrollDistance = 1;
+
+    const animate = () => {
+      frame = 0;
+      const delta = target - progress.current;
+      progress.current = Math.abs(delta) < .0005
+        ? target
+        : progress.current + delta * .14;
+
+      const currentDisplay = Math.round(progress.current * 100);
+      if (currentDisplay !== lastDisplay) {
+        lastDisplay = currentDisplay;
+        setDisplayProgress(currentDisplay);
+      }
+
+      if (Math.abs(target - progress.current) >= .0005) {
+        frame = window.requestAnimationFrame(animate);
+      }
+    };
+
+    const scheduleUpdate = () => {
+      target = clamp((window.scrollY - journeyTop) / scrollDistance);
+      if (!frame) frame = window.requestAnimationFrame(animate);
+    };
+
+    const measureJourney = () => {
+      const section = journeyRef.current;
+      if (!section) return;
+      journeyTop = section.getBoundingClientRect().top + window.scrollY;
+      scrollDistance = Math.max(1, section.offsetHeight - window.innerHeight);
+      scheduleUpdate();
+    };
+
+    measureJourney();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", measureJourney, { passive: true });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", measureJourney);
+    };
   }, []);
   return <main>
     <header className={`site-header ${displayProgress > 97 ? "site-header-solid" : ""} ${isMobileMenuOpen ? "site-header-expanded" : ""}`}>
@@ -1549,7 +1724,7 @@ export default function Home() {
       <div className="chapter chapter-first" style={firstChapterStyle}><span className="eyebrow"><span /> Inteligencia aplicada · Valencia</span><h1>La inteligencia<br />que mueve<br /><span className="text-gradient">tu empresa.</span></h1><p>Convertimos procesos complejos en sistemas que piensan, aprenden y evolucionan contigo.</p><a className="inline-link" href="#vision">Descubre cómo <span>↗</span></a></div>
       <div className="chapter chapter-right chapter-world" style={worldChapterStyle}><span className="chapter-number">02 / UN MUNDO CONECTADO</span><h2>La inteligencia<br />que mueve<br /><span className="text-gold">el mundo.</span></h2><p>Conectamos ideas, datos y personas para transformar la forma en que las empresas avanzan.</p></div>
       <div className="chapter chapter-center" style={{ opacity: opacity(67, 109), pointerEvents: "none" }}><span className="chapter-number">03 / SIN LÍMITES</span><h2>La tecnología<br />que se adapta<br /><span className="text-gradient">a ti.</span></h2><p>Construimos inteligencia a medida, preparada para evolucionar al ritmo de tu empresa.</p></div>
-      <div className="stage-navigation" aria-label="Etapas del recorrido">{[0, .49, .9].map((stage, index) => <button key={stage} type="button" aria-label={`Ir a la etapa ${index + 1}`} className={Math.abs(displayProgress / 100 - stage) < .22 ? "stage-active" : ""} onClick={() => jumpToStage(stage)} />)}</div>
+      <div className="stage-navigation" aria-label="Etapas del recorrido">{[0, .5, 1].map((stage, index) => { const active = Math.abs(displayProgress / 100 - stage) < .22; return <button key={stage} type="button" aria-label={index === 2 ? "Ir al final de la introducción" : `Ir a la etapa ${index + 1}`} aria-current={active ? "step" : undefined} className={active ? "stage-active" : ""} onClick={() => jumpToStage(stage)} />; })}</div>
       <div className="journey-bottom"><span className="scroll-prompt"><span /> Desliza para explorar</span><div className="progress-indicator"><span>{String(displayProgress).padStart(2, "0")}</span><i><b style={{ width: `${displayProgress}%` }} /></i><span>100</span></div><span className="system-status">SISTEMA ACTIVO <span /></span></div>
     </div></section>
     <section id="vision" className="vision-section">
@@ -1569,7 +1744,16 @@ export default function Home() {
         </div>
 
         <div className="vision-visual">
-          <DnaHelixVisual />
+          <img
+            className="vision-static-image"
+            src={visionImage}
+            width={1086}
+            height={1448}
+            loading="lazy"
+            decoding="async"
+            fetchPriority="low"
+            alt="Red luminosa de datos e inteligencia artificial conectada"
+          />
         </div>
       </div>
       <div className="vision-metrics">
@@ -1875,7 +2059,16 @@ export default function Home() {
             </div>
             <p>Unas pocas líneas son suficientes para empezar. Cuéntanos el reto y te ayudaremos a convertirlo en una oportunidad real.</p>
           </div>
-          <form className="contact-form" style={{ marginTop: "32px" }} onSubmit={(event) => event.preventDefault()}>
+          <form
+            className="contact-form"
+            style={{ marginTop: "32px" }}
+            onSubmit={handleContactSubmit}
+            aria-busy={contactFormStatus === "submitting"}
+          >
+            <label className="contact-website-field" aria-hidden="true">
+              No rellenar este campo
+              <input name="website" type="text" tabIndex={-1} autoComplete="off" />
+            </label>
             <div className="contact-form-heading">
               <span><i /> CANAL DIRECTO</span>
               <strong>RESPUESTA PERSONALIZADA</strong>
@@ -1883,17 +2076,17 @@ export default function Home() {
             <div className="form-row">
               <label>
                 <span><b>01</b> Nombre</span>
-                <input type="text" name="name" placeholder="Tu nombre" autoComplete="name" required />
+                <input type="text" name="name" placeholder="Tu nombre" autoComplete="name" maxLength={100} required />
               </label>
               <label>
                 <span><b>02</b> Email</span>
-                <input type="email" name="email" placeholder="nombre@empresa.com" autoComplete="email" required />
+                <input type="email" name="email" placeholder="nombre@empresa.com" autoComplete="email" maxLength={254} required />
               </label>
             </div>
             <div className="form-row">
               <label>
                 <span><b>03</b> Empresa <i>Opcional</i></span>
-                <input type="text" name="company" placeholder="Nombre de tu empresa" autoComplete="organization" />
+                <input type="text" name="company" placeholder="Nombre de tu empresa" autoComplete="organization" maxLength={150} />
               </label>
               <label>
                 <span><b>04</b> Área de interés</span>
@@ -1908,11 +2101,29 @@ export default function Home() {
             </div>
             <label className="form-message">
               <span><b>05</b> ¿Qué te gustaría transformar?</span>
-              <textarea name="message" rows={4} placeholder="Háblanos brevemente de tu proyecto, reto u objetivo..." required />
+              <textarea name="message" rows={4} maxLength={3000} placeholder="Háblanos brevemente de tu proyecto, reto u objetivo..." required />
             </label>
             <div className="contact-form-footer">
-              <small>Demo visual · El envío estará disponible próximamente.</small>
-              <button type="submit">Enviar mensaje <span>↗</span></button>
+              <small
+                id="contact-form-status"
+                className={`contact-form-status contact-form-status-${contactFormStatus}`}
+                role={contactFormStatus === "error" ? "alert" : "status"}
+                aria-live="polite"
+              >
+                {contactFormFeedback}
+              </small>
+              <button
+                type="submit"
+                disabled={contactFormStatus === "submitting"}
+                aria-describedby="contact-form-status"
+              >
+                {contactFormStatus === "submitting"
+                  ? "Enviando…"
+                  : contactFormStatus === "success"
+                    ? "Enviar otro mensaje"
+                    : "Enviar mensaje"}
+                <span>{contactFormStatus === "submitting" ? "·" : "↗"}</span>
+              </button>
             </div>
           </form>
         </div>
