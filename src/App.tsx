@@ -464,13 +464,13 @@ function NeuralCanvas({ progress }: { progress: React.RefObject<number> }) {
     if (!context) return;
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const compactLayout = window.innerWidth < 760;
-    const points = createPoints(compactLayout ? 1500 : 3000), synapses = createSynapses(48);
-    const frameInterval = 1000 / (compactLayout ? 30 : 45);
+    const points = createPoints(compactLayout ? 850 : 1800), synapses = createSynapses(30);
+    const frameInterval = 1000 / (compactLayout ? 24 : 40);
     let width = 0, height = 0, frame = 0, pointerX = 0, pointerY = 0, smoothX = 0, smoothY = 0;
     let visible = true, lastRenderedAt = 0;
     const resize = () => {
       width = window.innerWidth; height = window.innerHeight;
-      const ratio = Math.min(window.devicePixelRatio || 1, compactLayout ? 1.2 : 1.4);
+      const ratio = Math.min(window.devicePixelRatio || 1, compactLayout ? 1 : 1.25);
       canvas.width = Math.round(width * ratio); canvas.height = Math.round(height * ratio);
       canvas.style.width = `${width}px`; canvas.style.height = `${height}px`;
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
@@ -1178,8 +1178,9 @@ function MethodParticleTrack() {
     let seed = 314159;
     const random = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
     const palette = ["#a487ff", "#e5bd73", "#75d9bd", "#82a8ff"];
-    const particles: MethodParticle[] = Array.from({ length: 280 }, (_, index) => {
-      const target = clamp((index + random() * 1.8) / 281, 0, 1);
+    const particleCount = window.innerWidth < 760 ? 130 : 200;
+    const particles: MethodParticle[] = Array.from({ length: particleCount }, (_, index) => {
+      const target = clamp((index + random() * 1.8) / (particleCount + 1), 0, 1);
       return {
         target,
         origin: random(),
@@ -1251,7 +1252,7 @@ function MethodParticleTrack() {
 
     const resize = () => {
       const bounds = canvas.getBoundingClientRect();
-      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
       width = Math.max(1, bounds.width);
       height = Math.max(1, bounds.height);
       canvas.width = Math.round(width * ratio);
